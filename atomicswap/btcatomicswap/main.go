@@ -45,7 +45,7 @@ var (
 	connectFlag = flagset.String("s", "localhost", "host[:port] of Bitcoin Core wallet RPC server")
 	rpcuserFlag = flagset.String("rpcuser", "", "username for wallet RPC authentication")
 	rpcpassFlag = flagset.String("rpcpass", "", "password for wallet RPC authentication")
-	testnetFlag = flagset.Bool("testnet", false, "use testnet network")
+	netFlag     = flagset.String("net", "mainnet", "{mainnet, testnet, regtest}")
 )
 
 // There are two directions that the atomic swap can be performed, as the
@@ -186,8 +186,14 @@ func run() (err error, showUsage bool) {
 		return fmt.Errorf("unexpected argument: %s", flagset.Arg(0)), true
 	}
 
-	if *testnetFlag {
+	if *netFlag == "mainnet" {
+		chainParams = &chaincfg.MainNetParams
+	} else if *netFlag == "testnet" {
 		chainParams = &chaincfg.TestNet3Params
+	} else if *netFlag == "regtest" {
+		chainParams = &chaincfg.RegressionNetParams
+	} else {
+		return fmt.Errorf("Unknown net type: %s", *netFlag), true
 	}
 
 	var cmd command
@@ -378,6 +384,8 @@ func walletPort(params *chaincfg.Params) string {
 	switch params {
 	case &chaincfg.MainNetParams:
 		return "8332"
+	case &chaincfg.RegressionNetParams:
+		return "18444"
 	case &chaincfg.TestNet3Params:
 		return "18332"
 	default:
