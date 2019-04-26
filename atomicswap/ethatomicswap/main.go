@@ -43,7 +43,10 @@ import (
 )
 
 var (
-	chainConfig = params.MainnetChainConfig
+	chainConfig     = params.MainnetChainConfig
+	privChainConfig = &params.ChainConfig{
+		ChainID: big.NewInt(9),
+	}
 )
 
 const (
@@ -59,7 +62,7 @@ var (
 	contractFlag = flagset.String("c", "", "hex-enoded address of the deployed contract")
 	accountFlag  = flagset.String("account", "", "account file, account address or nothing for the daemon's first account")
 	timeoutFlag  = flagset.Duration("t", 0, "optional timeout of any call made")
-	testnetFlag  = flagset.Bool("testnet", false, "use testnet (Rinkeby) network")
+	netFlag      = flagset.String("net", "mainnet", "network type {mainnet, testnet, privnet}")
 )
 
 // There are two directions that the atomic swap can be performed, as the
@@ -289,8 +292,14 @@ func run() (err error, showUsage bool) {
 		return fmt.Errorf("unexpected argument: %s", flagset.Arg(0)), true
 	}
 
-	if *testnetFlag {
+	if *netFlag == "mainnet" {
+		chainConfig = params.MainnetChainConfig
+	} else if *netFlag == "testnet" {
 		chainConfig = params.RinkebyChainConfig
+	} else if *netFlag == "privnet" {
+		chainConfig = privChainConfig
+	} else {
+		return fmt.Errorf("Unknown net type: %s", *netFlag), true
 	}
 
 	var cmd command
@@ -419,6 +428,8 @@ func getDeployedContractAddress() (common.Address, error) {
 		return common.Address{}, errors.New("no default contract exist yet for the main net")
 	case params.RinkebyChainConfig:
 		return common.HexToAddress("2661CBAa149721f7c5FAB3FA88C1EA564A683631"), nil
+	case privChainConfig:
+		return common.Address{}, errors.New("no default contract exist yet for the private net")
 	}
 
 	panic("unknown chain config for chain ID: " + chainConfig.ChainID.String())
