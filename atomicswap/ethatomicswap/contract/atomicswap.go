@@ -15,11 +15,23 @@ import (
 	"github.com/ethereum/go-ethereum/event"
 )
 
+// Reference imports to suppress errors if they are not otherwise used.
+var (
+	_ = big.NewInt
+	_ = strings.NewReader
+	_ = ethereum.NotFound
+	_ = abi.U256
+	_ = bind.Bind
+	_ = common.Big1
+	_ = types.BloomLookup
+	_ = event.NewSubscription
+)
+
 // ContractABI is the input ABI used to generate the binding from.
 const ContractABI = "[{\"constant\":false,\"inputs\":[{\"name\":\"refundTime\",\"type\":\"uint256\"},{\"name\":\"secretHash\",\"type\":\"bytes32\"},{\"name\":\"initiator\",\"type\":\"address\"}],\"name\":\"participate\",\"outputs\":[],\"payable\":true,\"stateMutability\":\"payable\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"secretHash\",\"type\":\"bytes32\"}],\"name\":\"refund\",\"outputs\":[],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"refundTime\",\"type\":\"uint256\"},{\"name\":\"secretHash\",\"type\":\"bytes32\"},{\"name\":\"participant\",\"type\":\"address\"}],\"name\":\"initiate\",\"outputs\":[],\"payable\":true,\"stateMutability\":\"payable\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"secret\",\"type\":\"bytes32\"},{\"name\":\"secretHash\",\"type\":\"bytes32\"}],\"name\":\"redeem\",\"outputs\":[],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[{\"name\":\"\",\"type\":\"bytes32\"}],\"name\":\"swaps\",\"outputs\":[{\"name\":\"initTimestamp\",\"type\":\"uint256\"},{\"name\":\"refundTime\",\"type\":\"uint256\"},{\"name\":\"secretHash\",\"type\":\"bytes32\"},{\"name\":\"secret\",\"type\":\"bytes32\"},{\"name\":\"initiator\",\"type\":\"address\"},{\"name\":\"participant\",\"type\":\"address\"},{\"name\":\"value\",\"type\":\"uint256\"},{\"name\":\"kind\",\"type\":\"uint8\"},{\"name\":\"state\",\"type\":\"uint8\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"constructor\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"name\":\"refundTime\",\"type\":\"uint256\"},{\"indexed\":false,\"name\":\"secretHash\",\"type\":\"bytes32\"},{\"indexed\":false,\"name\":\"refunder\",\"type\":\"address\"},{\"indexed\":false,\"name\":\"value\",\"type\":\"uint256\"}],\"name\":\"Refunded\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"name\":\"redeemTime\",\"type\":\"uint256\"},{\"indexed\":false,\"name\":\"secretHash\",\"type\":\"bytes32\"},{\"indexed\":false,\"name\":\"secret\",\"type\":\"bytes32\"},{\"indexed\":false,\"name\":\"redeemer\",\"type\":\"address\"},{\"indexed\":false,\"name\":\"value\",\"type\":\"uint256\"}],\"name\":\"Redeemed\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"name\":\"initTimestamp\",\"type\":\"uint256\"},{\"indexed\":false,\"name\":\"refundTime\",\"type\":\"uint256\"},{\"indexed\":false,\"name\":\"secretHash\",\"type\":\"bytes32\"},{\"indexed\":false,\"name\":\"initiator\",\"type\":\"address\"},{\"indexed\":false,\"name\":\"participant\",\"type\":\"address\"},{\"indexed\":false,\"name\":\"value\",\"type\":\"uint256\"}],\"name\":\"Participated\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"name\":\"initTimestamp\",\"type\":\"uint256\"},{\"indexed\":false,\"name\":\"refundTime\",\"type\":\"uint256\"},{\"indexed\":false,\"name\":\"secretHash\",\"type\":\"bytes32\"},{\"indexed\":false,\"name\":\"initiator\",\"type\":\"address\"},{\"indexed\":false,\"name\":\"participant\",\"type\":\"address\"},{\"indexed\":false,\"name\":\"value\",\"type\":\"uint256\"}],\"name\":\"Initiated\",\"type\":\"event\"}]"
 
 // ContractBin is the compiled bytecode used for deploying new contracts.
-const ContractBin = `608060405234801561001057600080fd5b506110ac806100206000396000f30060806040526004361061006d576000357c0100000000000000000000000000000000000000000000000000000000900463ffffffff1680631aa02853146100725780637249fbb6146100c0578063ae052147146100f1578063b31597ad1461013f578063eb84e7f21461017e575b600080fd5b6100be600480360381019080803590602001909291908035600019169060200190929190803573ffffffffffffffffffffffffffffffffffffffff16906020019092919050505061027f565b005b3480156100cc57600080fd5b506100ef6004803603810190808035600019169060200190929190505050610576565b005b61013d600480360381019080803590602001909291908035600019169060200190929190803573ffffffffffffffffffffffffffffffffffffffff1690602001909291905050506108bb565b005b34801561014b57600080fd5b5061017c60048036038101908080356000191690602001909291908035600019169060200190929190505050610bb2565b005b34801561018a57600080fd5b506101ad6004803603810190808035600019169060200190929190505050610fd8565b604051808a8152602001898152602001886000191660001916815260200187600019166000191681526020018673ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1681526020018573ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200184815260200183600181111561024f57fe5b60ff16815260200182600381111561026357fe5b60ff168152602001995050505050505050505060405180910390f35b8260003411151561028f57600080fd5b60008111151561029e57600080fd5b82600060038111156102ac57fe5b600080836000191660001916815260200190815260200160002060070160019054906101000a900460ff1660038111156102e257fe5b1415156102ee57600080fd5b4260008086600019166000191681526020019081526020016000206000018190555084600080866000191660001916815260200190815260200160002060010181905550836000808660001916600019168152602001908152602001600020600201816000191690555082600080866000191660001916815260200190815260200160002060040160006101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff16021790555033600080866000191660001916815260200190815260200160002060050160006101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff160217905550346000808660001916600019168152602001908152602001600020600601819055506001600080866000191660001916815260200190815260200160002060070160006101000a81548160ff0219169083600181111561046c57fe5b02179055506001600080866000191660001916815260200190815260200160002060070160016101000a81548160ff021916908360038111156104ab57fe5b02179055507fe5571d467a528d7481c0e3bdd55ad528d0df6b457b07bab736c3e245c3aa16f44286868633346040518087815260200186815260200185600019166000191681526020018473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1681526020018373ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff168152602001828152602001965050505050505060405180910390a15050505050565b803360006001600381111561058757fe5b600080856000191660001916815260200190815260200160002060070160019054906101000a900460ff1660038111156105bd57fe5b1415156105c957600080fd5b6001808111156105d557fe5b600080856000191660001916815260200190815260200160002060070160009054906101000a900460ff16600181111561060b57fe5b141561068d578173ffffffffffffffffffffffffffffffffffffffff16600080856000191660001916815260200190815260200160002060050160009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1614151561068857600080fd5b610705565b8173ffffffffffffffffffffffffffffffffffffffff16600080856000191660001916815260200190815260200160002060040160009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1614151561070457600080fd5b5b600080846000191660001916815260200190815260200160002060000154905060008084600019166000191681526020019081526020016000206001015481019050804211151561075557600080fd5b3373ffffffffffffffffffffffffffffffffffffffff166108fc6000808760001916600019168152602001908152602001600020600601549081150290604051600060405180830381858888f193505050501580156107b8573d6000803e3d6000fd5b506003600080866000191660001916815260200190815260200160002060070160016101000a81548160ff021916908360038111156107f357fe5b02179055507fadb1dca52dfad065e50a1e25c2ee47ae54013a1f2d6f8ea5abace52eb4b7a4c842600080876000191660001916815260200190815260200160002060020154336000808960001916600019168152602001908152602001600020600601546040518085815260200184600019166000191681526020018373ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200182815260200194505050505060405180910390a150505050565b826000341115156108cb57600080fd5b6000811115156108da57600080fd5b82600060038111156108e857fe5b600080836000191660001916815260200190815260200160002060070160019054906101000a900460ff16600381111561091e57fe5b14151561092a57600080fd5b4260008086600019166000191681526020019081526020016000206000018190555084600080866000191660001916815260200190815260200160002060010181905550836000808660001916600019168152602001908152602001600020600201816000191690555033600080866000191660001916815260200190815260200160002060040160006101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff16021790555082600080866000191660001916815260200190815260200160002060050160006101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff160217905550346000808660001916600019168152602001908152602001600020600601819055506000806000866000191660001916815260200190815260200160002060070160006101000a81548160ff02191690836001811115610aa857fe5b02179055506001600080866000191660001916815260200190815260200160002060070160016101000a81548160ff02191690836003811115610ae757fe5b02179055507f75501a491c11746724d18ea6e5ac6a53864d886d653da6b846fdecda837cf5764286863387346040518087815260200186815260200185600019166000191681526020018473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1681526020018373ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff168152602001828152602001965050505050505060405180910390a15050505050565b80823360016003811115610bc257fe5b600080856000191660001916815260200190815260200160002060070160019054906101000a900460ff166003811115610bf857fe5b141515610c0457600080fd5b600180811115610c1057fe5b600080856000191660001916815260200190815260200160002060070160009054906101000a900460ff166001811115610c4657fe5b1415610cc8578073ffffffffffffffffffffffffffffffffffffffff16600080856000191660001916815260200190815260200160002060040160009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16141515610cc357600080fd5b610d40565b8073ffffffffffffffffffffffffffffffffffffffff16600080856000191660001916815260200190815260200160002060050160009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16141515610d3f57600080fd5b5b82600019166002836040516020018082600019166000191681526020019150506040516020818303038152906040526040518082805190602001908083835b602083101515610da45780518252602082019150602081019050602083039250610d7f565b6001836020036101000a0380198251168184511680821785525050505050509050019150506020604051808303816000865af1158015610de8573d6000803e3d6000fd5b5050506040513d6020811015610dfd57600080fd5b810190808051906020019092919050505060001916141515610e1e57600080fd5b3373ffffffffffffffffffffffffffffffffffffffff166108fc6000808760001916600019168152602001908152602001600020600601549081150290604051600060405180830381858888f19350505050158015610e81573d6000803e3d6000fd5b506002600080866000191660001916815260200190815260200160002060070160016101000a81548160ff02191690836003811115610ebc57fe5b021790555084600080866000191660001916815260200190815260200160002060030181600019169055507fe4da013d8c42cdfa76ab1d5c08edcdc1503d2da88d7accc854f0e57ebe45c59142600080876000191660001916815260200190815260200160002060020154600080886000191660001916815260200190815260200160002060030154336000808a600019166000191681526020019081526020016000206006015460405180868152602001856000191660001916815260200184600019166000191681526020018373ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1681526020018281526020019550505050505060405180910390a15050505050565b60006020528060005260406000206000915090508060000154908060010154908060020154908060030154908060040160009054906101000a900473ffffffffffffffffffffffffffffffffffffffff16908060050160009054906101000a900473ffffffffffffffffffffffffffffffffffffffff16908060060154908060070160009054906101000a900460ff16908060070160019054906101000a900460ff169050895600a165627a7a72305820081a82269020bc584dfffd0f5cad637d66d08ba4234a58c31e0dc6329fbe966b0029`
+const ContractBin = `608060405234801561001057600080fd5b50610f13806100206000396000f3fe60806040526004361061004a5760003560e01c80631aa028531461004f5780637249fbb6146100a7578063ae052147146100e2578063b31597ad1461013a578063eb84e7f21461017f575b600080fd5b6100a56004803603606081101561006557600080fd5b810190808035906020019092919080359060200190929190803573ffffffffffffffffffffffffffffffffffffffff16906020019092919050505061027a565b005b3480156100b357600080fd5b506100e0600480360360208110156100ca57600080fd5b8101908080359060200190929190505050610517565b005b610138600480360360608110156100f857600080fd5b810190808035906020019092919080359060200190929190803573ffffffffffffffffffffffffffffffffffffffff1690602001909291905050506107fc565b005b34801561014657600080fd5b5061017d6004803603604081101561015d57600080fd5b810190808035906020019092919080359060200190929190505050610a99565b005b34801561018b57600080fd5b506101b8600480360360208110156101a257600080fd5b8101908080359060200190929190505050610e3f565b604051808a81526020018981526020018881526020018781526020018673ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1681526020018573ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200184815260200183600181111561024a57fe5b60ff16815260200182600381111561025e57fe5b60ff168152602001995050505050505050505060405180910390f35b826000341161028857600080fd5b6000811161029557600080fd5b82600060038111156102a357fe5b60008083815260200190815260200160002060070160019054906101000a900460ff1660038111156102d157fe5b146102db57600080fd5b4260008086815260200190815260200160002060000181905550846000808681526020019081526020016000206001018190555083600080868152602001908152602001600020600201819055508260008086815260200190815260200160002060040160006101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff1602179055503360008086815260200190815260200160002060050160006101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff1602179055503460008086815260200190815260200160002060060181905550600160008086815260200190815260200160002060070160006101000a81548160ff0219169083600181111561041d57fe5b0217905550600160008086815260200190815260200160002060070160016101000a81548160ff0219169083600381111561045457fe5b02179055507fe5571d467a528d7481c0e3bdd55ad528d0df6b457b07bab736c3e245c3aa16f4428686863334604051808781526020018681526020018581526020018473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1681526020018373ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff168152602001828152602001965050505050505060405180910390a15050505050565b80336001600381111561052657fe5b60008084815260200190815260200160002060070160019054906101000a900460ff16600381111561055457fe5b1461055e57600080fd5b60018081111561056a57fe5b60008084815260200190815260200160002060070160009054906101000a900460ff16600181111561059857fe5b1415610610578073ffffffffffffffffffffffffffffffffffffffff1660008084815260200190815260200160002060050160009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff161461060b57600080fd5b61067e565b8073ffffffffffffffffffffffffffffffffffffffff1660008084815260200190815260200160002060040160009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff161461067d57600080fd5b5b600080600084815260200190815260200160002060000154905060008084815260200190815260200160002060010154810190508042116106be57600080fd5b3373ffffffffffffffffffffffffffffffffffffffff166108fc600080878152602001908152602001600020600601549081150290604051600060405180830381858888f19350505050158015610719573d6000803e3d6000fd5b50600360008086815260200190815260200160002060070160016101000a81548160ff0219169083600381111561074c57fe5b02179055507fadb1dca52dfad065e50a1e25c2ee47ae54013a1f2d6f8ea5abace52eb4b7a4c842600080878152602001908152602001600020600201543360008089815260200190815260200160002060060154604051808581526020018481526020018373ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200182815260200194505050505060405180910390a150505050565b826000341161080a57600080fd5b6000811161081757600080fd5b826000600381111561082557fe5b60008083815260200190815260200160002060070160019054906101000a900460ff16600381111561085357fe5b1461085d57600080fd5b4260008086815260200190815260200160002060000181905550846000808681526020019081526020016000206001018190555083600080868152602001908152602001600020600201819055503360008086815260200190815260200160002060040160006101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff1602179055508260008086815260200190815260200160002060050160006101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff1602179055503460008086815260200190815260200160002060060181905550600080600086815260200190815260200160002060070160006101000a81548160ff0219169083600181111561099f57fe5b0217905550600160008086815260200190815260200160002060070160016101000a81548160ff021916908360038111156109d657fe5b02179055507f75501a491c11746724d18ea6e5ac6a53864d886d653da6b846fdecda837cf576428686338734604051808781526020018681526020018581526020018473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1681526020018373ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff168152602001828152602001965050505050505060405180910390a15050505050565b80823360016003811115610aa957fe5b60008085815260200190815260200160002060070160019054906101000a900460ff166003811115610ad757fe5b14610ae157600080fd5b600180811115610aed57fe5b60008085815260200190815260200160002060070160009054906101000a900460ff166001811115610b1b57fe5b1415610b93578073ffffffffffffffffffffffffffffffffffffffff1660008085815260200190815260200160002060040160009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1614610b8e57600080fd5b610c01565b8073ffffffffffffffffffffffffffffffffffffffff1660008085815260200190815260200160002060050160009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1614610c0057600080fd5b5b82600283604051602001808281526020019150506040516020818303038152906040526040518082805190602001908083835b60208310610c575780518252602082019150602081019050602083039250610c34565b6001836020036101000a038019825116818451168082178552505050505050905001915050602060405180830381855afa158015610c99573d6000803e3d6000fd5b5050506040513d6020811015610cae57600080fd5b810190808051906020019092919050505014610cc957600080fd5b3373ffffffffffffffffffffffffffffffffffffffff166108fc600080878152602001908152602001600020600601549081150290604051600060405180830381858888f19350505050158015610d24573d6000803e3d6000fd5b50600260008086815260200190815260200160002060070160016101000a81548160ff02191690836003811115610d5757fe5b021790555084600080868152602001908152602001600020600301819055507fe4da013d8c42cdfa76ab1d5c08edcdc1503d2da88d7accc854f0e57ebe45c591426000808781526020019081526020016000206002015460008088815260200190815260200160002060030154336000808a815260200190815260200160002060060154604051808681526020018581526020018481526020018373ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1681526020018281526020019550505050505060405180910390a15050505050565b60006020528060005260406000206000915090508060000154908060010154908060020154908060030154908060040160009054906101000a900473ffffffffffffffffffffffffffffffffffffffff16908060050160009054906101000a900473ffffffffffffffffffffffffffffffffffffffff16908060060154908060070160009054906101000a900460ff16908060070160019054906101000a900460ff1690508956fea165627a7a723058206e8861bb7dc827d39d22b9a2c761caecc9f8f59d4d72df40c885d99fcc9c74360029`
 
 // DeployContract deploys a new Ethereum contract, binding an instance of Contract to it.
 func DeployContract(auth *bind.TransactOpts, backend bind.ContractBackend) (common.Address, *types.Transaction, *Contract, error) {
@@ -178,7 +190,7 @@ func (_Contract *ContractTransactorRaw) Transact(opts *bind.TransactOpts, method
 
 // Swaps is a free data retrieval call binding the contract method 0xeb84e7f2.
 //
-// Solidity: function swaps( bytes32) constant returns(initTimestamp uint256, refundTime uint256, secretHash bytes32, secret bytes32, initiator address, participant address, value uint256, kind uint8, state uint8)
+// Solidity: function swaps(bytes32 ) constant returns(uint256 initTimestamp, uint256 refundTime, bytes32 secretHash, bytes32 secret, address initiator, address participant, uint256 value, uint8 kind, uint8 state)
 func (_Contract *ContractCaller) Swaps(opts *bind.CallOpts, arg0 [32]byte) (struct {
 	InitTimestamp *big.Int
 	RefundTime    *big.Int
@@ -208,7 +220,7 @@ func (_Contract *ContractCaller) Swaps(opts *bind.CallOpts, arg0 [32]byte) (stru
 
 // Swaps is a free data retrieval call binding the contract method 0xeb84e7f2.
 //
-// Solidity: function swaps( bytes32) constant returns(initTimestamp uint256, refundTime uint256, secretHash bytes32, secret bytes32, initiator address, participant address, value uint256, kind uint8, state uint8)
+// Solidity: function swaps(bytes32 ) constant returns(uint256 initTimestamp, uint256 refundTime, bytes32 secretHash, bytes32 secret, address initiator, address participant, uint256 value, uint8 kind, uint8 state)
 func (_Contract *ContractSession) Swaps(arg0 [32]byte) (struct {
 	InitTimestamp *big.Int
 	RefundTime    *big.Int
@@ -225,7 +237,7 @@ func (_Contract *ContractSession) Swaps(arg0 [32]byte) (struct {
 
 // Swaps is a free data retrieval call binding the contract method 0xeb84e7f2.
 //
-// Solidity: function swaps( bytes32) constant returns(initTimestamp uint256, refundTime uint256, secretHash bytes32, secret bytes32, initiator address, participant address, value uint256, kind uint8, state uint8)
+// Solidity: function swaps(bytes32 ) constant returns(uint256 initTimestamp, uint256 refundTime, bytes32 secretHash, bytes32 secret, address initiator, address participant, uint256 value, uint8 kind, uint8 state)
 func (_Contract *ContractCallerSession) Swaps(arg0 [32]byte) (struct {
 	InitTimestamp *big.Int
 	RefundTime    *big.Int
@@ -242,84 +254,84 @@ func (_Contract *ContractCallerSession) Swaps(arg0 [32]byte) (struct {
 
 // Initiate is a paid mutator transaction binding the contract method 0xae052147.
 //
-// Solidity: function initiate(refundTime uint256, secretHash bytes32, participant address) returns()
+// Solidity: function initiate(uint256 refundTime, bytes32 secretHash, address participant) returns()
 func (_Contract *ContractTransactor) Initiate(opts *bind.TransactOpts, refundTime *big.Int, secretHash [32]byte, participant common.Address) (*types.Transaction, error) {
 	return _Contract.contract.Transact(opts, "initiate", refundTime, secretHash, participant)
 }
 
 // Initiate is a paid mutator transaction binding the contract method 0xae052147.
 //
-// Solidity: function initiate(refundTime uint256, secretHash bytes32, participant address) returns()
+// Solidity: function initiate(uint256 refundTime, bytes32 secretHash, address participant) returns()
 func (_Contract *ContractSession) Initiate(refundTime *big.Int, secretHash [32]byte, participant common.Address) (*types.Transaction, error) {
 	return _Contract.Contract.Initiate(&_Contract.TransactOpts, refundTime, secretHash, participant)
 }
 
 // Initiate is a paid mutator transaction binding the contract method 0xae052147.
 //
-// Solidity: function initiate(refundTime uint256, secretHash bytes32, participant address) returns()
+// Solidity: function initiate(uint256 refundTime, bytes32 secretHash, address participant) returns()
 func (_Contract *ContractTransactorSession) Initiate(refundTime *big.Int, secretHash [32]byte, participant common.Address) (*types.Transaction, error) {
 	return _Contract.Contract.Initiate(&_Contract.TransactOpts, refundTime, secretHash, participant)
 }
 
 // Participate is a paid mutator transaction binding the contract method 0x1aa02853.
 //
-// Solidity: function participate(refundTime uint256, secretHash bytes32, initiator address) returns()
+// Solidity: function participate(uint256 refundTime, bytes32 secretHash, address initiator) returns()
 func (_Contract *ContractTransactor) Participate(opts *bind.TransactOpts, refundTime *big.Int, secretHash [32]byte, initiator common.Address) (*types.Transaction, error) {
 	return _Contract.contract.Transact(opts, "participate", refundTime, secretHash, initiator)
 }
 
 // Participate is a paid mutator transaction binding the contract method 0x1aa02853.
 //
-// Solidity: function participate(refundTime uint256, secretHash bytes32, initiator address) returns()
+// Solidity: function participate(uint256 refundTime, bytes32 secretHash, address initiator) returns()
 func (_Contract *ContractSession) Participate(refundTime *big.Int, secretHash [32]byte, initiator common.Address) (*types.Transaction, error) {
 	return _Contract.Contract.Participate(&_Contract.TransactOpts, refundTime, secretHash, initiator)
 }
 
 // Participate is a paid mutator transaction binding the contract method 0x1aa02853.
 //
-// Solidity: function participate(refundTime uint256, secretHash bytes32, initiator address) returns()
+// Solidity: function participate(uint256 refundTime, bytes32 secretHash, address initiator) returns()
 func (_Contract *ContractTransactorSession) Participate(refundTime *big.Int, secretHash [32]byte, initiator common.Address) (*types.Transaction, error) {
 	return _Contract.Contract.Participate(&_Contract.TransactOpts, refundTime, secretHash, initiator)
 }
 
 // Redeem is a paid mutator transaction binding the contract method 0xb31597ad.
 //
-// Solidity: function redeem(secret bytes32, secretHash bytes32) returns()
+// Solidity: function redeem(bytes32 secret, bytes32 secretHash) returns()
 func (_Contract *ContractTransactor) Redeem(opts *bind.TransactOpts, secret [32]byte, secretHash [32]byte) (*types.Transaction, error) {
 	return _Contract.contract.Transact(opts, "redeem", secret, secretHash)
 }
 
 // Redeem is a paid mutator transaction binding the contract method 0xb31597ad.
 //
-// Solidity: function redeem(secret bytes32, secretHash bytes32) returns()
+// Solidity: function redeem(bytes32 secret, bytes32 secretHash) returns()
 func (_Contract *ContractSession) Redeem(secret [32]byte, secretHash [32]byte) (*types.Transaction, error) {
 	return _Contract.Contract.Redeem(&_Contract.TransactOpts, secret, secretHash)
 }
 
 // Redeem is a paid mutator transaction binding the contract method 0xb31597ad.
 //
-// Solidity: function redeem(secret bytes32, secretHash bytes32) returns()
+// Solidity: function redeem(bytes32 secret, bytes32 secretHash) returns()
 func (_Contract *ContractTransactorSession) Redeem(secret [32]byte, secretHash [32]byte) (*types.Transaction, error) {
 	return _Contract.Contract.Redeem(&_Contract.TransactOpts, secret, secretHash)
 }
 
 // Refund is a paid mutator transaction binding the contract method 0x7249fbb6.
 //
-// Solidity: function refund(secretHash bytes32) returns()
+// Solidity: function refund(bytes32 secretHash) returns()
 func (_Contract *ContractTransactor) Refund(opts *bind.TransactOpts, secretHash [32]byte) (*types.Transaction, error) {
 	return _Contract.contract.Transact(opts, "refund", secretHash)
 }
 
 // Refund is a paid mutator transaction binding the contract method 0x7249fbb6.
 //
-// Solidity: function refund(secretHash bytes32) returns()
+// Solidity: function refund(bytes32 secretHash) returns()
 func (_Contract *ContractSession) Refund(secretHash [32]byte) (*types.Transaction, error) {
 	return _Contract.Contract.Refund(&_Contract.TransactOpts, secretHash)
 }
 
 // Refund is a paid mutator transaction binding the contract method 0x7249fbb6.
 //
-// Solidity: function refund(secretHash bytes32) returns()
+// Solidity: function refund(bytes32 secretHash) returns()
 func (_Contract *ContractTransactorSession) Refund(secretHash [32]byte) (*types.Transaction, error) {
 	return _Contract.Contract.Refund(&_Contract.TransactOpts, secretHash)
 }
@@ -404,7 +416,7 @@ type ContractInitiated struct {
 
 // FilterInitiated is a free log retrieval operation binding the contract event 0x75501a491c11746724d18ea6e5ac6a53864d886d653da6b846fdecda837cf576.
 //
-// Solidity: e Initiated(initTimestamp uint256, refundTime uint256, secretHash bytes32, initiator address, participant address, value uint256)
+// Solidity: event Initiated(uint256 initTimestamp, uint256 refundTime, bytes32 secretHash, address initiator, address participant, uint256 value)
 func (_Contract *ContractFilterer) FilterInitiated(opts *bind.FilterOpts) (*ContractInitiatedIterator, error) {
 
 	logs, sub, err := _Contract.contract.FilterLogs(opts, "Initiated")
@@ -416,7 +428,7 @@ func (_Contract *ContractFilterer) FilterInitiated(opts *bind.FilterOpts) (*Cont
 
 // WatchInitiated is a free log subscription operation binding the contract event 0x75501a491c11746724d18ea6e5ac6a53864d886d653da6b846fdecda837cf576.
 //
-// Solidity: e Initiated(initTimestamp uint256, refundTime uint256, secretHash bytes32, initiator address, participant address, value uint256)
+// Solidity: event Initiated(uint256 initTimestamp, uint256 refundTime, bytes32 secretHash, address initiator, address participant, uint256 value)
 func (_Contract *ContractFilterer) WatchInitiated(opts *bind.WatchOpts, sink chan<- *ContractInitiated) (event.Subscription, error) {
 
 	logs, sub, err := _Contract.contract.WatchLogs(opts, "Initiated")
@@ -531,7 +543,7 @@ type ContractParticipated struct {
 
 // FilterParticipated is a free log retrieval operation binding the contract event 0xe5571d467a528d7481c0e3bdd55ad528d0df6b457b07bab736c3e245c3aa16f4.
 //
-// Solidity: e Participated(initTimestamp uint256, refundTime uint256, secretHash bytes32, initiator address, participant address, value uint256)
+// Solidity: event Participated(uint256 initTimestamp, uint256 refundTime, bytes32 secretHash, address initiator, address participant, uint256 value)
 func (_Contract *ContractFilterer) FilterParticipated(opts *bind.FilterOpts) (*ContractParticipatedIterator, error) {
 
 	logs, sub, err := _Contract.contract.FilterLogs(opts, "Participated")
@@ -543,7 +555,7 @@ func (_Contract *ContractFilterer) FilterParticipated(opts *bind.FilterOpts) (*C
 
 // WatchParticipated is a free log subscription operation binding the contract event 0xe5571d467a528d7481c0e3bdd55ad528d0df6b457b07bab736c3e245c3aa16f4.
 //
-// Solidity: e Participated(initTimestamp uint256, refundTime uint256, secretHash bytes32, initiator address, participant address, value uint256)
+// Solidity: event Participated(uint256 initTimestamp, uint256 refundTime, bytes32 secretHash, address initiator, address participant, uint256 value)
 func (_Contract *ContractFilterer) WatchParticipated(opts *bind.WatchOpts, sink chan<- *ContractParticipated) (event.Subscription, error) {
 
 	logs, sub, err := _Contract.contract.WatchLogs(opts, "Participated")
@@ -657,7 +669,7 @@ type ContractRedeemed struct {
 
 // FilterRedeemed is a free log retrieval operation binding the contract event 0xe4da013d8c42cdfa76ab1d5c08edcdc1503d2da88d7accc854f0e57ebe45c591.
 //
-// Solidity: e Redeemed(redeemTime uint256, secretHash bytes32, secret bytes32, redeemer address, value uint256)
+// Solidity: event Redeemed(uint256 redeemTime, bytes32 secretHash, bytes32 secret, address redeemer, uint256 value)
 func (_Contract *ContractFilterer) FilterRedeemed(opts *bind.FilterOpts) (*ContractRedeemedIterator, error) {
 
 	logs, sub, err := _Contract.contract.FilterLogs(opts, "Redeemed")
@@ -669,7 +681,7 @@ func (_Contract *ContractFilterer) FilterRedeemed(opts *bind.FilterOpts) (*Contr
 
 // WatchRedeemed is a free log subscription operation binding the contract event 0xe4da013d8c42cdfa76ab1d5c08edcdc1503d2da88d7accc854f0e57ebe45c591.
 //
-// Solidity: e Redeemed(redeemTime uint256, secretHash bytes32, secret bytes32, redeemer address, value uint256)
+// Solidity: event Redeemed(uint256 redeemTime, bytes32 secretHash, bytes32 secret, address redeemer, uint256 value)
 func (_Contract *ContractFilterer) WatchRedeemed(opts *bind.WatchOpts, sink chan<- *ContractRedeemed) (event.Subscription, error) {
 
 	logs, sub, err := _Contract.contract.WatchLogs(opts, "Redeemed")
@@ -782,7 +794,7 @@ type ContractRefunded struct {
 
 // FilterRefunded is a free log retrieval operation binding the contract event 0xadb1dca52dfad065e50a1e25c2ee47ae54013a1f2d6f8ea5abace52eb4b7a4c8.
 //
-// Solidity: e Refunded(refundTime uint256, secretHash bytes32, refunder address, value uint256)
+// Solidity: event Refunded(uint256 refundTime, bytes32 secretHash, address refunder, uint256 value)
 func (_Contract *ContractFilterer) FilterRefunded(opts *bind.FilterOpts) (*ContractRefundedIterator, error) {
 
 	logs, sub, err := _Contract.contract.FilterLogs(opts, "Refunded")
@@ -794,7 +806,7 @@ func (_Contract *ContractFilterer) FilterRefunded(opts *bind.FilterOpts) (*Contr
 
 // WatchRefunded is a free log subscription operation binding the contract event 0xadb1dca52dfad065e50a1e25c2ee47ae54013a1f2d6f8ea5abace52eb4b7a4c8.
 //
-// Solidity: e Refunded(refundTime uint256, secretHash bytes32, refunder address, value uint256)
+// Solidity: event Refunded(uint256 refundTime, bytes32 secretHash, address refunder, uint256 value)
 func (_Contract *ContractFilterer) WatchRefunded(opts *bind.WatchOpts, sink chan<- *ContractRefunded) (event.Subscription, error) {
 
 	logs, sub, err := _Contract.contract.WatchLogs(opts, "Refunded")
