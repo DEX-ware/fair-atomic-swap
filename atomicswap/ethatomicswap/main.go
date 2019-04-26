@@ -779,7 +779,7 @@ func (cmd *auditContractCmd) runCommand(sct swapContractTransactor) error {
 	}
 
 	// compute the locktime
-	lockTime := time.Unix(block.Time().Int64()+params.LockDuration.Int64(), 0)
+	lockTime := time.Unix(int64(block.Time())+params.LockDuration.Int64(), 0)
 
 	// print contract info
 
