@@ -39,7 +39,7 @@ import (
 	"github.com/ethereum/go-ethereum/rlp"
 	"github.com/ethereum/go-ethereum/rpc"
 
-	"github.com/decred/atomicswap/cmd/ethatomicswap/contract"
+	"./contract"
 )
 
 var (
