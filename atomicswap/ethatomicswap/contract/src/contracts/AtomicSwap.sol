@@ -4,7 +4,7 @@
 // Use of this source code is governed by an MIT
 // license that can be found at https://github.com/rivine/rivine/blob/master/LICENSE.
 
-pragma solidity ^0.4.23;
+pragma solidity ^0.5.0;
 
 // Notes on security warnings:
 //  + block.timestamp is safe to use,
