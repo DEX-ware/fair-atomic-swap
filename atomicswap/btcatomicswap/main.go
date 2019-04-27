@@ -385,7 +385,7 @@ func walletPort(params *chaincfg.Params) string {
 	case &chaincfg.MainNetParams:
 		return "8332"
 	case &chaincfg.RegressionNetParams:
-		return "18444"
+		return "18334"
 	case &chaincfg.TestNet3Params:
 		return "18332"
 	default:

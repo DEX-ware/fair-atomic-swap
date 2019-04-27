@@ -1,4 +1,29 @@
 
+
+## Bitcoin-core
+
+Start a bitcoin-core node by:
+
+```
+bitcoind --regtest --rpcuser=user --rpcpassword=pass
+```
+
+The RPC port is 18443. The P2P port is 18444.
+
+## Btcd
+
+Start a btcd node by:
+
+```
+btcd --regtest --rpcuser=user --rpcpass=pass
+```
+
+The RPC port is 18334. The P2P port is 18444.
+
+---
+
+Original:
+
 ## Example
 
 The first step is for both parties to exchange addresses on both blockchains. If
