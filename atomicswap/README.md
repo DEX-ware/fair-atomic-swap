@@ -5,7 +5,7 @@
 Start a bitcoin-core node by:
 
 ```
-bitcoind --regtest --rpcuser=user --rpcpassword=pass
+bitcoind --regtest --rpcuser=elvis --rpcpassword=wadhy -deprecatedrpc=signrawtransaction
 ```
 
 The RPC port is 18443. The P2P port is 18444.
