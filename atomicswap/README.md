@@ -1,20 +1,27 @@
-
+# Atomic Swap
 
 ## Bitcoin-core
 
 Start a bitcoin-core node by:
 
-```
-bitcoind --regtest --rpcuser=elvis --rpcpassword=wadhy -deprecatedrpc=signrawtransaction
+```bash
+bitcoind --regtest --rpcuser=user --rpcpassword=pass -deprecatedrpc=signrawtransaction
 ```
 
 The RPC port is 18443. The P2P port is 18444.
+
+Then execute `btcatomicswap`
+
+```bash
+cd btcatomicswap
+./btcatomicswap --net=regtest --rpcuser=user --rpcpass=pass initiate $btcaddr 1
+```
 
 ## Btcd
 
 Start a btcd node by:
 
-```
+```bash
 btcd --regtest --rpcuser=user --rpcpass=pass
 ```
 
