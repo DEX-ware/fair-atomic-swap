@@ -20,6 +20,18 @@ btcd --regtest --rpcuser=user --rpcpass=pass
 
 The RPC port is 18334. The P2P port is 18444.
 
+
+
+
+
+
+
+
+
+
+
+
+
 ---
 
 Original:
