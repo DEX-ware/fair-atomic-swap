@@ -56,7 +56,7 @@ TsfWDVTAcsLaHUhHnLLKkGnZuJz2vkmM6Vr
 
 _Party B runs:_
 ```
-$ bitcoin-cli --regtest --rpcuser=user --rpcpassword=pass getnewaddress
+$ bitcoin-cli --regtest --rpcuser=user --rpcpassword=pass getnewaddress "" legacy
 n31og5QGuS28dmHpDH6PQD5wmVQ2K2spAG
 ```
 
