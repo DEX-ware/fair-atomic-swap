@@ -12,7 +12,7 @@ The RPC port is 18443. The P2P port is 18444.
 
 Note: for `btcd`, the RPC port is 18334. The P2P port is 18444.
 
-2. generate a Bitcoin P2PKH address
+2. generate 2 wallets, and a P2PKH address for each of them
 
 ```bash
 bitcoin-cli --regtest --rpcuser=user --rpcpassword=pass createwallet wallet1
@@ -30,7 +30,7 @@ cd btcatomicswap
 
 ## Ethereum
 
-1. create account
+1. create an account
 
 ```bash
 geth --datadir node0 account new
