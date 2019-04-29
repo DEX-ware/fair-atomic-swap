@@ -4,6 +4,9 @@ pragma solidity ^0.5.0;
 //  + block.timestamp is safe to use,
 //    given that our timestamp can tolerate a 30-second drift in time;
 
+// TODO: add vendor
+import "openzeppelin-solidity/contracts/math/SafeMath.sol";
+
 contract NonSpeculativeAtomicSwap {
     enum Kind { Initiator, Participant }
     enum State { Empty, Filled, Redeemed, Refunded }
@@ -121,6 +124,7 @@ contract NonSpeculativeAtomicSwap {
         );
     }
 
+    // TODO: should we add up balance?
     function participate(uint refundTime, bytes32 secretHash, address initiator)
         public
         payable
@@ -145,6 +149,7 @@ contract NonSpeculativeAtomicSwap {
         );
     }
 
+    // TODO: should we allow partial redeem?
     function redeem(bytes32 secret, bytes32 secretHash)
         public
         isRedeemable(secretHash, secret, msg.sender)
@@ -167,10 +172,21 @@ contract NonSpeculativeAtomicSwap {
         public
         isRefundable(secretHash, msg.sender)
     {
-        msg.sender.transfer(swaps[secretHash].value);
+        uint256 numerator = div(swaps[secretHash].value, 5);
+        uint256 major = mul(numerator, 4);
+        uint256 minor = mul(numerator, 1);;
+
+        if (swaps[secretHash].kind == Kind.Participant) {
+            swaps[secretHash].participant.transfer(major);
+            swaps[secretHash].initiator.transfer(minor);
+        } else {
+            swaps[secretHash].initiator.transfer(major);
+            swaps[secretHash].participant.transfer(minor);
+        }
 
         swaps[secretHash].state = State.Refunded;
 
+        // TODO: add more info
         emit Refunded(
             block.timestamp,
             swaps[secretHash].secretHash,
