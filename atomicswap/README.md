@@ -15,7 +15,10 @@ Note: for `btcd`, the RPC port is 18334. The P2P port is 18444.
 2. generate a Bitcoin P2PKH address
 
 ```bash
-bitcoin-cli --regtest --rpcuser=user --rpcpassword=pass getnewaddress "" "legacy"
+bitcoin-cli --regtest --rpcuser=user --rpcpassword=pass createwallet wallet1
+bitcoin-cli --regtest --rpcuser=user --rpcpassword=pass --rpcwallet=wallet1 getnewaddress "wallet1" "legacy"
+bitcoin-cli --regtest --rpcuser=user --rpcpassword=pass createwallet wallet2
+bitcoin-cli --regtest --rpcuser=user --rpcpassword=pass --rpcwallet=wallet2 getnewaddress "wallet2" "legacy"
 ```
 
 3. execute `btcatomicswap`
