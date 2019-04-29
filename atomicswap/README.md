@@ -1,6 +1,6 @@
 # Atomic Swap
 
-## Bitcoin-core
+## Bitcoin-core v0.17.1
 
 1. start a bitcoin-core node by
 
