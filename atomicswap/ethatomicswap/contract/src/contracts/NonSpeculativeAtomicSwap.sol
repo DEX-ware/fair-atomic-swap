@@ -4,8 +4,8 @@ pragma solidity ^0.5.0;
 //  + block.timestamp is safe to use,
 //    given that our timestamp can tolerate a 30-second drift in time;
 
-// TODO: add dependency into the project
-import "openzeppelin-solidity/contracts/math/SafeMath.sol";
+// use openzeppelin-solidity/contracts/math/SafeMath.sol
+import "./SafeMath.sol";
 
 contract NonSpeculativeAtomicSwap {
     enum Kind { Initiator, Participant }
