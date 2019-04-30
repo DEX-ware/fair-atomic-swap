@@ -137,24 +137,26 @@ Using [the Remix IDE](http://remix.ethereum.org)
 ```
  -->
 
-7. create a new account and transfer some eth to it
+7. create 2 new accounts
 
 ```bash
 > personal.newAccount("")
+> personal.newAccount("")
+```
+
+8. transfer 11 eth to eth.accounts[1], and unlock it
+
+```bash
 > var amount = web3.toWei(10, "ether")
 > eth.sendTransaction({from:eth.accounts[0], to:eth.accounts[1], value: amount})
-```
-8. query current balance
-```
-> eth.getBalance(eth.accounts[1])
+> 
 ```
 
-9. invoke initiate() in Remix with parameters:
+9. query eth.accounts[1]'s current balance in Remix 
 
-10. invoke refund() in Remix with parameters:
+10. Send a tx with 10 ether, invoking initiate() in Remix with parameters:
 
-11. query current balance
-```
-> eth.getBalance(eth.accounts[1])
-```
+11. invoke refund() in Remix with parameters:
+
+12. query eth.accounts[1]'s and eth.accounts[2]'s current balances in Remix 
 
