@@ -193,8 +193,8 @@ contract NonSpeculativeAtomicSwap {
             swaps[secretHash].initiator.transfer(refundedValue);
             swaps[secretHash].participant.transfer(lostValue);
         } else {
+            // equivalent to `msg.sender.transfer(swaps[secretHash].value);`
             swaps[secretHash].participant.transfer(refundedValue);
-            swaps[secretHash].initiator.transfer(lostValue);
         }
         
 
