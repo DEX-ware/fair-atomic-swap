@@ -129,8 +129,12 @@ true
 
 Using [the Remix IDE](http://remix.ethereum.org)
 
+<!-- 
 7. execute `ethatomicswap`
 
 ```bash
 ./ethatomicswap --net=testnet --account=0x78fdb0ca831312efc77c2fec51e5525aad68f0a9 -c 0x08383da28ea84351271f7f86026102deafcb4596 initiate 00000000000000000000000000000000000000ff 5.55
 ```
+ -->
+
+7. invoke the smart contract
