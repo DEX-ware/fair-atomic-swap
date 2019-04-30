@@ -127,7 +127,7 @@ true
 
 6. deploy the contract
 
-Using the Remix IDE
+Using [the Remix IDE](http://remix.ethereum.org)
 
 7. execute `ethatomicswap`
 
