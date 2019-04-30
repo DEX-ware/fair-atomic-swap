@@ -137,16 +137,24 @@ Using [the Remix IDE](http://remix.ethereum.org)
 ```
  -->
 
-7. stop mining to our addresses
+7. create a new account and transfer some eth to it
 
 ```bash
-eth.coinbase = "0x3ca60eb49314d867ab75a3c7b3a5aa61c3d6ef71"
+> personal.newAccount("")
+> var amount = web3.toWei(10, "ether")
+> eth.sendTransaction({from:eth.accounts[0], to:eth.accounts[1], value: amount})
 ```
 8. query current balance
+```
+> eth.getBalance(eth.accounts[1])
+```
 
-9. invoke initiate() in Remix with parameter:
+9. invoke initiate() in Remix with parameters:
 
-10. invoke refund() in Remix with parameter:
+10. invoke refund() in Remix with parameters:
 
 11. query current balance
+```
+> eth.getBalance(eth.accounts[1])
+```
 
