@@ -1,21 +1,40 @@
 \section{Formalization}
 \label{sec:formalization}
 
+\subsection{American Call Option}
+
+The American Call Option is a contract that ``one can buy an amount of an asset with an agreed price prior to or on an agreed time in the future''.
+The agreed price is usually called the \textit{spot price}, and the buying is called \textit{exercising}.
+For American Call Option, the buyer can exercise in advanced of the agreed exercise time.
+The price of the asset when exercising is called the \textit{strike price}.
+Apart from the asset, the option contract itself has value, called the \textit{premium}.
+The buyer should pay for both the asset and the premium when participating in the contract.
+
+Note that the price of the asset changes over time. This makes the American Call Option ``speculative'': One may profit from the contract by buying the asset with a lower price then sell it with a higher price.
+
+We define an American Call Option contract $\Pi$ as $(x, y, \pi, S, T, pr)$.
+$x$ is the amount of the currency unit (e.g. USD) to participate in the contract.
+$y$ is the amount of the asset $\pi$ that the participant hopes to buy.
+$S(t)$ is the price of a unit of $\pi$ against the time $t$, and $S(0)$ is the spot price.
+$T$ is the agreed strike time.
+$pr$ is the \textit{premium}.
+
 \subsection{Atomic Swap}
 
 (We follow the notion in ``Perun: Virtual Payment Hubs over Cryptocurrencies'')
 
 Alice hopes to buy $x_2$ $Coin_2$ on blockchain $BC_2$ with $x_1$ $Coin_1$ on blockchain $BC_1$.
 She initiates an atomic swap, and Bob participates in the atomic swap.
+We define an Atomic Swap as $\mathcal{AS} = (x_1, Coin_1, x_2, Coin_2)$.
 
-The Atomic Swap protocol follows the steps below:
+The Atomic Swap protocol consists of the algorithms below:
 
 \begin{enumerate}
-    \item Setup: Alice and Bob create addresses on both blockchains.
-    \item Initiate: Alice initiates the Atomic Swap by publishing a contract transaction on $BC_1$.
-    \item Participate: Bob participates in the Atomic Swap by publishing a contract transaction on $BC_2$.
-    \item Redeem: Alice redeems $x_2$ $Coin_2$ and Bob redeems $x_1$ $Coin_1$. Alice should redeem earlier than Bob.
-    \item Refund: If Alice or Bob is unsatisfied with the Atomic Swap, he/she can get his/her money back after the timelock of the contract transaction.
+    \item \textbf{Setup}: Alice and Bob create addresses on both blockchains.
+    \item \textbf{Initiate}: Alice initiates the Atomic Swap by publishing a contract transaction on $BC_1$.
+    \item \textbf{Participate}: Bob participates in the Atomic Swap by publishing a contract transaction on $BC_2$.
+    \item \textbf{Redeem}: Alice redeems $x_2$ $Coin_2$ and Bob redeems $x_1$ $Coin_1$. Alice should redeem earlier than Bob.
+    \item \textbf{Refund}: If Alice or Bob is unsatisfied with the Atomic Swap, he/she can get his/her money back after the timelock of the contract transaction.
 \end{enumerate}
 
 \paragraph{Setup}
@@ -52,13 +71,14 @@ takes no parameters and returns the $\mathcal{V} \in \{true, false\}$ indicating
 Alice and Bob can perform the refund by publishing $tx_{\mathcal{R}, 1}$ and $tx_{\mathcal{R}, 2}$ after the timelock $\Delta_1$ and $\Delta
 _2$, respectively.
 
+% TODO process
 
 
+\subsection{Atomic Swaps as Premium-free American Call Options}
 
-
-
-
-
-
-
-\subsection{American Option}
+\begin{enumerate}
+    \item \textbf{Advertise}: Alice creates and advertises an American Call Option contract $\Pi = (x_1, x_2, Coin_2, S, \Delta_1, fee)$ by \textbf{initiating} an Atomic Swap $\mathcal{AS}$. Note that $S$ is the exchange rate of $Coin_2 / Coin_1$.
+    \item \textbf{Contract}: Bob agrees on $\Pi$ by \textbf{Participating} the $\mathcal{AS}$.
+    \item \textbf{Hold}: Alice does not exercise $\Pi$ - \textbf{redeem} the coins from Bob, until $\Delta_2$ is about to expire.
+    \item \textbf{Exercise or Abort}: When $\Delta_2$ is about to abort, Alice checks $S$ between $Coin_1$ and $Coin_2$. If she earns money with the latest $S$, she can exercise $\Pi$ by \textbf{redeeming}. Otherwise, she can wait for $\Pi$ to expire and \textbf{refund}.
+\end{enumerate}
