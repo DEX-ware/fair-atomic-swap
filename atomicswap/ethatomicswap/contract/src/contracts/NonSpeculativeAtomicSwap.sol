@@ -19,6 +19,7 @@ contract NonSpeculativeAtomicSwap {
         address initiator;
         address participant;
         uint256 value;
+        uint256 refundPercent;
         Kind kind;
         State state;
     }
@@ -100,7 +101,7 @@ contract NonSpeculativeAtomicSwap {
         _;
     }
 
-    function initiate(uint refundTime, bytes32 secretHash, address participant)
+    function initiate(uint refundTime, uint256 refundPercent, bytes32 secretHash, address participant)
         public
         payable
         hasNoNilValues(refundTime)
@@ -112,6 +113,7 @@ contract NonSpeculativeAtomicSwap {
         swaps[secretHash].initiator = msg.sender;
         swaps[secretHash].participant = participant;
         swaps[secretHash].value = msg.value;
+        swaps[secretHash].refundPercent = refundPercent;
         swaps[secretHash].kind = Kind.Initiator;
         swaps[secretHash].state = State.Filled;
         emit Initiated(
@@ -124,8 +126,7 @@ contract NonSpeculativeAtomicSwap {
         );
     }
 
-    // TODO: should we add up balance?
-    function participate(uint refundTime, bytes32 secretHash, address initiator)
+    function participate(uint refundTime, uint256 refundPercent, bytes32 secretHash, address initiator)
         public
         payable
         hasNoNilValues(refundTime)
@@ -137,6 +138,7 @@ contract NonSpeculativeAtomicSwap {
         swaps[secretHash].initiator = initiator;
         swaps[secretHash].participant = msg.sender;
         swaps[secretHash].value = msg.value;
+        swaps[secretHash].refundPercent = refundPercent;
         swaps[secretHash].kind = Kind.Participant;
         swaps[secretHash].state = State.Filled;
         emit Participated(
@@ -149,7 +151,6 @@ contract NonSpeculativeAtomicSwap {
         );
     }
 
-    // TODO: should we allow partial redeem?
     function redeem(bytes32 secret, bytes32 secretHash)
         public
         isRedeemable(secretHash, secret, msg.sender)
@@ -172,9 +173,8 @@ contract NonSpeculativeAtomicSwap {
         public
         isRefundable(secretHash, msg.sender)
     {
-        uint256 numerator = div(swaps[secretHash].value, 5);
-        uint256 major = mul(numerator, 4);
-        uint256 minor = mul(numerator, 1);;
+        uint256 major = mul(div(swaps[secretHash].value, 100), swaps[secretHash].refundPercent);
+        minor = sub(swaps[secretHash].value, major);
 
         if (swaps[secretHash].kind == Kind.Participant) {
             swaps[secretHash].participant.transfer(major);
