@@ -32,7 +32,8 @@ contract NonSpeculativeAtomicSwap {
         uint refundTime,
         bytes32 secretHash,
         address refunder,
-        uint256 value
+        uint256 refundedValue,
+        uint256 lostValue
     );
 
     event Redeemed(
@@ -178,20 +179,24 @@ contract NonSpeculativeAtomicSwap {
         );
     }
 
-    // refund partially refund the locked value per agreement
+    // refund partially refunds the locked value per agreement
     function refund(bytes32 secretHash)
         public
         isRefundable(secretHash, msg.sender)
     {
-        uint256 major = swaps[secretHash].value.div(100).mul(swaps[secretHash].refundPercent);
-        uint256 minor = swaps[secretHash].value.sub(major);
-        if (swaps[secretHash].kind == Kind.Participant) {
-            swaps[secretHash].participant.transfer(major);
-            swaps[secretHash].initiator.transfer(minor);
+        uint256 refundedValue = swaps[secretHash].value;
+        uint256 lostValue = 0;
+
+        if (swaps[secretHash].kind == Kind.Initiator) {
+            refundedValue = swaps[secretHash].value.div(100).mul(swaps[secretHash].refundPercent);
+            lostValue = swaps[secretHash].value.sub(refundedValue);
+            swaps[secretHash].initiator.transfer(refundedValue);
+            swaps[secretHash].participant.transfer(lostValue);
         } else {
-            swaps[secretHash].initiator.transfer(major);
-            swaps[secretHash].participant.transfer(minor);
+            swaps[secretHash].participant.transfer(refundedValue);
+            swaps[secretHash].initiator.transfer(lostValue);
         }
+        
 
         swaps[secretHash].state = State.Refunded;
 
@@ -199,7 +204,8 @@ contract NonSpeculativeAtomicSwap {
             block.timestamp,
             swaps[secretHash].secretHash,
             msg.sender,
-            major
+            refundedValue,
+            lostValue
         );
     }
 }

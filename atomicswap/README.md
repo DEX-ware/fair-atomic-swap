@@ -158,7 +158,7 @@ or
 > web3.fromWei(eth.getBalance(eth.accounts[1]), "ether")
 ```
 
-10. Send a tx with 10 ether, invoking initiate() in Remix with parameters:
+10. send a tx with 10 ether, invoking initiate() in Remix with parameters:
 + `refundTime`: _1_
 + `refundPercent`: _80_
 + `secretHash`: `0x64f1ddd4cc83a3aaf37a7f290ec922dc764de023acdd11bf76c24378b086a017`
