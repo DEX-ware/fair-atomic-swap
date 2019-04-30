@@ -1,6 +1,6 @@
 # Atomic Swap
 
-## Bitcoin-core
+## Bitcoin-core v0.17.1
 
 1. start a bitcoin-core node by
 
@@ -12,10 +12,13 @@ The RPC port is 18443. The P2P port is 18444.
 
 Note: for `btcd`, the RPC port is 18334. The P2P port is 18444.
 
-2. generate a Bitcoin P2PKH address
+2. create 2 wallets and generate a P2PKH address for each of them
 
 ```bash
-bitcoin-cli --regtest --rpcuser=user --rpcpassword=pass getnewaddress "" "legacy"
+bitcoin-cli --regtest --rpcuser=user --rpcpassword=pass createwallet wallet1
+bitcoin-cli --regtest --rpcuser=user --rpcpassword=pass --rpcwallet=wallet1 getnewaddress "" "legacy"
+bitcoin-cli --regtest --rpcuser=user --rpcpassword=pass createwallet wallet2
+bitcoin-cli --regtest --rpcuser=user --rpcpassword=pass --rpcwallet=wallet2 getnewaddress "" "legacy"
 ```
 
 3. execute `btcatomicswap`
@@ -27,7 +30,7 @@ cd btcatomicswap
 
 ## Ethereum
 
-1. create account
+1. create an account
 
 ```bash
 geth --datadir node0 account new
