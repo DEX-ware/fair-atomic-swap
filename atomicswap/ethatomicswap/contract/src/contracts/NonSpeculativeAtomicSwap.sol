@@ -8,6 +8,8 @@ pragma solidity ^0.5.0;
 import "./SafeMath.sol";
 
 contract NonSpeculativeAtomicSwap {
+    using SafeMath for uint256;
+
     enum Kind { Initiator, Participant }
     enum State { Empty, Filled, Redeemed, Refunded }
 
@@ -16,8 +18,8 @@ contract NonSpeculativeAtomicSwap {
         uint refundTime;
         bytes32 secretHash;
         bytes32 secret;
-        address initiator;
-        address participant;
+        address payable initiator;
+        address payable participant;
         uint256 value;
         uint256 refundPercent;
         Kind kind;
@@ -181,8 +183,8 @@ contract NonSpeculativeAtomicSwap {
         public
         isRefundable(secretHash, msg.sender)
     {
-        uint256 major = mul(div(swaps[secretHash].value, 100), swaps[secretHash].refundPercent);
-        minor = sub(swaps[secretHash].value, major);
+        uint256 major = swaps[secretHash].value.div(100).mul(swaps[secretHash].refundPercent);
+        minor = swaps[secretHash].value.sub(major);
         if (swaps[secretHash].kind == Kind.Participant) {
             swaps[secretHash].participant.transfer(major);
             swaps[secretHash].initiator.transfer(minor);
