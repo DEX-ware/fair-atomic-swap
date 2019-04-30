@@ -137,4 +137,16 @@ Using [the Remix IDE](http://remix.ethereum.org)
 ```
  -->
 
-7. invoke the smart contract
+7. stop mining to our addresses
+
+```bash
+eth.coinbase = "0x3ca60eb49314d867ab75a3c7b3a5aa61c3d6ef71"
+```
+8. query current balance
+
+9. invoke initiate() in Remix with parameter:
+
+10. invoke refund() in Remix with parameter:
+
+11. query current balance
+
