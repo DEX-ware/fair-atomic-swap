@@ -50,8 +50,7 @@ contract NonSpeculativeAtomicSwap {
         bytes32 secretHash,
         address initiator,
         address participant,
-        uint256 value,
-        uint256 refundPercent
+        uint256 value
     );
 
     event Initiated(
@@ -133,7 +132,7 @@ contract NonSpeculativeAtomicSwap {
         );
     }
 
-    function participate(uint refundTime, uint256 refundPercent, bytes32 secretHash, address payable initiator)
+    function participate(uint refundTime, bytes32 secretHash, address payable initiator)
         public
         payable
         hasNoNilValues(refundTime)
@@ -145,7 +144,7 @@ contract NonSpeculativeAtomicSwap {
         swaps[secretHash].initiator = initiator;
         swaps[secretHash].participant = msg.sender;
         swaps[secretHash].value = msg.value;
-        swaps[secretHash].refundPercent = refundPercent;
+        swaps[secretHash].refundPercent = 100;
         swaps[secretHash].kind = Kind.Participant;
         swaps[secretHash].state = State.Filled;
        
@@ -155,8 +154,7 @@ contract NonSpeculativeAtomicSwap {
             secretHash,
             initiator,
             msg.sender,
-            msg.value,
-            refundPercent
+            msg.value
         );
     }
 
