@@ -127,7 +127,9 @@ true
 
 6. deploy the contract
 
-Using the Remix IDE
+Options:
++ Using the Remix IDE
++ Using metamask + https://mycrypto.com/contracts/deploy
 
 7. execute `ethatomicswap`
 
