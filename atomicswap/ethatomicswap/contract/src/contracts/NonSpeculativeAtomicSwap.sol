@@ -47,7 +47,8 @@ contract NonSpeculativeAtomicSwap {
         bytes32 secretHash,
         address initiator,
         address participant,
-        uint256 value
+        uint256 value,
+        uint256 refundPercent
     );
 
     event Initiated(
@@ -56,7 +57,8 @@ contract NonSpeculativeAtomicSwap {
         bytes32 secretHash,
         address initiator,
         address participant,
-        uint256 value
+        uint256 value,
+        uint256 refundPercent
     );
 
     constructor() public {}
@@ -116,13 +118,15 @@ contract NonSpeculativeAtomicSwap {
         swaps[secretHash].refundPercent = refundPercent;
         swaps[secretHash].kind = Kind.Initiator;
         swaps[secretHash].state = State.Filled;
+       
         emit Initiated(
             block.timestamp,
             refundTime,
             secretHash,
             msg.sender,
             participant,
-            msg.value
+            msg.value,
+            refundPercent
         );
     }
 
@@ -141,16 +145,19 @@ contract NonSpeculativeAtomicSwap {
         swaps[secretHash].refundPercent = refundPercent;
         swaps[secretHash].kind = Kind.Participant;
         swaps[secretHash].state = State.Filled;
+       
         emit Participated(
             block.timestamp,
             refundTime,
             secretHash,
             initiator,
             msg.sender,
-            msg.value
+            msg.value,
+            refundPercent
         );
     }
 
+    // redeem fully redeems the locked value
     function redeem(bytes32 secret, bytes32 secretHash)
         public
         isRedeemable(secretHash, secret, msg.sender)
@@ -169,13 +176,13 @@ contract NonSpeculativeAtomicSwap {
         );
     }
 
+    // refund partially refund the locked value per agreement
     function refund(bytes32 secretHash)
         public
         isRefundable(secretHash, msg.sender)
     {
         uint256 major = mul(div(swaps[secretHash].value, 100), swaps[secretHash].refundPercent);
         minor = sub(swaps[secretHash].value, major);
-
         if (swaps[secretHash].kind == Kind.Participant) {
             swaps[secretHash].participant.transfer(major);
             swaps[secretHash].initiator.transfer(minor);
@@ -186,12 +193,11 @@ contract NonSpeculativeAtomicSwap {
 
         swaps[secretHash].state = State.Refunded;
 
-        // TODO: add more info
         emit Refunded(
             block.timestamp,
             swaps[secretHash].secretHash,
             msg.sender,
-            swaps[secretHash].value
+            major
         );
     }
 }
