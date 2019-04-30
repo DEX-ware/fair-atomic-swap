@@ -19,13 +19,13 @@ $S(t)$ is the price of a unit of $\pi$ against the time $t$, and $S(0)$ is the s
 $T$ is the agreed strike time.
 $pr$ is the \textit{premium}.
 
-\subsection{Atomic Swap}
+\subsection{Atomic Cross-Chain Swap}
 
 (We follow the notion in ``Perun: Virtual Payment Hubs over Cryptocurrencies'')
 
 Alice hopes to buy $x_2$ $Coin_2$ on blockchain $BC_2$ with $x_1$ $Coin_1$ on blockchain $BC_1$.
 She initiates an atomic swap, and Bob participates in the atomic swap.
-We define an Atomic Swap as $\mathcal{AS} = (x_1, Coin_1, x_2, Coin_2)$.
+We define an Atomic Swap $\mathcal{AS}$ as $(x_1, Coin_1, x_2, Coin_2)$.
 
 The Atomic Swap protocol consists of the algorithms below:
 
@@ -77,7 +77,7 @@ _2$, respectively.
 \subsection{Atomic Swaps as Premium-free American Call Options}
 
 \begin{enumerate}
-    \item \textbf{Advertise}: Alice creates and advertises an American Call Option contract $\Pi = (x_1, x_2, Coin_2, S, \Delta_1, fee)$ by \textbf{initiating} an Atomic Swap $\mathcal{AS}$. Note that $S$ is the exchange rate of $Coin_2 / Coin_1$.
+    \item \textbf{Advertise}: Alice creates and advertises an American Call Option contract $\Pi = (x_1, x_2, Coin_2, S, \Delta_2, fee)$ by \textbf{initiating} an Atomic Swap $\mathcal{AS}$. Note that $S$ is the exchange rate of $Coin_2 / Coin_1$.
     \item \textbf{Contract}: Bob agrees on $\Pi$ by \textbf{Participating} the $\mathcal{AS}$.
     \item \textbf{Hold}: Alice does not exercise $\Pi$ - \textbf{redeem} the coins from Bob, until $\Delta_2$ is about to expire.
     \item \textbf{Exercise or Abort}: When $\Delta_2$ is about to abort, Alice checks $S$ between $Coin_1$ and $Coin_2$. If she earns money with the latest $S$, she can exercise $\Pi$ by \textbf{redeeming}. Otherwise, she can wait for $\Pi$ to expire and \textbf{refund}.
