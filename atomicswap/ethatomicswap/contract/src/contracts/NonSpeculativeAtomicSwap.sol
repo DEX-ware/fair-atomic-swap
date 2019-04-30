@@ -105,7 +105,7 @@ contract NonSpeculativeAtomicSwap {
         _;
     }
 
-    function initiate(uint refundTime, uint256 refundPercent, bytes32 secretHash, address participant)
+    function initiate(uint refundTime, uint256 refundPercent, bytes32 secretHash, address payable participant)
         public
         payable
         hasNoNilValues(refundTime)
@@ -132,7 +132,7 @@ contract NonSpeculativeAtomicSwap {
         );
     }
 
-    function participate(uint refundTime, uint256 refundPercent, bytes32 secretHash, address initiator)
+    function participate(uint refundTime, uint256 refundPercent, bytes32 secretHash, address payable initiator)
         public
         payable
         hasNoNilValues(refundTime)
@@ -184,7 +184,7 @@ contract NonSpeculativeAtomicSwap {
         isRefundable(secretHash, msg.sender)
     {
         uint256 major = swaps[secretHash].value.div(100).mul(swaps[secretHash].refundPercent);
-        minor = swaps[secretHash].value.sub(major);
+        uint256 minor = swaps[secretHash].value.sub(major);
         if (swaps[secretHash].kind == Kind.Participant) {
             swaps[secretHash].participant.transfer(major);
             swaps[secretHash].initiator.transfer(minor);
