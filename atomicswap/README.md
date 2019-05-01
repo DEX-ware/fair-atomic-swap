@@ -100,7 +100,7 @@ INFO [08-21|23:05:36] Exported existing genesis block
 
 ```bash
 geth --datadir node0 init genesis.json
-geth --rpc --datadir node0 --nodiscover --unlock '0' console
+geth --datadir node0 --nodiscover --unlock '0' console
 ```
 
 4. unlock the account and start mining
