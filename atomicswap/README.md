@@ -129,48 +129,8 @@ true
 
 Using [the Remix IDE](http://remix.ethereum.org)
 
-<!-- 
 7. execute `ethatomicswap`
 
 ```bash
 ./ethatomicswap --net=testnet --account=0x78fdb0ca831312efc77c2fec51e5525aad68f0a9 -c 0x08383da28ea84351271f7f86026102deafcb4596 initiate 00000000000000000000000000000000000000ff 5.55
 ```
- -->
-
-7. create 2 new accounts
-
-```bash
-> personal.newAccount("")
-> personal.newAccount("")
-```
-
-8. transfer 11 eth to eth.accounts[1], and unlock it
-
-```bash
-> var amount = web3.toWei(10, "ether")
-> eth.sendTransaction({from:eth.accounts[0], to:eth.accounts[1], value: amount})
-> personal.unlockAccount(eth.accounts[1])
-```
-
-9. query eth.accounts[1]'s current balance in Remix 
-or
-```
-> web3.fromWei(eth.getBalance(eth.accounts[1]), "ether")
-```
-
-10. send a tx with 10 ether, invoking initiate() in Remix with parameters:
-+ `refundTime`: _1_
-+ `refundPercent`: _80_
-+ `secretHash`: `0x64f1ddd4cc83a3aaf37a7f290ec922dc764de023acdd11bf76c24378b086a017`
-+ `participant`: <eth.accounts[2]>
-
-11. invoke refund() in Remix with parameters:
-+ `secretHash`: `0x64f1ddd4cc83a3aaf37a7f290ec922dc764de023acdd11bf76c24378b086a017`
-
-12. query eth.accounts[1]'s and eth.accounts[2]'s current balances in Remix
-or
-```
-> web3.fromWei(eth.getBalance(eth.accounts[1]), "ether")
-> web3.fromWei(eth.getBalance(eth.accounts[2]), "ether")
-```
-
