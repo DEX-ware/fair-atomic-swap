@@ -12,12 +12,20 @@ The buyer should pay for both the asset and the premium when participating in th
 
 Note that the price of the asset changes over time. This makes the American Call Option ``speculative'': One may profit from the contract by buying the asset with a lower price then sell it with a higher price.
 
-We define an American Call Option contract $\Pi$ as $(x, y, \pi, S, T, pr)$.
-$x$ is the amount of the currency unit (e.g. USD) to participate in the contract.
-$y$ is the amount of the asset $\pi$ that the participant hopes to buy.
+We define an American Call Option contract $\Pi$ as $(x, \pi, y, S, T, pr)$.
+$x$ is the amount of the asset $\pi$ that the seller wants to sell.
+$y$ is the amount of the currency unit (e.g. USD) that the buyer needs to pay.
 $S(t)$ is the price of a unit of $\pi$ against the time $t$, and $S(0)$ is the spot price.
 $T$ is the agreed strike time.
 $pr$ is the \textit{premium}.
+
+
+\begin{enumerate}
+    \item \textbf{Advertise}: The buyer creates and advertises an American Call Option contract $\Pi = (x, \pi, y, S, T, pr)$.
+    \item \textbf{Contract}: The seller finds $\Pi$ is profitable, so he signs $\Pi$. The buyer should pay $pr$ to the seller. Note that the buyer does not pay for $\pi$ at this stage.
+    \item \textbf{Hold}: The buyer keeps not exercising $\Pi$. If he doesn't exercise $\Pi$ before $T$, $\Pi$ will abort.
+    \item \textbf{Exercise}: The buyer exercises $\Pi$ - The buyer pays $y$ to the seller, and the seller gives $x$ $\pi$ to the buyer. The buyer can exercise $\Pi$ before $T$ or on $T$.
+\end{enumerate}
 
 \subsection{Atomic Cross-Chain Swap}
 
@@ -71,14 +79,8 @@ takes no parameters and returns the $\mathcal{V} \in \{true, false\}$ indicating
 Alice and Bob can perform the refund by publishing $tx_{\mathcal{R}, 1}$ and $tx_{\mathcal{R}, 2}$ after the timelock $\Delta_1$ and $\Delta
 _2$, respectively.
 
-% TODO process
+% TODO process graph
 
 
-\subsection{Atomic Swaps as an Instance of Premium-free American Call Options}
+\subsection{Modeling Atomic Cross-Chain Swaps as American Call Options}
 
-\begin{enumerate}
-    \item \textbf{Advertise}: Alice creates and advertises an American Call Option contract $\Pi = (x_1, x_2, Coin_2, S, \Delta_2, fee)$ by \textbf{initiating} an Atomic Swap $\mathcal{AS}$. Note that $S$ is the exchange rate of $Coin_2 / Coin_1$.
-    \item \textbf{Contract}: Bob agrees on $\Pi$ by \textbf{Participating} the $\mathcal{AS}$.
-    \item \textbf{Hold}: Alice does not exercise $\Pi$ - \textbf{redeem} the coins from Bob, until $\Delta_2$ is about to expire.
-    \item \textbf{Exercise or Abort}: When $\Delta_2$ is about to abort, Alice checks $S$ between $Coin_1$ and $Coin_2$. If she earns money with the latest $S$, she can exercise $\Pi$ by \textbf{redeeming}. Otherwise, she can wait for $\Pi$ to expire and \textbf{refund}.
-\end{enumerate}
