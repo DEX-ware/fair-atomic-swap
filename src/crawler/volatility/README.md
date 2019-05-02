@@ -12,8 +12,12 @@ Moreover, after trying some services out and comparing across them, we've decide
 + https://www.coingecko.com/en/api#
 + https://www.coingecko.com/api/documentations/v3
 
-
 ## Prerequisite
 + virtualenv
 + python3
 + `pip3 install requests`
+
+## Usage
+```
+python3 crawler.py
+```
