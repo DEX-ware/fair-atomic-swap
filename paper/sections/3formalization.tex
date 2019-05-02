@@ -23,11 +23,17 @@ $pr$ is the \textit{premium}.
     \item \textbf{Advertise}: The buyer creates and advertises an American Call Option contract $\Pi = (K, \pi_1, y, \pi_2, S, T, pr)$.
     \item \textbf{Contract}: The seller finds $\Pi$ is profitable, so he signs $\Pi$.
     The buyer should pay $pr$ to the seller.
-    Note that the buyer does not pay for $\pi$ at this stage.
+    Note that the buyer does not pay for $\pi$ at this stage. \JS{$\pi$ is not defined. Do you mean $\pi_1$?}
     \item \textbf{Hold}: The buyer keeps not exercising $\Pi$. If he doesn't exercise $\Pi$ before $T$, $\Pi$ will abort.
     \item \textbf{Exercise}: The buyer exercises $\Pi$ - The buyer pays $K$ $\pi_1$ to the seller, and the seller gives $y$ $\pi_2$ to the buyer. The buyer can exercise $\Pi$ before $T$ or on $T$.
 \end{enumerate}
 
+\JS{$S_t$ and $t$ are defined but not used in the definition of $\Pi$. Is $(S_t,t)\in S$?}\\
+
+\JS{Can a seller abort the contract in American Call Option? It seems
+  that a seller can abort the contract in Atomic Cross-Chain Swap, but
+  not in American Call Option. Is there a possible mismatching here
+  between the two protocols?}
 \subsection{Atomic Cross-Chain Swap}
 
 Alice hopes to buy $x_2$ $Coin_2$ on blockchain $BC_2$ with $x_1$ $Coin_1$ on blockchain $BC_1$.
