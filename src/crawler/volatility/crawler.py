@@ -14,14 +14,20 @@ def main():
     for coin in settings.coins:
         print("Getting data of %s..." % coin)
         data = get_data(coin)
-        print("Saving data of %s..." % coin)
-        file = open('{}-{}.csv'.format(coin, datetime.today().strftime('%Y-%m-%d')), "w")
-        try:
-            file.write("")
-            file.flush()
-            file.close()
-        except Exception as e:
-            print("Error:", e)
+        print("Saving data for %s..." % coin)
+        prices = data["prices"]
+        last_timestamp = 0
+        file = open('btc-{}_{}.csv'.format(coin, datetime.today().strftime('%Y-%m-%d')), "w")
+        for price in prices:
+            # price[0] is a timestamp and price[1] is the price at that time
+            assert(price[0]>last_timestamp)
+            last_timestamp = price[0]
+            try:
+                file.write('%d, %s\n' % (price[0], price[1]))
+                file.flush()
+            except Exception as e:
+                print("Error:", e)
+        file.close()
     print("Done!")
 
 if __name__ == '__main__':
