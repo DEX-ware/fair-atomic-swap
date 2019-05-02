@@ -26,7 +26,7 @@ The model assume that for each step on the binomial tree, the price rises or fal
 % reverse engineering
 Reverse engineering the option price relies on iteratively back propagating the option price for each level of the binomial tree.
 
-Formally, pricing the American Call Option $\Pi = (K, \pi_1, y, \pi_2, S, T, pr)$ is as follows:
+Formally, pricing the American Call Option $\Pi = (K, \pi_1, y, \pi_2, S, T, pr)$ by using the CRR model is as follows:
 
 \begin{enumerate}
     \item Creating the binomial price tree
@@ -35,8 +35,9 @@ Formally, pricing the American Call Option $\Pi = (K, \pi_1, y, \pi_2, S, T, pr)
 \end{enumerate}
 
 \paragraph{Creating the binomial price tree}
-The binomial price tree $\mathcal{T}$ represents the possible future prices discretely.
-Each node $\mathcal{T}_{t, i}$ is attached with the asset price $S_{t, i}$ and the option price $C_{t, i}$, where $t$ is the point of time and $i$ is the number of the node at its level.
+The binomial price tree $\mathcal{T}$ of the height $n$ represents the possible future prices discretely.
+Each node $\mathcal{T}_{t, i}$ is attached with the asset price $S_{t, i}$ and the option price $C_{t, i}$,
+where $t \in \{0, \frac{T}{n}, \frac{2T}{n}, \dots, T\}$ is the point of time and $i$ is the number of the node at its level.
 The CRR model assumes that the asset price will either move up or down by a specific factor per step in $\mathcal{T}$.
 The move-up factor is $u$, and the move-down factor is $d$.
 Accordingly, the price after one move-up is $S_up = u \cdot S$, and the price after one move-down is $S_down = d \cdot S$.
@@ -44,8 +45,8 @@ Accordingly, the price after one move-up is $S_up = u \cdot S$, and the price af
 $u$ and $d$ are calculated using the underlying volatility $\sigma$ of the asset price:
 
 \begin{align} 
-u &= e^{\sigma \sqrt{t}}\\
-d &= e^{- \sigma \sqrt{t}} = \frac{1}{u}
+u &= e^{\sigma \sqrt{\frac{T}{n}}}\\
+d &= e^{- \sigma \sqrt{\frac{T}{n}}} = \frac{1}{u}
 \end{align}
 
 Where $\sigma$ is computed as:
@@ -88,5 +89,5 @@ C_{t - \Delta t, i} = max[e^{-r \Delta t} (p C_{t, i} + q C_{t, i+1}), K]
 
 The earliest option price $S_{0, 1}$ - the estimated option price - can be calculated by iteratively back-propagating the later option prices. 
 
-\subsubsection{Pricing the Premium of the Atomic Cross-Chain Swaps}
+\subsubsection{Pricing}
 
