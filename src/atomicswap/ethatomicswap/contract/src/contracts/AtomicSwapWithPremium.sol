@@ -27,6 +27,7 @@ contract AtomicSwapWithPremium {
         uint256 value;
         Kind kind;
         State state;
+        uint256 premiumValue;
         PremiumState premiumState;
     }
 
