@@ -120,6 +120,9 @@ contract AtomicSwapWithPremium {
         _;
     }
 
+    //TODO: status here?
+    function checkStatus(bytes32 secretHash) {}
+
     //TODO: premium here?
     function setup(uint refundTime, bytes32 secretHash, address participant)
         public
