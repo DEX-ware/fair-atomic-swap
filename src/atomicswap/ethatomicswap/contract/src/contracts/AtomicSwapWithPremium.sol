@@ -104,24 +104,38 @@ contract AtomicSwapWithPremium {
         _;
     }
 
-    //TODO: premium here?
+    //TODO:
     modifier isNotInitiated(bytes32 secretHash) {
         require(swaps[secretHash].state == State.Empty);
         _;
     }
 
-    //TODO: premium here?
-    modifier hasNoNilValues(uint refundTime) {
+    modifier hasPayment() {
         require(msg.value > 0);
+        _;
+    }
+
+    modifier hasRefundTime(uint refundTime) {
         require(refundTime > 0);
         _;
+    }
+
+    //TODO: premium here?
+    function setup(uint refundTime, bytes32 secretHash, address participant)
+        public
+        payable
+        hasRefundTime(refundTime)
+        isNotInitiated(secretHash)
+    {
+
     }
 
     //TODO: premium here?
     function initiate(uint refundTime, bytes32 secretHash, address participant)
         public
         payable
-        hasNoNilValues(refundTime)
+        hasPayment()
+        hasRefundTime(refundTime)
         isNotInitiated(secretHash)
     {
         swaps[secretHash].initTimestamp = block.timestamp;
@@ -146,7 +160,8 @@ contract AtomicSwapWithPremium {
     function participate(uint refundTime, bytes32 secretHash, address initiator)
         public
         payable
-        hasNoNilValues(refundTime)
+        hasPayment()
+        hasRefundTime(refundTime)
         isNotInitiated(secretHash)
     {
         swaps[secretHash].initTimestamp = block.timestamp;
