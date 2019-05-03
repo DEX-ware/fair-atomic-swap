@@ -33,6 +33,7 @@ contract AtomicSwapWithPremium {
 
     mapping(bytes32 => Swap) public swaps;
 
+    //TODO: premium here?
     event Refunded(
         uint refundTime,
         bytes32 secretHash,
@@ -40,6 +41,7 @@ contract AtomicSwapWithPremium {
         uint256 value
     );
 
+    //TODO: premium here?
     event Redeemed(
         uint redeemTime,
         bytes32 secretHash,
@@ -48,6 +50,7 @@ contract AtomicSwapWithPremium {
         uint256 value
     );
 
+    //TODO: premium here?
     event Participated(
         uint initTimestamp,
         uint refundTime,
@@ -57,6 +60,7 @@ contract AtomicSwapWithPremium {
         uint256 value
     );
 
+    //TODO: premium here?
     event Initiated(
         uint initTimestamp,
         uint refundTime,
@@ -68,6 +72,7 @@ contract AtomicSwapWithPremium {
 
     constructor() public {}
 
+    //TODO: premium here?
     modifier isRefundable(bytes32 secretHash, address refunder) {
         require(swaps[secretHash].state == State.Filled);
         if (swaps[secretHash].kind == Kind.Participant) {
@@ -81,6 +86,7 @@ contract AtomicSwapWithPremium {
         _;
     }
 
+    //TODO: premium here?
     modifier isRedeemable(bytes32 secretHash, bytes32 secret, address redeemer) {
         require(swaps[secretHash].state == State.Filled);
         if (swaps[secretHash].kind == Kind.Participant) {
@@ -92,22 +98,26 @@ contract AtomicSwapWithPremium {
         _;
     }
 
+    //TODO: premium here?
     modifier isInitiator(bytes32 secretHash) {
         require(msg.sender == swaps[secretHash].initiator);
         _;
     }
 
+    //TODO: premium here?
     modifier isNotInitiated(bytes32 secretHash) {
         require(swaps[secretHash].state == State.Empty);
         _;
     }
 
+    //TODO: premium here?
     modifier hasNoNilValues(uint refundTime) {
         require(msg.value > 0);
         require(refundTime > 0);
         _;
     }
 
+    //TODO: premium here?
     function initiate(uint refundTime, bytes32 secretHash, address participant)
         public
         payable
@@ -132,6 +142,7 @@ contract AtomicSwapWithPremium {
         );
     }
 
+    //TODO: premium here?
     function participate(uint refundTime, bytes32 secretHash, address initiator)
         public
         payable
@@ -156,6 +167,7 @@ contract AtomicSwapWithPremium {
         );
     }
 
+    //TODO: premium here?
     function redeem(bytes32 secret, bytes32 secretHash)
         public
         isRedeemable(secretHash, secret, msg.sender)
@@ -174,6 +186,7 @@ contract AtomicSwapWithPremium {
         );
     }
 
+    //TODO: premium here?
     function refund(bytes32 secretHash)
         public
         isRefundable(secretHash, msg.sender)
