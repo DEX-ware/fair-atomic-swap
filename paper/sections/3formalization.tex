@@ -13,27 +13,23 @@ The buyer should pay for both the asset and the premium when participating in th
 Note that the price of the asset changes over time. This makes the American Call Option ``speculative'': One may profit from the contract by buying the asset with a lower price then sell it with a higher price.
 
 \begin{definition}
-We define an American Call Option contract $\Pi$ as $(K, \pi_1, y, \pi_2, S, T, pr)$.
+We define an American Call Option contract $\Pi$ as $(K, \pi_1, y, \pi_2, T, C)$.
 $K$ is the strike price - the amount of the currency $\pi_1$ that the buyer needs to pay.
 $y$ is the amount of the asset $\pi_2$ that the seller wants to sell.
-$S_t$ is the price of a unit of $\pi_2$ against the time $t$.
 $T$ is the agreed strike time.
-$pr$ is the \textit{premium}.
+$C$ is the \textit{premium}.
 \end{definition}
 
 The process of an American Call Option is as follows:
 
 \begin{enumerate}
-    \item \textbf{Advertise}: The buyer creates and advertises an American Call Option contract $\Pi = (K, \pi_1, y, \pi_2, S, T, pr)$.
+    \item \textbf{Advertise}: The buyer creates and advertises an American Call Option contract $\Pi = (K, \pi_1, y, \pi_2, T, C)$.
     \item \textbf{Contract}: The seller finds $\Pi$ is profitable, so he signs $\Pi$.
-    The buyer should pay $pr$ to the seller.
+    The buyer should pay $C$ to the seller.
     Note that the buyer does not pay for $\pi_2$ at this stage.
     \item \textbf{Hold}: The buyer keeps not exercising $\Pi$. If he doesn't exercise $\Pi$ before $T$, $\Pi$ will abort.
     \item \textbf{Exercise}: The buyer exercises $\Pi$ - The buyer pays $K$ $\pi_1$ to the seller, and the seller gives $y$ $\pi_2$ to the buyer. The buyer can exercise $\Pi$ before $T$ or on $T$.
 \end{enumerate}
-
-\JS{$S_t$ and $t$ are defined but not used in the definition of $\Pi$. Is $(S_t,t)\in S$?}
-\RC{It is used in the following sections (evaluation). S is a function where $x$ is time and $y$ is the asset price. Should we mention that in this section?}
 
 \JS{Can a seller abort the contract in American Call Option? It seems that a seller can abort the contract in Atomic Cross-Chain Swap, but not in American Call Option. Is there a possible mismatching here between the two protocols?}
 \RC{Yes, there is a little difference, but the difference does not affect the model. In American Call Options, after $T$ the contract is expired automatically. In Atomic Swap, after Bob's timelock, Bob can choose to or not to abort the Atomic Swap. At that stage, Bob can refund, Alice can redeem or refund, and once Alice redeems Bob can refund, so they are fair.}
@@ -102,7 +98,7 @@ Assume Alice \textbf{initiates} an Atomic Cross-Chain Swap $\mathcal{AS} = (x_1,
 $\mathcal{AS} = (x_1, Coin_1, x_2, Coin_2)$ is equivalent to the American Call Option contract
 
 $$
-\Pi = (\frac{x_2 Coin_2}{Coin_1}, Coin_1, x_2, Coin_2, \frac{Coin_2}{Coin_1}, \Delta_2, 0)
+\Pi = (\frac{x_2 Coin_2}{Coin_1}, Coin_1, x_2, Coin_2, \Delta_2, 0)
 $$
 \end{theorem}
 

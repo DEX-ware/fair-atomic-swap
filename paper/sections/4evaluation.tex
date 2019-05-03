@@ -26,7 +26,7 @@ The model assume that for each step on the binomial tree, the price rises or fal
 % reverse engineering
 Reverse engineering the option price relies on iteratively back propagating the option price for each level of the binomial tree.
 
-Formally, pricing the American Call Option $\Pi = (K, \pi_1, y, \pi_2, S, T, pr)$ by using the CRR model is as follows:
+Formally, pricing the American Call Option $\Pi = (K, \pi_1, y, \pi_2, T, pr)$ by using the CRR model is as follows:
 
 \begin{enumerate}
     \item Creating the binomial price tree
@@ -35,22 +35,31 @@ Formally, pricing the American Call Option $\Pi = (K, \pi_1, y, \pi_2, S, T, pr)
 \end{enumerate}
 
 \paragraph{Creating the binomial price tree}
-The binomial price tree $\mathcal{T}$ of the height $n$ represents the possible future prices discretely.
+The binomial price tree $\mathcal{T}$ of the height $n$ represents the possible future prices within the time period $T$ discretely.
+$n$ can be picked arbitrarily. With larger $n$, the result will be more accurate, but the computing overhead will be heavier.
 Each node $\mathcal{T}_{t, i}$ is attached with the asset price $S_{t, i}$ and the option price $C_{t, i}$,
 where $t \in \{0, \frac{T}{n}, \frac{2T}{n}, \dots, T\}$ is the point of time and $i$ is the number of the node at its level.
 The CRR model assumes that the asset price will either move up or down by a specific factor per step in $\mathcal{T}$.
 The move-up factor is $u$, and the move-down factor is $d$.
 Accordingly, the price after one move-up is $S_up = u \cdot S$, and the price after one move-down is $S_down = d \cdot S$.
 
-$u$ and $d$ are calculated using the underlying volatility $\sigma$ of the asset price:
+$u$ and $d$ are calculated using the underlying annualized volatility $\sigma_a$ of the asset price:
 
 \begin{align} 
-u &= e^{\sigma \sqrt{\frac{T}{n}}}\\
-d &= e^{- \sigma \sqrt{\frac{T}{n}}} = \frac{1}{u}
+u &= e^{\sigma_a \sqrt{\frac{T}{n}}}\\
+d &= e^{- \sigma_a \sqrt{\frac{T}{n}}} = \frac{1}{u}
 \end{align}
 
-Where $\sigma$ is computed as:
-% TODO
+Here, $T$ is measured in years, and $\sigma_a$ is defined as the annual price standard deviation.
+$\sigma_a$ can be computed from the daily price standard deviation $\sigma_d$ as below:
+
+\begin{align} 
+\sigma_a &= \sigma_d \sqrt{d}\\
+\sigma_d &= \sqrt{\frac{\sum^{d}_{i=1} (S_i - \bar{S})^2}{d-1}}
+\end{align}
+
+where $d$ is the number of trading days within a year.
+For cryptocurrencies, it equals to the number of a days within a year.
 
 The asset price $S_{t, i}$ can also be computed as $S_{t, i} = S_{0, 1} \cdot u^{N_u - N_d}$, where $S_{0, 1}$ is the spot price, and $N_u, N_d$ are the numbers of move-up and move-down, respectively.
 
