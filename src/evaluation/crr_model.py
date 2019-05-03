@@ -12,7 +12,7 @@ def CRR(n, S, K, r, sigma_a, T, contract_type):
         K: strike price
         r: risk factor
         sigma_a: annualized volatility
-        T: strike time
+        T: strike time (in year)
         contract_type: type of the contract (0 for call, 1 for put)
     Returns:
         S_tree: The binomial tree of the asset prices
@@ -61,7 +61,7 @@ def CRR(n, S, K, r, sigma_a, T, contract_type):
 
 
 def price(n, S, K, r, sigma_a, T, contract_type):
-    S_tree, C_tree = CRR(n, S, K, r, sigma_a, T, contract_type)
+    _, C_tree = CRR(n, S, K, r, sigma_a, T, contract_type)
     return C_tree[0][0]
 
 

@@ -243,3 +243,6 @@ TSWLatexianTemp*
 
 # vscode
 .vscode
+
+# py
+*.pyc

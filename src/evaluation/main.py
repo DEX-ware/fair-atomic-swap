@@ -3,6 +3,7 @@ import pandas as pd
 from datetime import datetime
 import matplotlib
 from matplotlib import pyplot as plt
+from crr_model import price
 
 
 def get_exchange_rate(coin1, coin2):
@@ -21,6 +22,13 @@ def annualized_volatility(df):
     return annual_volatility
 
 
+def price_atomic_swap(coin1, coin2):
+    df = get_exchange_rate(coin1, coin2)
+    sigma_a = annualized_volatility(df)
+    p = price(12, df['price'].mean(),
+              df['price'].mean(), 0.05, sigma_a, 1.0, 0)
+    print('{}-{} option price: {}'.format(coin1, coin2, p))
+
+
 if __name__ == '__main__':
-    df = get_exchange_rate('btc', 'bch')
-    print(annualized_volatility(df))
+    price_atomic_swap('btc', 'eth')
