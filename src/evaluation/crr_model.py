@@ -60,6 +60,11 @@ def CRR(n, S, K, r, sigma_a, T, contract_type):
     return S_tree, C_tree
 
 
+def price(n, S, K, r, sigma_a, T, contract_type):
+    S_tree, C_tree = CRR(n, S, K, r, sigma_a, T, contract_type)
+    return C_tree[0][0]
+
+
 if __name__ == '__main__':
     # input
     S = 100.0
@@ -74,3 +79,4 @@ if __name__ == '__main__':
     S_tree, C_tree = CRR(n, S, K, r, v, T, contract_type)
     print('Asset Prices:\n', np.matrix(S_tree.astype(int)))
     print('Option Prices:\n', np.matrix(C_tree.astype(int)))
+    print('Final Price: ', price(n, S, K, r, v, T, contract_type))
