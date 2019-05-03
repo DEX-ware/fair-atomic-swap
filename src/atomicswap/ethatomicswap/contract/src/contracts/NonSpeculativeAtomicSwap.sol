@@ -12,6 +12,7 @@ contract NonSpeculativeAtomicSwap {
 
     enum Kind { Initiator, Participant }
     enum State { Empty, Filled, Redeemed, Refunded }
+    enum PremiumState { Empty, Filled, Redeemed }
 
     struct Swap {
         uint initTimestamp;
