@@ -1,15 +1,16 @@
+// Copyright (c) 2017 Altcoin Exchange, Inc
+
+// Copyright (c) 2018 BetterToken BVBA
+// Use of this source code is governed by an MIT
+// license that can be found at https://github.com/rivine/rivine/blob/master/LICENSE.
+
 pragma solidity ^0.5.0;
 
 // Notes on security warnings:
 //  + block.timestamp is safe to use,
 //    given that our timestamp can tolerate a 30-second drift in time;
 
-// use openzeppelin-solidity/contracts/math/SafeMath.sol
-import "./SafeMath.sol";
-
 contract NonSpeculativeAtomicSwap {
-    using SafeMath for uint256;
-
     enum Kind { Initiator, Participant }
     enum State { Empty, Filled, Redeemed, Refunded }
     enum PremiumState { Empty, Filled, Redeemed }
@@ -19,10 +20,9 @@ contract NonSpeculativeAtomicSwap {
         uint refundTime;
         bytes32 secretHash;
         bytes32 secret;
-        address payable initiator;
-        address payable participant;
+        address initiator;
+        address participant;
         uint256 value;
-        uint256 refundPercent;
         Kind kind;
         State state;
         PremiumState premiumState;
@@ -34,8 +34,7 @@ contract NonSpeculativeAtomicSwap {
         uint refundTime,
         bytes32 secretHash,
         address refunder,
-        uint256 refundedValue,
-        uint256 lostValue
+        uint256 value
     );
 
     event Redeemed(
@@ -61,8 +60,7 @@ contract NonSpeculativeAtomicSwap {
         bytes32 secretHash,
         address initiator,
         address participant,
-        uint256 value,
-        uint256 refundPercent
+        uint256 value
     );
 
     constructor() public {}
@@ -107,7 +105,7 @@ contract NonSpeculativeAtomicSwap {
         _;
     }
 
-    function initiate(uint refundTime, uint256 refundPercent, bytes32 secretHash, address payable participant)
+    function initiate(uint refundTime, bytes32 secretHash, address participant)
         public
         payable
         hasNoNilValues(refundTime)
@@ -119,22 +117,19 @@ contract NonSpeculativeAtomicSwap {
         swaps[secretHash].initiator = msg.sender;
         swaps[secretHash].participant = participant;
         swaps[secretHash].value = msg.value;
-        swaps[secretHash].refundPercent = refundPercent;
         swaps[secretHash].kind = Kind.Initiator;
         swaps[secretHash].state = State.Filled;
-       
         emit Initiated(
             block.timestamp,
             refundTime,
             secretHash,
             msg.sender,
             participant,
-            msg.value,
-            refundPercent
+            msg.value
         );
     }
 
-    function participate(uint refundTime, bytes32 secretHash, address payable initiator)
+    function participate(uint refundTime, bytes32 secretHash, address initiator)
         public
         payable
         hasNoNilValues(refundTime)
@@ -146,10 +141,8 @@ contract NonSpeculativeAtomicSwap {
         swaps[secretHash].initiator = initiator;
         swaps[secretHash].participant = msg.sender;
         swaps[secretHash].value = msg.value;
-        swaps[secretHash].refundPercent = 100;
         swaps[secretHash].kind = Kind.Participant;
         swaps[secretHash].state = State.Filled;
-       
         emit Participated(
             block.timestamp,
             refundTime,
@@ -160,7 +153,6 @@ contract NonSpeculativeAtomicSwap {
         );
     }
 
-    // redeem fully redeems the locked value
     function redeem(bytes32 secret, bytes32 secretHash)
         public
         isRedeemable(secretHash, secret, msg.sender)
@@ -179,24 +171,11 @@ contract NonSpeculativeAtomicSwap {
         );
     }
 
-    // refund partially refunds the locked value per agreement
     function refund(bytes32 secretHash)
         public
         isRefundable(secretHash, msg.sender)
     {
-        uint256 refundedValue = swaps[secretHash].value;
-        uint256 lostValue = 0;
-
-        if (swaps[secretHash].kind == Kind.Initiator) {
-            refundedValue = swaps[secretHash].value.div(100).mul(swaps[secretHash].refundPercent);
-            lostValue = swaps[secretHash].value.sub(refundedValue);
-            swaps[secretHash].initiator.transfer(refundedValue);
-            swaps[secretHash].participant.transfer(lostValue);
-        } else {
-            // equivalent to `msg.sender.transfer(swaps[secretHash].value);`
-            swaps[secretHash].participant.transfer(refundedValue);
-        }
-        
+        msg.sender.transfer(swaps[secretHash].value);
 
         swaps[secretHash].state = State.Refunded;
 
@@ -204,8 +183,7 @@ contract NonSpeculativeAtomicSwap {
             block.timestamp,
             swaps[secretHash].secretHash,
             msg.sender,
-            refundedValue,
-            lostValue
+            swaps[secretHash].value
         );
     }
 }
