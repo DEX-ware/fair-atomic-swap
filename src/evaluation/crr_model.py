@@ -56,6 +56,7 @@ def CRR(n, S, K, r, sigma_a, T, contract_type):
                     C_tree[i, j-1] = m.exp(-.05*dt) * \
                         (p*C_tree[i, j] + (1-p)*C_tree[i+1, j])
 
+    # where the final estimated option price is C_tree[0][0]
     return S_tree, C_tree
 
 
