@@ -18,7 +18,7 @@ contract AtomicSwapWithPremium {
     enum PremiumState { Empty, Filled, Redeemed }
 
     struct Swap {
-        uint initTimestamp;
+        uint setupTimestamp;
         uint refundTime;
         bytes32 secretHash;
         bytes32 secret;
@@ -52,7 +52,7 @@ contract AtomicSwapWithPremium {
 
     //TODO: premium here?
     event Participated(
-        uint initTimestamp,
+        uint setupTimestamp,
         uint refundTime,
         bytes32 secretHash,
         address initiator,
@@ -62,12 +62,23 @@ contract AtomicSwapWithPremium {
 
     //TODO: premium here?
     event Initiated(
-        uint initTimestamp,
+        uint setupTimestamp,
         uint refundTime,
         bytes32 secretHash,
         address initiator,
         address participant,
         uint256 value
+    );
+
+    //TODO: premium here?
+    event SetUp(
+        uint setupTimestamp,
+        uint refundTime,
+        bytes32 secretHash,
+        address initiator,
+        address participant,
+        uint256 value,
+        uint256 premiumValue
     );
 
     constructor() public {}
@@ -80,7 +91,7 @@ contract AtomicSwapWithPremium {
         } else {
             require(swaps[secretHash].initiator == refunder);
         }
-        uint preRefundTimestamp = swaps[secretHash].initTimestamp;
+        uint preRefundTimestamp = swaps[secretHash].setupTimestamp;
         preRefundTimestamp += swaps[secretHash].refundTime;
         require(block.timestamp > preRefundTimestamp);
         _;
@@ -104,14 +115,13 @@ contract AtomicSwapWithPremium {
         _;
     }
 
-    //TODO:
-    modifier isNotInitiated(bytes32 secretHash) {
+    modifier isEmptyState(bytes32 secretHash) {
         require(swaps[secretHash].state == State.Empty);
         _;
     }
 
-    modifier hasPayment() {
-        require(msg.value > 0);
+    modifier hasPayment(bytes32 secretHash) {
+        require(msg.value == swaps[secretHash].value);
         _;
     }
 
@@ -123,51 +133,93 @@ contract AtomicSwapWithPremium {
     //TODO: status here?
     function checkStatus(bytes32 secretHash) {}
 
-    //TODO: premium here?
-    function setup(uint refundTime, bytes32 secretHash, address participant)
+    //TODO:
+    // isInitiator?
+    // send prem to set up?
+    // config prem redeem time?
+    function setup(uint refundTime,
+                    bytes32 secretHash,
+                    address initiator,
+                    address participant,
+                    uint256 value,
+                    uint256 premiumValue)
         public
         payable
         hasRefundTime(refundTime)
-        isNotInitiated(secretHash)
+        isEmptyState(secretHash)
     {
-
-    }
-
-    //TODO: premium here?
-    function initiate(uint refundTime, bytes32 secretHash, address participant)
-        public
-        payable
-        hasPayment()
-        hasRefundTime(refundTime)
-        isNotInitiated(secretHash)
-    {
-        swaps[secretHash].initTimestamp = block.timestamp;
+        swaps[secretHash].setupTimestamp = block.timestamp; 
         swaps[secretHash].refundTime = refundTime;
         swaps[secretHash].secretHash = secretHash;
-        swaps[secretHash].initiator = msg.sender;
+        swaps[secretHash].initiator = initiator;
         swaps[secretHash].participant = participant;
-        swaps[secretHash].value = msg.value;
-        swaps[secretHash].kind = Kind.Initiator;
-        swaps[secretHash].state = State.Filled;
+        swaps[secretHash].value = value;
+        swaps[secretHash].premiumValue = premiumValue;
+        // swaps[secretHash].kind = Kind.Initiator;  //TODO: 
+        swaps[secretHash].state = State.Empty;
+        swaps[secretHash].premiumState = PremiumState.Empty;
+        emit SetUp(
+            block.timestamp,
+            refundTime,
+            secretHash,
+            initiator,
+            participant,
+            value,
+            premiumValue  //TODO: 
+        );
+    }
+
+    //TODO:
+    function payPremium(bytes32 secretHash)
+        public
+        payable
+        hasPremiumPayment(secretHash)
+        hasRefundTime(refundTime) // TODO:
+        isEmptyState(secretHash)
+    {   
+        //TODO:
         emit Initiated(
             block.timestamp,
             refundTime,
             secretHash,
-            msg.sender,
+            initiator,
             participant,
             msg.value
         );
     }
 
     //TODO: premium here?
-    function participate(uint refundTime, bytes32 secretHash, address initiator)
+    function initiate(bytes32 secretHash)
         public
         payable
-        hasPayment()
+        hasPayment(secretHash)
+        hasRefundTime(refundTime)
+        isEmptyState(secretHash)
+    {
+        swaps[secretHash].setupTimestamp = block.timestamp;
+        swaps[secretHash].refundTime = refundTime;
+        swaps[secretHash].secretHash = secretHash;
+        swaps[secretHash].initiator = initiator;
+        swaps[secretHash].participant = participant;
+        emit Initiated(
+            block.timestamp,
+            refundTime,
+            secretHash,
+            initiator,
+            participant,
+            msg.value
+        );
+    }
+
+    //TODO: premium here?
+    function participate(bytes32 secretHash)
+        public
+        payable
+        hasPayment(secretHash)
         hasRefundTime(refundTime)
         isNotInitiated(secretHash)
     {
-        swaps[secretHash].initTimestamp = block.timestamp;
+        swaps[secretHash].setupTimestamp = block.timestamp;
         swaps[secretHash].refundTime = refundTime;
         swaps[secretHash].secretHash = secretHash;
         swaps[secretHash].initiator = initiator;
