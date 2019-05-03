@@ -26,14 +26,14 @@ def CRR(n, S, K, r, sigma_a, T, contract_type):
     p = (m.exp(r*dt)-d)/(u-d)
     S_tree = np.zeros((n+1, n+1))
     C_tree = np.zeros((n+1, n+1))
+
+    # Step 1.5: Find the asset price for each node of the binomial price tree
     tmp = np.zeros((2, n+1))
     for j in range(n+1):
         tmp[0, j] = S * m.pow(d, j)
         tmp[1, j] = S * m.pow(u, j)
     tot = np.unique(tmp)
     c = n
-
-    # Step 1.5: Find the asset price for each node of the binomial price tree
     for i in range(c+1):
         for j in range(c+1):
             S_tree[i, j-c-1] = tot[(n-i)+j]
