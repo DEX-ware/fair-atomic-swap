@@ -1,9 +1,22 @@
-\section{Fair Atomic Swaps: Marketizing the Premium}
-\label{sec:fairer_atomic_swap}
+\section{A Fair Atomic Cross-Chain Swap}
+\label{sec:fair_atomic_swap}
 
-\subsection{Design Rationale}
+We propose a solution to make the Atomic Cross-Chain Swap fair: 
+The initiators should specify the percentages that he can refund before \textbf{initiating} an Atomic Swap.
 
-The CRR model estimates how much the premium should be, rather than how much the premium is exactly.
-In reality, the premium is marketized by investors, and regulated by the government.
+In detail, an Atomic Cross-Chain Swap is defined as $\mathcal{AS} = (x_1, Coin_1, x_2, Coin_2, \alpha)$.
+\textbf{Initiate} additionally takes a percentage $\alpha \in [0, 1]$ as inputs.
+The contract script $\mathcal{C}_1$ is changed to ``Alice pays $x_1$ $Coin_1$ from $\beta_{A, 1}$ to $\beta_{B, 1}$ if Bob can provide $s$ before or on a timelock $\Delta_1$ (which is a timestamp). After $\Delta_1$, Alice can refund $\alpha$ of the money - get $\alpha$ $x_1$ $Coin_1$ back, and $(1 - \alpha)$ $x_1$ $Coin_1$ is sent to Bob.''
 
-\subsection{Our Construction}
+Bob can judge whether $\alpha$ is fair or not.
+If Bob thinks $\alpha$ is fair, he will participate in $\mathcal{AS}$.
+The worst case is that the price of $Coin_2$ moves down, Alice aborts $\mathcal{AS}$ by \textbf{refund}, and Bob still gets $\alpha x_1 Coin_1$.
+
+This further marketizes the Atomic Cross-Chain Swaps.
+We consider the following cases:
+
+\paragraph{An initiator aiming at profitting}
+The initiator will intend to choose a big $\alpha$, so that he can minimize the loss of \textbf{refund} once the price of $Coin_2$ drops.
+
+\paragraph{An initiator aiming at exchanging his coin as soon as possible.}
+The initiator will intend to choose a small $\alpha$, so that his contract will attract more participants.

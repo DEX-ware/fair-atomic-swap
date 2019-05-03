@@ -5,10 +5,12 @@ import settings
 
 headers = {'accept': 'application/json'}
 
+
 def get_data(coin):
-    url = "https://api.coingecko.com/api/v3/coins/bitcoin/market_chart?vs_currency=%s&days=365" %coin
+    url = "https://api.coingecko.com/api/v3/coins/bitcoin/market_chart?vs_currency=%s&days=365" % coin
     r = requests.get(url, headers)
     return r.json()
+
 
 def main():
     for coin in settings.coins:
@@ -17,10 +19,11 @@ def main():
         print("Saving data for %s..." % coin)
         prices = data["prices"]
         last_timestamp = 0
-        file = open('btc-{}_{}.csv'.format(coin, datetime.today().strftime('%Y-%m-%d')), "w")
+        file = open('btc-{}_{}.csv'.format(coin,
+                                           datetime.today().strftime('%Y-%m-%d')), "w")
         for price in prices:
             # price[0] is a timestamp and price[1] is the price at that time
-            assert(price[0]>last_timestamp)
+            assert(price[0] > last_timestamp)
             last_timestamp = price[0]
             try:
                 file.write('%d, %s\n' % (price[0], price[1]))
@@ -29,6 +32,7 @@ def main():
                 print("Error:", e)
         file.close()
     print("Done!")
+
 
 if __name__ == '__main__':
     main()
