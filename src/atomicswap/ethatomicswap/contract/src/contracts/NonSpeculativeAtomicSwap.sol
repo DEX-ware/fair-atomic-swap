@@ -25,6 +25,7 @@ contract NonSpeculativeAtomicSwap {
         uint256 refundPercent;
         Kind kind;
         State state;
+        PremiumState premiumState;
     }
 
     mapping(bytes32 => Swap) public swaps;
