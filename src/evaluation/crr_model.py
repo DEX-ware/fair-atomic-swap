@@ -2,13 +2,13 @@ import numpy as np
 import math as m
 
 
-def CRR(n, S, K, r, sigma_a, T, contract_type):
+def CRR(n, S_0, K, r, sigma_a, T, contract_type):
     '''
     The Cox-Ross-Rubinstein Model
     Please refer to https://en.wikipedia.org/wiki/Binomial_options_pricing_model
     Inputs:
         n: steps of the binomial tree
-        S: price
+        S_0: initial asset price
         K: strike price
         r: risk factor
         sigma_a: annualized volatility
@@ -30,8 +30,8 @@ def CRR(n, S, K, r, sigma_a, T, contract_type):
     # Step 1.5: Find the asset price for each node of the binomial price tree
     tmp = np.zeros((2, n+1))
     for j in range(n+1):
-        tmp[0, j] = S * m.pow(d, j)
-        tmp[1, j] = S * m.pow(u, j)
+        tmp[0, j] = S_0 * m.pow(d, j)
+        tmp[1, j] = S_0 * m.pow(u, j)
     tot = np.unique(tmp)
     c = n
     for i in range(c+1):
@@ -60,14 +60,14 @@ def CRR(n, S, K, r, sigma_a, T, contract_type):
     return S_tree, C_tree
 
 
-def price(n, S, K, r, sigma_a, T, contract_type):
-    _, C_tree = CRR(n, S, K, r, sigma_a, T, contract_type)
+def price(n, S_0, K, r, sigma_a, T, contract_type):
+    _, C_tree = CRR(n, S_0, K, r, sigma_a, T, contract_type)
     return C_tree[0][0]
 
 
 if __name__ == '__main__':
     # input
-    S = 100.0
+    S_0 = 100.0
     K = 100.0
     r = 0.05
     v = 0.3
@@ -76,7 +76,7 @@ if __name__ == '__main__':
     contract_type = 0
 
     # get all asset prices S_tree and option prices C_tree
-    S_tree, C_tree = CRR(n, S, K, r, v, T, contract_type)
+    S_tree, C_tree = CRR(n, S_0, K, r, v, T, contract_type)
     print('Asset Prices:\n', np.matrix(S_tree.astype(int)))
     print('Option Prices:\n', np.matrix(C_tree.astype(int)))
-    print('Final Price: ', price(n, S, K, r, v, T, contract_type))
+    print('Final Price: ', price(n, S_0, K, r, v, T, contract_type))

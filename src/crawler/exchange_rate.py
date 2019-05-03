@@ -13,14 +13,14 @@ def get_data(coin):
 
 
 def main():
-    for coin in settings.coins:
+    for coin in settings.coin2s:
         print("Getting data of %s..." % coin)
         data = get_data(coin)
         print("Saving data for %s..." % coin)
         prices = data["prices"]
         last_timestamp = 0
-        file = open('btc-{}_{}.csv'.format(coin,
-                                           datetime.today().strftime('%Y-%m-%d')), "w")
+        file = open(
+            '../../data/exchange-rate/{}-{}.csv'.format(settings.coin1, coin), "w")
         for price in prices:
             # price[0] is a timestamp and price[1] is the price at that time
             assert(price[0] > last_timestamp)

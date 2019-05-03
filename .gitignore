@@ -246,3 +246,4 @@ TSWLatexianTemp*
 
 # py
 *.pyc
+__pycache__
