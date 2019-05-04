@@ -21,7 +21,6 @@ contract AtomicSwapWithPremium {
 
     struct Swap {
         uint setupTimestamp;
-        // TODO: should we use timestamp?
         uint refundTime;
         bytes32 secretHash;
         bytes32 secret;
@@ -258,33 +257,38 @@ contract AtomicSwapWithPremium {
         );
     }
 
-    //TODO: premium here?
+    //TODO: fix isRedeemable
     function redeem(bytes32 secret, bytes32 secretHash)
         public
         isRedeemable(secretHash, secret, msg.sender)
     {
         msg.sender.transfer(swaps[secretHash].value);
+        msg.sender.transfer(swaps[secretHash].premiumValue);
 
         swaps[secretHash].state = State.Redeemed;
+        swaps[secretHash].premiumState = PremiumState.Redeemed;
         swaps[secretHash].secret = secret;
 
         emit Redeemed(
             block.timestamp,
-            swaps[secretHash].secretHash,
-            swaps[secretHash].secret,
+            secretHash,
+            secret,
             msg.sender,
             swaps[secretHash].value
         );
     }
 
-    //TODO: premium here?
+    //TODO: fix isRedeemable
+    //TODO: fix premiumState
     function refund(bytes32 secretHash)
         public
         isRefundable(secretHash, msg.sender)
     {
         msg.sender.transfer(swaps[secretHash].value);
+        msg.sender.transfer(swaps[secretHash].premiumValue);
 
         swaps[secretHash].state = State.Refunded;
+        swaps[secretHash].premiumState = PremiumState.Refunded;
 
         emit Refunded(
             block.timestamp,
