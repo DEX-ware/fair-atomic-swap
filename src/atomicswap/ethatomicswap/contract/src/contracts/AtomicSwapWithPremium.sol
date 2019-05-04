@@ -148,8 +148,8 @@ contract AtomicSwapWithPremium {
         _;
     }
 
-    modifier checkRefundTimestamp(uint256 refundTime) {
-        require(refundTime > 0);
+    // overflow check for refundTimestamp 
+    modifier checkRefundTimestampOverflow(uint256 refundTime) {
         uint256 setupTimestamp = block.timestamp;
         uint256 refundTimestamp = block.timestamp + refundTime;
         require(refundTimestamp > block.timestamp, "calc refundTimestamp overflow");
@@ -171,7 +171,7 @@ contract AtomicSwapWithPremium {
                     uint256 premiumValue)
         public
         payable
-        checkRefundTimestamp(refundTime)
+        checkRefundTimestampOverflow(refundTime)
         isEmptyState(secretHash)
     {
         swaps[secretHash].refundTimestamp = block.timestamp + refundTime;
@@ -289,6 +289,8 @@ contract AtomicSwapWithPremium {
         );
     }
 
+    // refund refunds the value back to the refunder..
+    // the premium goes back to the initiator if the contract is obsolete.
     function refund(bytes32 secretHash)
         public
         isPremiumFilled(secretHash)
