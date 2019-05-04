@@ -13,19 +13,23 @@ pragma solidity ^0.5.0;
 //    given that our timestamp can tolerate a 30-second drift in time;
 
 contract AtomicSwapWithPremium {
-    enum Kind { Initiator, Participant }
+    // TODO: remove?
+    // enum Kind { Initiator, Participant }
     enum State { Empty, Filled, Redeemed, Refunded }
-    enum PremiumState { Empty, Filled, Redeemed } // TODO: combine?
+    // TODO: combine?
+    enum PremiumState { Empty, Filled, Redeemed }
 
     struct Swap {
         uint setupTimestamp;
+        // TODO: should we use timestamp?
         uint refundTime;
         bytes32 secretHash;
         bytes32 secret;
         address initiator;
         address participant;
         uint256 value;
-        Kind kind;
+        // TODO: remove?
+        // Kind kind;
         State state;
         uint256 premiumValue;
         PremiumState premiumState;
@@ -119,7 +123,6 @@ contract AtomicSwapWithPremium {
         _;
     }
 
-    //TODO: premium here?
     modifier isInitiator(bytes32 secretHash) {
         require(msg.sender == swaps[secretHash].initiator);
         _;
@@ -148,7 +151,6 @@ contract AtomicSwapWithPremium {
     }
 
     //TODO:
-    // isInitiator?
     // send prem to set up?
     // config prem redeem time?
     function setup(uint refundTime,
@@ -159,6 +161,7 @@ contract AtomicSwapWithPremium {
                     uint256 premiumValue)
         public
         payable
+        isInitiator(secretHash)
         hasRefundTime(refundTime)
         isEmptyState(secretHash)
     {
@@ -209,21 +212,19 @@ contract AtomicSwapWithPremium {
         public
         payable
         hasPayment(secretHash)
-        hasRefundTime(refundTime)
         isEmptyState(secretHash)
     {
-        swaps[secretHash].setupTimestamp = block.timestamp;
-        swaps[secretHash].refundTime = refundTime;
-        swaps[secretHash].secretHash = secretHash;
-        swaps[secretHash].initiator = initiator;
-        swaps[secretHash].participant = participant;
+        swaps[secretHash].state = State.Filled;
+        
         emit Initiated(
             block.timestamp,
-            refundTime,
-            secretHash,
-            initiator,
-            participant,
-            msg.value
+            swaps[secretHash].setupTimestamp,
+            swaps[secretHash].refundTime,
+            swaps[secretHash].secretHash,
+            swaps[secretHash].initiator,
+            swaps[secretHash].participant,
+            msg.value,
+            swaps[secretHash].premiumValue
         );
     }
 
