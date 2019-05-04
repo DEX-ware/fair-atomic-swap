@@ -33,7 +33,6 @@ contract AtomicSwapWithPremium {
 
     mapping(bytes32 => Swap) public swaps;
 
-    //TODO: premium here?
     event Refunded(
         uint refundTime,
         bytes32 secretHash,
@@ -41,7 +40,6 @@ contract AtomicSwapWithPremium {
         uint256 value
     );
 
-    //TODO: premium here?
     event Redeemed(
         uint redeemTime,
         bytes32 secretHash,
@@ -50,28 +48,8 @@ contract AtomicSwapWithPremium {
         uint256 value
     );
 
-    //TODO: premium here?
     event Participated(
-        uint setupTimestamp,
-        uint refundTime,
-        bytes32 secretHash,
-        address initiator,
-        address participant,
-        uint256 value
-    );
-
-    //TODO: premium here?
-    event Initiated(
-        uint setupTimestamp,
-        uint refundTime,
-        bytes32 secretHash,
-        address initiator,
-        address participant,
-        uint256 value
-    );
-
-    //TODO: timestamp?
-    event PremiumFilled(
+        uint participateTimestamp,
         uint setupTimestamp,
         uint refundTime,
         bytes32 secretHash,
@@ -81,7 +59,28 @@ contract AtomicSwapWithPremium {
         uint256 premiumValue
     );
 
-    //TODO: premium here?
+    event Initiated(
+        uint initiateTimestamp,
+        uint setupTimestamp,
+        uint refundTime,
+        bytes32 secretHash,
+        address initiator,
+        address participant,
+        uint256 value,
+        uint256 premiumValue
+    );
+
+    event PremiumFilled(
+        uint fillPremiumTimestamp,
+        uint setupTimestamp,
+        uint refundTime,
+        bytes32 secretHash,
+        address initiator,
+        address participant,
+        uint256 value,
+        uint256 premiumValue
+    );
+
     event SetUp(
         uint setupTimestamp,
         uint refundTime,
@@ -173,6 +172,7 @@ contract AtomicSwapWithPremium {
         // swaps[secretHash].kind = Kind.Initiator;  //TODO: 
         swaps[secretHash].state = State.Empty;
         swaps[secretHash].premiumState = PremiumState.Empty;
+        
         emit SetUp(
             block.timestamp,
             refundTime,
@@ -180,7 +180,7 @@ contract AtomicSwapWithPremium {
             initiator,
             participant,
             value,
-            premiumValue  //TODO: 
+            premiumValue 
         );
     }
 
@@ -191,8 +191,10 @@ contract AtomicSwapWithPremium {
         fulfillPremiumPayment(secretHash)
     {   
         swaps[secretHash].premiumState = PremiumState.Filled;
+        
         emit PremiumFilled(
-            block.timestamp, // TODO:
+            block.timestamp,
+            swaps[secretHash].setupTimestamp,
             swaps[secretHash].refundTime,
             secretHash,
             swaps[secretHash].initiator,
