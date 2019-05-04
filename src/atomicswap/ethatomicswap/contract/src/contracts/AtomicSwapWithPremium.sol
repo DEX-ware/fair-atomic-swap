@@ -123,6 +123,11 @@ contract AtomicSwapWithPremium {
         _;
     }
 
+    modifier isPremiumFilled(bytes32 secretHash) {
+        require(swaps[secretHash].premiumState == PremiumState.Filled);
+        _;
+    }
+
     modifier isEmptyState(bytes32 secretHash) {
         require(swaps[secretHash].state == State.Empty);
         _;
@@ -149,10 +154,6 @@ contract AtomicSwapWithPremium {
         _;
     }
 
-    //TODO:
-    // config prem redeem time?
-    // check addup value?
-    //
     // setup sets up a contract
     // 1. setuper doesn't has to be the initiator,
     // 2. initiator should only initiate on blockchian1 after a contrat is set up
@@ -221,6 +222,7 @@ contract AtomicSwapWithPremium {
         isInitiator(secretHash)
         fulfillPayment(secretHash)
         isEmptyState(secretHash)
+        isPremiumFilled(secretHash)
     {
         swaps[secretHash].state = State.Filled;
         
@@ -238,15 +240,17 @@ contract AtomicSwapWithPremium {
     }
 
     // participant should only participate after premium is paid by the initiator
-    // TODO: redeem premiumValue?
     function participate(bytes32 secretHash)
         public
         payable
         isParticipant(secretHash)
         fulfillPayment(secretHash)
         isEmptyState(secretHash)
+        isPremiumFilled(secretHash)
     {
         swaps[secretHash].state = State.Filled;
+        msg.sender.transfer(swaps[secretHash].premiumValue);
+        swaps[secretHash].premiumState = PremiumState.Redeemed;
         
         emit Participated(
             block.timestamp,
@@ -266,10 +270,8 @@ contract AtomicSwapWithPremium {
         isRedeemable(secretHash, secret)
     {
         msg.sender.transfer(swaps[secretHash].value);
-        msg.sender.transfer(swaps[secretHash].premiumValue);
 
         swaps[secretHash].state = State.Redeemed;
-        swaps[secretHash].premiumState = PremiumState.Redeemed;
         swaps[secretHash].secret = secret;
 
         emit Redeemed(
@@ -287,7 +289,7 @@ contract AtomicSwapWithPremium {
         isRefundable(secretHash)
     {
         msg.sender.transfer(swaps[secretHash].value);
-        msg.sender.transfer(swaps[secretHash].premiumValue);
+        swaps[secretHash].initiator.transfer(swaps[secretHash].premiumValue);
 
         swaps[secretHash].state = State.Refunded;
         swaps[secretHash].premiumState = PremiumState.Refunded;
