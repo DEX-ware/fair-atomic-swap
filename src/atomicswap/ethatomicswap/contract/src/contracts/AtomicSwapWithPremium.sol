@@ -18,7 +18,6 @@ import "./SafeMath.sol";
 contract AtomicSwapWithPremium {
     using SafeMath for uint256;
 
-    enum Kind { Initiator, Participant }
     enum State { Empty, Filled, Redeemed, Refunded }
     enum PremiumState { Empty, Filled, Redeemed, Refunded }
 
