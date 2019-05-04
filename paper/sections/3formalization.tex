@@ -13,7 +13,11 @@ The buyer should pay for both the asset and the premium when participating in th
 Note that the price of the asset changes over time. This makes the American Call Option ``speculative'': One may profit from the contract by buying the asset with a lower price then sell it with a higher price.
 
 \begin{definition}
-We define an American Call Option contract $\Pi$ as $(K, \pi_1, y, \pi_2, T, C)$.
+We define an American Call Option contract $\Pi$ as
+
+$$\Pi = (K, \pi_1, y, \pi_2, T, C)$$
+
+where
 $K$ is the strike price - the amount of the currency $\pi_1$ that the buyer needs to pay.
 $y$ is the amount of the asset $\pi_2$ that the seller wants to sell.
 $T$ is the agreed strike time.
@@ -38,8 +42,11 @@ The process of an American Call Option is as follows:
 \subsection{Atomic Cross-Chain Swap}
 
 \begin{definition}
-We define an Atomic Swap $\mathcal{AS}$ as $(x_1, Coin_1, x_2, Coin_2)$, where
-Alice hopes to buy $x_2$ $Coin_2$ on blockchain $BC_2$ from Bob with $x_1$ $Coin_1$ on blockchain $BC_1$.
+We define an Atomic Swap $\mathcal{AS}$ as
+
+$$\mathcal{AS} = (x_1, Coin_1, x_2, Coin_2)$$
+
+where Alice hopes to buy $x_2$ $Coin_2$ on blockchain $BC_2$ from Bob with $x_1$ $Coin_1$ on blockchain $BC_1$.
 \end{definition}
 
 The Atomic Swap protocol consists of the algorithms below:
@@ -54,7 +61,7 @@ The Atomic Swap protocol consists of the algorithms below:
 
 \paragraph{Setup}
 takes the security parameter $k$,
-and returns the address on two blockchains for Alice and Bob $\beta_{A, 1}$, $\beta_{A, 2}$, $\beta_{B, 1}$, $\beta_{B, 2}$.
+and returns the addresses on two blockchains for Alice and Bob $\beta_{A, 1}$, $\beta_{A, 2}$, $\beta_{B, 1}$, $\beta_{B, 2}$.
 
 \paragraph{Initiate}
 takes $\beta_{B, 1}$ and $x_1$,

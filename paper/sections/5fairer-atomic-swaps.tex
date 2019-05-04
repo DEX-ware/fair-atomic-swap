@@ -2,21 +2,110 @@
 \label{sec:fair_atomic_swap}
 
 We propose a solution to make the Atomic Cross-Chain Swap fair: 
-The initiators should specify the percentages that he can refund before \textbf{initiating} an Atomic Swap.
+The initiator is responsible for creating the contracts on both blockchains,
+and the participant can choose whether to participate in the swap or not.
+In addition to the original protocol, the initiator should lock an amount of the premium on $BC_2$ as the cost of aborting the swap.
+If the swap is successful, the initiator can redeem the premium back, otherwise the participant will redeem the premium.
 
-In detail, an Atomic Cross-Chain Swap is defined as $\mathcal{AS} = (x_1, Coin_1, x_2, Coin_2, \alpha)$.
-\textbf{Initiate} additionally takes a percentage $\alpha \in [0, 1]$ as inputs.
-The contract script $\mathcal{C}_1$ is changed to ``Alice pays $x_1$ $Coin_1$ from $\beta_{A, 1}$ to $\beta_{B, 1}$ if Bob can provide $s$ before or on a timelock $\Delta_1$ (which is a timestamp). After $\Delta_1$, Alice can refund $\alpha$ of the money - get $\alpha$ $x_1$ $Coin_1$ back, and $(1 - \alpha)$ $x_1$ $Coin_1$ is sent to Bob.''
+\subsection{Design}
 
-Bob can judge whether $\alpha$ is fair or not.
-If Bob thinks $\alpha$ is fair, he will participate in $\mathcal{AS}$.
-The worst case is that the price of $Coin_2$ moves down, Alice aborts $\mathcal{AS}$ by \textbf{refund}, and Bob still gets $\alpha x_1 Coin_1$.
+\subsubsection{Difference between Currency Exchange and Options}
 
-This further marketizes the Atomic Cross-Chain Swaps.
-We consider the following cases:
+% option: premium goes to seller (participant)
+%   if swap is successful || initiator aborts the swap
+% currency exchange: premium goes to seller 
+%   if initiator aborts the swap
 
-\paragraph{An initiator aiming at profitting}
-The initiator will intend to choose a big $\alpha$, so that he can minimize the loss of \textbf{refund} once the price of $Coin_2$ drops.
+\subsubsection{Atomic Swaps for Currency Exchange and Options}
 
-\paragraph{An initiator aiming at exchanging his coin as soon as possible.}
-The initiator will intend to choose a small $\alpha$, so that his contract will attract more participants.
+% design objecive: fairness
+% 1. cannot get both assets
+% 2. fair exchange of assets
+%   (how to define fair? currency exchange: no premium
+%    option: must pay premium
+% 3. initiator cannot painlessly abort
+% 4. participant can choose to or not to join, but cannot abort
+
+% why premium should be on blockchain2
+
+% timing constraint for each step
+
+\subsection{Our Protocol Construction}
+
+We define an Atomic Cross-Chain Swap protocol $\mathcal{AS}'$ as
+
+$$\mathcal{AS}' = (x_1, Coin_1, x_2, Coin_2, pr)$$
+
+where $pr$ is the premium amount that the initiator should lock on $BC_2$, measured in $Coin_2$.
+
+The protocol follows the steps below:
+
+\begin{enumerate}
+    \item \textbf{Setup}: Alice and Bob create addresses on both blockchains.
+    In addition, Alice creates both contracts $\mathcal{C}_1$ and $\mathcal{C}_2$ and publishes them as transactions $tx_{\mathcal{C}, 1}$ and $tx_{\mathcal{C}, 2}$ on $BC_1$ and $BC_2$. 
+    \item \textbf{Initiate}: Alice locks her $x_1$ $Coin_1$ on $BC_1$, and lock her $pr$ on $BC_2$.
+    \item \textbf{Participate}: Bob locks his $x_2$ $Coin_2$ on $BC_2$. Note that Bob's timelock expires earlier than Alice's.
+    \item \textbf{Redeem}: Alice redeems $x_2$ $Coin_2$ and Bob redeems $x_1$ $Coin_1$. Alice should redeem earlier than Bob.
+    \item \textbf{Refund}: If Alice does not redeem $x_2$ $Coin_2$ before Bob's timelock expires, Bob can refund $x_2$ $Coin_2$ and redeem $pr$.
+    If Bob does not redeem $x_1$ $Coin_1$ before Alice's timelock expires, Alice can refund $x_1$ $Coin_1$ and $pr$.
+\end{enumerate}
+
+\paragraph{Setup}
+In addition to the address generation in the original protocol,
+Alice creates and publishes both contracts on $BC_1$ and $BC_2$.
+In the original protocol, Alice and Bob create $\mathcal{C}_1$ and $\mathcal{C}_2$, and publish $tx_{\mathcal{C}, 1}$ and $tx_{\mathcal{C}, 2}$ on $BC_1$ and $BC_2$, respectively.
+In our protocol, Alice is responsible for creating and publishing both of them.
+
+$\mathcal{C}_1$ remains the same as the original protocol, while $\mathcal{C}_2$ is more sophisticated here - It contains two coherent sub-contracts as follows:
+
+\begin{itemize}
+    \item $\mathcal{C}^{asset}_2$: The contract for the asset $x_2$ $Coin_2$
+    \item $\mathcal{C}^{pr}_2$: The contract for the premium $pr$
+\end{itemize}
+
+$\mathcal{C}^{asset}_2$ is the same as in the original protocol, while $\mathcal{C}^{pr}_2$ is that
+
+``Alice pays $pr$ to Bob with the condition: If Bob refunds $x_2$ $Coin_2$ before the timelock $\Delta_1$ (which is definite as $x_2$ $Coin_2$ is timelocked by $\Delta_2 < \Delta_1$), Bob can redeem $pr$, otherwise Bob cannot.
+If $\Delta$ expires, Alice can refund $pr$ back.''
+
+or:
+
+``Alice pays $pr$ to Bob with the condition: If Alice redeems $x_2$ $Coin_2$ before the timelock $\Delta_1$ (which is definite as $x_2$ $Coin_2$ is timelocked by $\Delta_2 < \Delta_1$), Bob can redeem $pr$, otherwise Bob cannot.
+If $\Delta$ expires, Alice can refund $pr$ back.''
+
+% ``
+% if $\Delta_1$ is expired:
+%   initiator can refund $pr$
+% else:
+%   initiator cannot refund $pr$
+%   if asset2 is refunded:
+%     participant can redeem $pr$
+%   else:
+%     participant cannot redeem $pr$
+% ''
+
+Note that $\Delta_1$ in $\mathcal{C}_1$ is the same as in $\mathcal{C}^{pr}_2$, and $\mathcal{C}^{asset}_2$ is with the timelock $\Delta_2$.
+
+Also note that neither of them triggers contracts at this stage.
+Instead, Alice and Bob can enter the contracts in the future.
+In this stage, Bob can decide whether to participate in $\mathcal{AS}'$ by auditing $tx_{\mathcal{C}, 1}$ and $tx_{\mathcal{C}, 2}$: If both contracts are fair, Bob will participate, otherwise Bob will not participate in this contract and find contracts from others.
+
+\paragraph{Initiate}
+Alice initiates the swap by entering $\mathcal{C}_1$ and $\mathcal{C}^{pr}_2$.
+First, Alice deposits her $x_1$ $Coin_1$ in $\mathcal{C}_1$, and triggers the hash-locked payment to Bob.
+Second, Alice deposits her $pr$ in $\mathcal{C}^{pr}_2$, and triggers the conditional payment to Bob.
+Note that Alice can specify an arbitrary amount for $pr$ when creating $\mathcal{C}_2$, and Alice should have enough $Coin_2$ to deposit $pr$.
+
+\paragraph{Participate}
+If Bob thinks $\mathcal{AS}'$ is fair for him, he will participate in $\mathcal{AS}'$ by depositing $x_2$ $Coin_2$ in $\mathcal{C}^{asset}_2$, and triggers the the hash-locked payment to Alice.
+
+
+\paragraph{Redeem}
+Same as the original protocol, Alice redeems $x_2$ $Coin_2$ in $\mathcal{C}^{asset}_2$ by releasing $s$, then Bob can redeem  $x_1$ $Coin_1$ in $\mathcal{C}_1$ using the released $s$.
+Note that once Bob redeems $x_1$ $Coin_1$, he cannot redeem $pr$ anymore according to $\mathcal{C}^{pr}_2$.
+
+\paragraph{Refund}
+Refunding $x_2$ $Coin_2$ for Alice and $x_1$ $Coin_1$ for Bob are the same as in the original protocol.
+Alice can refund $pr$ after $\Delta_1$ if Bob has not refunded $x_1$ $Coin_1$.
+If Bob refunds $x_1$ $Coin_1$ before $\Delta_2$ (which is definitely before $\Delta_1$ as $\Delta_2 < \Delta_1$), Bob can also redeem $pr$.
+

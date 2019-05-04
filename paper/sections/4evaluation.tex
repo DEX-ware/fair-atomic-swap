@@ -70,9 +70,10 @@ For each leaf node $\mathcal{T}_{n, i}$, the option price (for Call Options) is 
 
 \paragraph{Finding the option prices for earlier nodes}
 We back-propagate the option prices for leaf nodes to earlier option prices.
-The back propagation applies the ``risk neutrality'' assumption: Today's fair price of a derivative equals to the expected future value discounted by the risk free rate. % TODO further analysis
+The back propagation applies the ``risk neutrality'' assumption:
+Today's fair price of a derivative equals to the expected future value discounted by the risk-free rate. % TODO further analysis
 Based on this assumption, the earlier option price is calculated from the option prices of the later two nodes weighted by their state transition possibilities.
-The move-up and move-down possibility are $p$ and $q$ where $p + q = 1$, and the discount factor is $r = q$.
+The move-up and move-down possibility are $p$ and $q$ where $p + q = 1$, and the risk-free rate is $r = q$.
 
 The earlier option price is calculated from later option prices as:
 
