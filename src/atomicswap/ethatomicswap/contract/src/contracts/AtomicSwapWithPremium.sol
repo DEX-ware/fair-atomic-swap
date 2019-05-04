@@ -17,8 +17,6 @@ contract AtomicSwapWithPremium {
     enum PremiumState { Empty, Filled, Redeemed, Refunded }
 
     struct Swap {
-        // TODO: remove setupTimestamp?
-        uint256 setupTimestamp;
         // TODO: use refundTimestamp?
         uint256 refundTime;
         bytes32 secretHash;
@@ -54,7 +52,6 @@ contract AtomicSwapWithPremium {
 
     event Participated(
         uint256 participateTimestamp,
-        uint256 setupTimestamp,
         uint256 refundTime,
         bytes32 secretHash,
         address initiator,
@@ -67,7 +64,6 @@ contract AtomicSwapWithPremium {
 
     event Initiated(
         uint256 initiateTimestamp,
-        uint256 setupTimestamp,
         uint256 refundTime,
         bytes32 secretHash,
         address initiator,
@@ -80,7 +76,6 @@ contract AtomicSwapWithPremium {
 
     event PremiumFilled(
         uint256 fillPremiumTimestamp,
-        uint256 setupTimestamp,
         uint256 refundTime,
         bytes32 secretHash,
         address initiator,
@@ -93,7 +88,7 @@ contract AtomicSwapWithPremium {
 
     event SetUp(
         uint256 setupTimestamp,
-        uint256 refundTime,
+        uint256 refundTimestamp,
         bytes32 secretHash,
         address initiator,
         address participant,
@@ -109,12 +104,7 @@ contract AtomicSwapWithPremium {
     modifier isRefundable(bytes32 secretHash) {
         require(swaps[secretHash].state == State.Filled);
         require(swaps[secretHash].refunder == msg.sender);
-        uint256 setupTimestamp = swaps[secretHash].setupTimestamp;
-        uint256 refundTime = swaps[secretHash].refundTime;
-        uint256 refundTimestamp = setupTimestamp + refundTime;
-        require(refundTimestamp > setupTimestamp, "calc refundTimestamp overflow");
-        require(refundTimestamp > refundTime, "calc refundTimestamp overflow");
-        require(block.timestamp > refundTimestamp);
+        require(block.timestamp > swaps[secretHash].refundTimestamp);
         _;
     }
 
@@ -154,8 +144,12 @@ contract AtomicSwapWithPremium {
         _;
     }
 
-    modifier hasRefundTime(uint256 refundTime) {
+    modifier checkRefundTime(uint256 refundTime) {
         require(refundTime > 0);
+        uint256 setupTimestamp = block.timestamp;
+        uint256 refundTimestamp = block.timestamp + refundTime;
+        require(refundTimestamp > block.timestamp, "calc refundTimestamp overflow");
+        require(refundTimestamp > refundTime, "calc refundTimestamp overflow");
         _;
     }
 
@@ -180,8 +174,7 @@ contract AtomicSwapWithPremium {
         hasRefundTime(refundTime)
         isEmptyState(secretHash)
     {
-        swaps[secretHash].setupTimestamp = block.timestamp; 
-        swaps[secretHash].refundTime = refundTime;
+        swaps[secretHash].refundTimestamp = block.timestamp + refundTime;
         swaps[secretHash].secretHash = secretHash;
         swaps[secretHash].initiator = initiator;
         swaps[secretHash].participant = participant;
@@ -215,7 +208,6 @@ contract AtomicSwapWithPremium {
         
         emit PremiumFilled(
             block.timestamp,
-            swaps[secretHash].setupTimestamp,
             swaps[secretHash].refundTime,
             secretHash,
             msg.sender,
@@ -238,7 +230,6 @@ contract AtomicSwapWithPremium {
         
         emit Initiated(
             block.timestamp,
-            swaps[secretHash].setupTimestamp,
             swaps[secretHash].refundTime,
             secretHash,
             msg.sender,
@@ -263,7 +254,6 @@ contract AtomicSwapWithPremium {
         
         emit Participated(
             block.timestamp,
-            swaps[secretHash].setupTimestamp,
             swaps[secretHash].refundTime,
             secretHash,
             swaps[secretHash].initiator,
