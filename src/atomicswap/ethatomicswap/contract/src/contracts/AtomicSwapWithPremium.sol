@@ -20,10 +20,10 @@ contract AtomicSwapWithPremium {
         uint256 refundTimestamp;
         bytes32 secretHash;
         bytes32 secret;
-        address initiator;
-        address participant;
-        address redeemer;
-        address refunder;
+        address payable initiator;
+        address payable participant;
+        address payable redeemer;
+        address payable refunder;
         uint256 value;
         State state;
         uint256 premiumValue;
@@ -160,10 +160,10 @@ contract AtomicSwapWithPremium {
     //    on blockchain2 and audit it if necessary.
     function setup(uint256 refundTime,
                     bytes32 secretHash,
-                    address initiator,
-                    address participant,
-                    address redeemer,
-                    address refunder,
+                    address payable initiator,
+                    address payable participant,
+                    address payable redeemer,
+                    address payable refunder,
                     uint256 value,
                     uint256 premiumValue)
         public
