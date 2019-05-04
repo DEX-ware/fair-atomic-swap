@@ -133,15 +133,18 @@ contract AtomicSwapWithPremium {
         _;
     }
 
+    modifier isEmptyPremiumState(bytes32 secretHash) {
+        require(swaps[secretHash].premiumState == PremiumState.Empty);
+        _;
+    }
+
     modifier fulfillPayment(bytes32 secretHash) {
         require(swaps[secretHash].value == msg.value);
         _;
     }
 
     modifier fulfillPremiumPayment(bytes32 secretHash) {
-        require(swaps[secretHash].premiumState == PremiumState.Empty);
         require(swaps[secretHash].premiumValue == msg.value);
-        require(swaps[secretHash].initiator == msg.sender);
         _;
     }
 
@@ -199,7 +202,9 @@ contract AtomicSwapWithPremium {
     function fillPremium(bytes32 secretHash)
         public
         payable
+        isInitiator(secretHash)
         fulfillPremiumPayment(secretHash)
+        isEmptyPremiumState(secretHash)
     {   
         swaps[secretHash].premiumState = PremiumState.Filled;
         
@@ -222,7 +227,6 @@ contract AtomicSwapWithPremium {
         isInitiator(secretHash)
         fulfillPayment(secretHash)
         isEmptyState(secretHash)
-        isPremiumFilled(secretHash)
     {
         swaps[secretHash].state = State.Filled;
         
@@ -286,6 +290,7 @@ contract AtomicSwapWithPremium {
 
     function refund(bytes32 secretHash)
         public
+        isPremiumFilled(secretHash)
         isRefundable(secretHash)
     {
         msg.sender.transfer(swaps[secretHash].value);
