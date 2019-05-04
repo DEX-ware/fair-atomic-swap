@@ -128,12 +128,17 @@ contract AtomicSwapWithPremium {
         _;
     }
 
+    modifier isParticipant(bytes32 secretHash) {
+        require(msg.sender == swaps[secretHash].participant);
+        _;
+    }
+
     modifier isEmptyState(bytes32 secretHash) {
         require(swaps[secretHash].state == State.Empty);
         _;
     }
 
-    modifier hasPayment(bytes32 secretHash) {
+    modifier fulfillPayment(bytes32 secretHash) {
         require(msg.value == swaps[secretHash].value);
         _;
     }
@@ -141,7 +146,7 @@ contract AtomicSwapWithPremium {
     modifier fulfillPremiumPayment(bytes32 secretHash) {
         require(swaps[secretHash].premiumState == PremiumState.Empty);
         require(swaps[secretHash].value == msg.value);
-        require(swaps[secretHash].Initiator == msg.sender);
+        require(swaps[secretHash].initiator == msg.sender);
         _;
     }
 
@@ -153,6 +158,10 @@ contract AtomicSwapWithPremium {
     //TODO:
     // send prem to set up?
     // config prem redeem time?
+    // setup sets up a contract
+    // 1. setuper doesn't has to be the initiator,
+    // 2. initiator should only initiate on blockchian1 after a contrat is set up
+    //    on blockchain2 and audit it if necessary.
     function setup(uint refundTime,
                     bytes32 secretHash,
                     address initiator,
@@ -161,7 +170,6 @@ contract AtomicSwapWithPremium {
                     uint256 premiumValue)
         public
         payable
-        isInitiator(secretHash)
         hasRefundTime(refundTime)
         isEmptyState(secretHash)
     {
@@ -172,7 +180,6 @@ contract AtomicSwapWithPremium {
         swaps[secretHash].participant = participant;
         swaps[secretHash].value = value;
         swaps[secretHash].premiumValue = premiumValue;
-        // swaps[secretHash].kind = Kind.Initiator;  //TODO: 
         swaps[secretHash].state = State.Empty;
         swaps[secretHash].premiumState = PremiumState.Empty;
         
@@ -200,18 +207,18 @@ contract AtomicSwapWithPremium {
             swaps[secretHash].setupTimestamp,
             swaps[secretHash].refundTime,
             secretHash,
-            swaps[secretHash].initiator,
+            msg.sender,
             swaps[secretHash].participant,
             swaps[secretHash].value,
             msg.value
         );
     }
 
-    //TODO: premium here?
     function initiate(bytes32 secretHash)
         public
         payable
-        hasPayment(secretHash)
+        isInitiator(secretHash)
+        fulfillPayment(secretHash)
         isEmptyState(secretHash)
     {
         swaps[secretHash].state = State.Filled;
@@ -220,37 +227,34 @@ contract AtomicSwapWithPremium {
             block.timestamp,
             swaps[secretHash].setupTimestamp,
             swaps[secretHash].refundTime,
-            swaps[secretHash].secretHash,
-            swaps[secretHash].initiator,
+            secretHash,
+            msg.sender,
             swaps[secretHash].participant,
             msg.value,
             swaps[secretHash].premiumValue
         );
     }
 
-    //TODO: premium here?
+    // participant should only participate after premium is paid by the initiator
+    // TODO: redeem premiumValue?
     function participate(bytes32 secretHash)
         public
         payable
-        hasPayment(secretHash)
-        hasRefundTime(refundTime)
-        isNotInitiated(secretHash)
+        isParticipant(secretHash)
+        fulfillPayment(secretHash)
+        isEmptyState(secretHash)
     {
-        swaps[secretHash].setupTimestamp = block.timestamp;
-        swaps[secretHash].refundTime = refundTime;
-        swaps[secretHash].secretHash = secretHash;
-        swaps[secretHash].initiator = initiator;
-        swaps[secretHash].participant = msg.sender;
-        swaps[secretHash].value = msg.value;
-        swaps[secretHash].kind = Kind.Participant;
         swaps[secretHash].state = State.Filled;
+        
         emit Participated(
             block.timestamp,
-            refundTime,
+            swaps[secretHash].setupTimestamp,
+            swaps[secretHash].refundTime,
             secretHash,
-            initiator,
+            swaps[secretHash].initiator,
             msg.sender,
-            msg.value
+            msg.value,
+            swaps[secretHash].premiumValue
         );
     }
 
