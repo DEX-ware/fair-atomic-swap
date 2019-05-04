@@ -13,7 +13,7 @@ pragma solidity ^0.5.0;
 //    given that our timestamp can tolerate a 30-second drift in time;
 
 contract AtomicSwapWithPremium {
-    enum State { Empty, Filled, Redeemed, Refunded }
+    enum AssetState { Empty, Filled, Redeemed, Refunded }
     enum PremiumState { Empty, Filled, Redeemed, Refunded }
 
     struct Swap {
@@ -25,7 +25,7 @@ contract AtomicSwapWithPremium {
         address payable redeemer;
         address payable refunder;
         uint256 value;
-        State state;
+        AssetState assetState;
         uint256 premiumValue;
         PremiumState premiumState;
     }
@@ -100,14 +100,14 @@ contract AtomicSwapWithPremium {
     constructor() public {}
 
     modifier isRefundable(bytes32 secretHash) {
-        require(swaps[secretHash].state == State.Filled);
+        require(swaps[secretHash].assetState == AssetState.Filled);
         require(swaps[secretHash].refunder == msg.sender);
         require(block.timestamp > swaps[secretHash].refundTimestamp);
         _;
     }
 
     modifier isRedeemable(bytes32 secretHash, bytes32 secret) {
-        require(swaps[secretHash].state == State.Filled);
+        require(swaps[secretHash].assetState == AssetState.Filled);
         require(swaps[secretHash].redeemer == msg.sender);
         require(sha256(abi.encodePacked(secret)) == secretHash);
         _;
@@ -129,7 +129,7 @@ contract AtomicSwapWithPremium {
     }
 
     modifier isEmptyState(bytes32 secretHash) {
-        require(swaps[secretHash].state == State.Empty);
+        require(swaps[secretHash].assetState == AssetState.Empty);
         _;
     }
 
@@ -182,7 +182,7 @@ contract AtomicSwapWithPremium {
         swaps[secretHash].refunder = refunder;
         swaps[secretHash].value = value;
         swaps[secretHash].premiumValue = premiumValue;
-        swaps[secretHash].state = State.Empty;
+        swaps[secretHash].assetState = AssetState.Empty;
         swaps[secretHash].premiumState = PremiumState.Empty;
         
         emit SetUp(
@@ -228,7 +228,7 @@ contract AtomicSwapWithPremium {
         fulfillPayment(secretHash)
         isEmptyState(secretHash)
     {
-        swaps[secretHash].state = State.Filled;
+        swaps[secretHash].assetState = AssetState.Filled;
         
         emit Initiated(
             block.timestamp,
@@ -253,7 +253,7 @@ contract AtomicSwapWithPremium {
         isEmptyState(secretHash)
         isPremiumFilled(secretHash)
     {
-        swaps[secretHash].state = State.Filled;
+        swaps[secretHash].assetState = AssetState.Filled;
         msg.sender.transfer(swaps[secretHash].premiumValue);
         swaps[secretHash].premiumState = PremiumState.Redeemed;
         
@@ -276,7 +276,7 @@ contract AtomicSwapWithPremium {
     {
         msg.sender.transfer(swaps[secretHash].value);
 
-        swaps[secretHash].state = State.Redeemed;
+        swaps[secretHash].assetState = AssetState.Redeemed;
         swaps[secretHash].secret = secret;
 
         emit Redeemed(
@@ -299,7 +299,7 @@ contract AtomicSwapWithPremium {
         msg.sender.transfer(swaps[secretHash].value);
         swaps[secretHash].initiator.transfer(swaps[secretHash].premiumValue);
 
-        swaps[secretHash].state = State.Refunded;
+        swaps[secretHash].assetState = AssetState.Refunded;
         swaps[secretHash].premiumState = PremiumState.Refunded;
 
         emit Refunded(
