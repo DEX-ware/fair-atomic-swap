@@ -17,7 +17,6 @@ contract AtomicSwapWithPremium {
     enum PremiumState { Empty, Filled, Redeemed, Refunded }
 
     struct Swap {
-        // TODO: use refundTimestamp?
         uint256 refundTimestamp;
         bytes32 secretHash;
         bytes32 secret;
@@ -100,7 +99,6 @@ contract AtomicSwapWithPremium {
 
     constructor() public {}
 
-    //TODO: premium time?
     modifier isRefundable(bytes32 secretHash) {
         require(swaps[secretHash].state == State.Filled);
         require(swaps[secretHash].refunder == msg.sender);
@@ -108,7 +106,6 @@ contract AtomicSwapWithPremium {
         _;
     }
 
-    //TODO: premium time?
     modifier isRedeemable(bytes32 secretHash, bytes32 secret) {
         require(swaps[secretHash].state == State.Filled);
         require(swaps[secretHash].redeemer == msg.sender);
