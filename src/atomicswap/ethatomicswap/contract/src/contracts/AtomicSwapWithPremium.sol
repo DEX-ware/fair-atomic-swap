@@ -198,7 +198,7 @@ contract AtomicSwapWithPremium {
         );
     }
 
-    // the initiator needs to pay for the premium with premiumValue
+    // Initiator needs to pay for the premium with premiumValue
     function fillPremium(bytes32 secretHash)
         public
         payable
@@ -243,7 +243,8 @@ contract AtomicSwapWithPremium {
         );
     }
 
-    // participant should only participate after premium is paid by the initiator
+    // Participant should only participate after premium is paid by the initiator.
+    // Once the participant participate, the premium is redeemed immediately by the participant.
     function participate(bytes32 secretHash)
         public
         payable
