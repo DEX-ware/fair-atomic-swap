@@ -13,11 +13,9 @@ pragma solidity ^0.5.0;
 //    given that our timestamp can tolerate a 30-second drift in time;
 
 contract AtomicSwapWithPremium {
-    // TODO: remove?
-    // enum Kind { Initiator, Participant }
+    enum Kind { Initiator, Participant }
     enum State { Empty, Filled, Redeemed, Refunded }
-    // TODO: combine?
-    enum PremiumState { Empty, Filled, Redeemed }
+    enum PremiumState { Empty, Filled, Redeemed, Refunded }
 
     struct Swap {
         uint setupTimestamp;
@@ -26,9 +24,9 @@ contract AtomicSwapWithPremium {
         bytes32 secret;
         address initiator;
         address participant;
+        address redeemer;
+        address refunder;
         uint256 value;
-        // TODO: remove?
-        // Kind kind;
         State state;
         uint256 premiumValue;
         PremiumState premiumState;
@@ -40,7 +38,8 @@ contract AtomicSwapWithPremium {
         uint refundTime,
         bytes32 secretHash,
         address refunder,
-        uint256 value
+        uint256 value,
+        uint256 premiumValue
     );
 
     event Redeemed(
@@ -48,7 +47,8 @@ contract AtomicSwapWithPremium {
         bytes32 secretHash,
         bytes32 secret,
         address redeemer,
-        uint256 value
+        uint256 value,
+        uint256 premiumValue
     );
 
     event Participated(
@@ -58,6 +58,8 @@ contract AtomicSwapWithPremium {
         bytes32 secretHash,
         address initiator,
         address participant,
+        address redeemer,
+        address refunder,
         uint256 value,
         uint256 premiumValue
     );
@@ -69,6 +71,8 @@ contract AtomicSwapWithPremium {
         bytes32 secretHash,
         address initiator,
         address participant,
+        address redeemer,
+        address refunder,
         uint256 value,
         uint256 premiumValue
     );
@@ -80,6 +84,8 @@ contract AtomicSwapWithPremium {
         bytes32 secretHash,
         address initiator,
         address participant,
+        address redeemer,
+        address refunder,
         uint256 value,
         uint256 premiumValue
     );
@@ -90,6 +96,8 @@ contract AtomicSwapWithPremium {
         bytes32 secretHash,
         address initiator,
         address participant,
+        address redeemer,
+        address refunder,
         uint256 value,
         uint256 premiumValue
     );
@@ -123,12 +131,12 @@ contract AtomicSwapWithPremium {
     }
 
     modifier isInitiator(bytes32 secretHash) {
-        require(msg.sender == swaps[secretHash].initiator);
+        require(swaps[secretHash].initiator == msg.sender);
         _;
     }
 
     modifier isParticipant(bytes32 secretHash) {
-        require(msg.sender == swaps[secretHash].participant);
+        require(swaps[secretHash].participant == msg.sender);
         _;
     }
 
@@ -138,13 +146,14 @@ contract AtomicSwapWithPremium {
     }
 
     modifier fulfillPayment(bytes32 secretHash) {
-        require(msg.value == swaps[secretHash].value);
+        require((swaps[secretHash].state == State.Initiated) || (swaps[secretHash].state == State.Participated));
+        require(swaps[secretHash].value == msg.value);
         _;
     }
 
     modifier fulfillPremiumPayment(bytes32 secretHash) {
         require(swaps[secretHash].premiumState == PremiumState.Empty);
-        require(swaps[secretHash].value == msg.value);
+        require(swaps[secretHash].premiumValue == msg.value);
         require(swaps[secretHash].initiator == msg.sender);
         _;
     }
@@ -155,7 +164,6 @@ contract AtomicSwapWithPremium {
     }
 
     //TODO:
-    // send prem to set up?
     // config prem redeem time?
     // setup sets up a contract
     // 1. setuper doesn't has to be the initiator,
@@ -165,6 +173,8 @@ contract AtomicSwapWithPremium {
                     bytes32 secretHash,
                     address initiator,
                     address participant,
+                    address redeemer,
+                    address refunder,
                     uint256 value,
                     uint256 premiumValue)
         public
@@ -177,6 +187,8 @@ contract AtomicSwapWithPremium {
         swaps[secretHash].secretHash = secretHash;
         swaps[secretHash].initiator = initiator;
         swaps[secretHash].participant = participant;
+        swaps[secretHash].redeemer = redeemer;
+        swaps[secretHash].refunder = refunder;
         swaps[secretHash].value = value;
         swaps[secretHash].premiumValue = premiumValue;
         swaps[secretHash].state = State.Empty;
@@ -188,6 +200,8 @@ contract AtomicSwapWithPremium {
             secretHash,
             initiator,
             participant,
+            redeemer,
+            refunder,
             value,
             premiumValue 
         );
@@ -274,12 +288,12 @@ contract AtomicSwapWithPremium {
             secretHash,
             secret,
             msg.sender,
-            swaps[secretHash].value
+            swaps[secretHash].value,
+            swaps[secretHash].premiumValue
         );
     }
 
-    //TODO: fix isRedeemable
-    //TODO: fix premiumState
+    //TODO: fix isRefundable
     function refund(bytes32 secretHash)
         public
         isRefundable(secretHash, msg.sender)
@@ -294,7 +308,8 @@ contract AtomicSwapWithPremium {
             block.timestamp,
             swaps[secretHash].secretHash,
             msg.sender,
-            swaps[secretHash].value
+            swaps[secretHash].value,
+            swaps[secretHash].premiumValue
         );
     }
 }
