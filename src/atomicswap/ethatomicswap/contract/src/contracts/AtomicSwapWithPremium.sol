@@ -22,6 +22,7 @@ contract AtomicSwapWithPremium {
     enum PremiumState { Empty, Filled, Redeemed, Refunded }
 
     struct Swap {
+        // TODO: remove setupTimestamp?
         uint256 setupTimestamp;
         uint256 refundTime;
         bytes32 secretHash;
