@@ -12,14 +12,19 @@ pragma solidity ^0.5.0;
 //  + block.timestamp is safe to use,
 //    given that our timestamp can tolerate a 30-second drift in time;
 
+// use openzeppelin-solidity/contracts/math/SafeMath.sol
+import "./SafeMath.sol";
+
 contract AtomicSwapWithPremium {
+    using SafeMath for uint256;
+
     enum Kind { Initiator, Participant }
     enum State { Empty, Filled, Redeemed, Refunded }
     enum PremiumState { Empty, Filled, Redeemed, Refunded }
 
     struct Swap {
-        uint setupTimestamp;
-        uint refundTime;
+        uint256 setupTimestamp;
+        uint256 refundTime;
         bytes32 secretHash;
         bytes32 secret;
         address initiator;
@@ -35,7 +40,7 @@ contract AtomicSwapWithPremium {
     mapping(bytes32 => Swap) public swaps;
 
     event Refunded(
-        uint refundTime,
+        uint256 refundTime,
         bytes32 secretHash,
         address refunder,
         uint256 value,
@@ -43,7 +48,7 @@ contract AtomicSwapWithPremium {
     );
 
     event Redeemed(
-        uint redeemTime,
+        uint256 redeemTime,
         bytes32 secretHash,
         bytes32 secret,
         address redeemer,
@@ -52,9 +57,9 @@ contract AtomicSwapWithPremium {
     );
 
     event Participated(
-        uint participateTimestamp,
-        uint setupTimestamp,
-        uint refundTime,
+        uint256 participateTimestamp,
+        uint256 setupTimestamp,
+        uint256 refundTime,
         bytes32 secretHash,
         address initiator,
         address participant,
@@ -65,9 +70,9 @@ contract AtomicSwapWithPremium {
     );
 
     event Initiated(
-        uint initiateTimestamp,
-        uint setupTimestamp,
-        uint refundTime,
+        uint256 initiateTimestamp,
+        uint256 setupTimestamp,
+        uint256 refundTime,
         bytes32 secretHash,
         address initiator,
         address participant,
@@ -78,9 +83,9 @@ contract AtomicSwapWithPremium {
     );
 
     event PremiumFilled(
-        uint fillPremiumTimestamp,
-        uint setupTimestamp,
-        uint refundTime,
+        uint256 fillPremiumTimestamp,
+        uint256 setupTimestamp,
+        uint256 refundTime,
         bytes32 secretHash,
         address initiator,
         address participant,
@@ -91,8 +96,8 @@ contract AtomicSwapWithPremium {
     );
 
     event SetUp(
-        uint setupTimestamp,
-        uint refundTime,
+        uint256 setupTimestamp,
+        uint256 refundTime,
         bytes32 secretHash,
         address initiator,
         address participant,
@@ -104,28 +109,20 @@ contract AtomicSwapWithPremium {
 
     constructor() public {}
 
-    //TODO: premium here?
-    modifier isRefundable(bytes32 secretHash, address refunder) {
+    //TODO: premium time?
+    modifier isRefundable(bytes32 secretHash) {
         require(swaps[secretHash].state == State.Filled);
-        if (swaps[secretHash].kind == Kind.Participant) {
-            require(swaps[secretHash].participant == refunder);
-        } else {
-            require(swaps[secretHash].initiator == refunder);
-        }
-        uint preRefundTimestamp = swaps[secretHash].setupTimestamp;
-        preRefundTimestamp += swaps[secretHash].refundTime;
-        require(block.timestamp > preRefundTimestamp);
+        require(swaps[secretHash].refunder == msg.sender);
+        uint256 setupTimestamp = swaps[secretHash].setupTimestamp;
+        uint256 refundTime += swaps[secretHash].refundTime;
+        require(block.timestamp > setupTimestamp.add(refundTime));
         _;
     }
 
-    //TODO: premium here?
-    modifier isRedeemable(bytes32 secretHash, bytes32 secret, address redeemer) {
+    //TODO: premium time?
+    modifier isRedeemable(bytes32 secretHash, bytes32 secret) {
         require(swaps[secretHash].state == State.Filled);
-        if (swaps[secretHash].kind == Kind.Participant) {
-            require(swaps[secretHash].initiator == redeemer);
-        } else {
-            require(swaps[secretHash].participant == redeemer);
-        }
+        require(swaps[secretHash].redeemer == msg.sender);
         require(sha256(abi.encodePacked(secret)) == secretHash);
         _;
     }
@@ -158,18 +155,20 @@ contract AtomicSwapWithPremium {
         _;
     }
 
-    modifier hasRefundTime(uint refundTime) {
+    modifier hasRefundTime(uint256 refundTime) {
         require(refundTime > 0);
         _;
     }
 
     //TODO:
     // config prem redeem time?
+    // check addup value?
+    //
     // setup sets up a contract
     // 1. setuper doesn't has to be the initiator,
     // 2. initiator should only initiate on blockchian1 after a contrat is set up
     //    on blockchain2 and audit it if necessary.
-    function setup(uint refundTime,
+    function setup(uint256 refundTime,
                     bytes32 secretHash,
                     address initiator,
                     address participant,
@@ -222,6 +221,8 @@ contract AtomicSwapWithPremium {
             secretHash,
             msg.sender,
             swaps[secretHash].participant,
+            swaps[secretHash].redeemer,
+            swaps[secretHash].refunder,
             swaps[secretHash].value,
             msg.value
         );
@@ -243,6 +244,8 @@ contract AtomicSwapWithPremium {
             secretHash,
             msg.sender,
             swaps[secretHash].participant,
+            swaps[secretHash].redeemer,
+            swaps[secretHash].refunder,
             msg.value,
             swaps[secretHash].premiumValue
         );
@@ -266,15 +269,16 @@ contract AtomicSwapWithPremium {
             secretHash,
             swaps[secretHash].initiator,
             msg.sender,
+            swaps[secretHash].redeemer,
+            swaps[secretHash].refunder,
             msg.value,
             swaps[secretHash].premiumValue
         );
     }
 
-    //TODO: fix isRedeemable
     function redeem(bytes32 secret, bytes32 secretHash)
         public
-        isRedeemable(secretHash, secret, msg.sender)
+        isRedeemable(secretHash, secret)
     {
         msg.sender.transfer(swaps[secretHash].value);
         msg.sender.transfer(swaps[secretHash].premiumValue);
@@ -293,10 +297,9 @@ contract AtomicSwapWithPremium {
         );
     }
 
-    //TODO: fix isRefundable
     function refund(bytes32 secretHash)
         public
-        isRefundable(secretHash, msg.sender)
+        isRefundable(secretHash)
     {
         msg.sender.transfer(swaps[secretHash].value);
         msg.sender.transfer(swaps[secretHash].premiumValue);
