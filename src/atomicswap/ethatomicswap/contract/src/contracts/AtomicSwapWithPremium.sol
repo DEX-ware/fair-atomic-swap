@@ -12,18 +12,14 @@ pragma solidity ^0.5.0;
 //  + block.timestamp is safe to use,
 //    given that our timestamp can tolerate a 30-second drift in time;
 
-// use openzeppelin-solidity/contracts/math/SafeMath.sol
-import "./SafeMath.sol";
-
 contract AtomicSwapWithPremium {
-    using SafeMath for uint256;
-
     enum State { Empty, Filled, Redeemed, Refunded }
     enum PremiumState { Empty, Filled, Redeemed, Refunded }
 
     struct Swap {
         // TODO: remove setupTimestamp?
         uint256 setupTimestamp;
+        // TODO: use refundTimestamp?
         uint256 refundTime;
         bytes32 secretHash;
         bytes32 secret;
@@ -114,8 +110,11 @@ contract AtomicSwapWithPremium {
         require(swaps[secretHash].state == State.Filled);
         require(swaps[secretHash].refunder == msg.sender);
         uint256 setupTimestamp = swaps[secretHash].setupTimestamp;
-        uint256 refundTime += swaps[secretHash].refundTime;
-        require(block.timestamp > setupTimestamp.add(refundTime));
+        uint256 refundTime = swaps[secretHash].refundTime;
+        uint256 refundTimestamp = setupTimestamp + refundTime;
+        require(refundTimestamp > setupTimestamp, "calc refundTimestamp overflow");
+        require(refundTimestamp > refundTime, "calc refundTimestamp overflow");
+        require(block.timestamp > refundTimestamp);
         _;
     }
 
