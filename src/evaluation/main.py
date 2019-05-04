@@ -47,7 +47,7 @@ def price_atomic_swap(alice_coin, bob_coin, bob_coin_amount):
 
     # money_in_alice_coin = bob_coin_amount * bob_coin / alice_coin
     p = price(12, df['price'][0] * bob_coin_amount,
-              df['price'][0] * bob_coin_amount, 0.05, sigma_a, 1.0, 0)
+              df['price'][0] * bob_coin_amount, sigma_a, 1.0, 0)
 
     print('Option price: {} alice_coin'.format(p))
     return p
