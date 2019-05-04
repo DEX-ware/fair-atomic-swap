@@ -144,7 +144,7 @@ contract AtomicSwapWithPremium {
         _;
     }
 
-    modifier checkRefundTime(uint256 refundTime) {
+    modifier checkRefundTimestamp(uint256 refundTime) {
         require(refundTime > 0);
         uint256 setupTimestamp = block.timestamp;
         uint256 refundTimestamp = block.timestamp + refundTime;
@@ -171,7 +171,7 @@ contract AtomicSwapWithPremium {
                     uint256 premiumValue)
         public
         payable
-        hasRefundTime(refundTime)
+        checkRefundTimestamp(refundTime)
         isEmptyState(secretHash)
     {
         swaps[secretHash].refundTimestamp = block.timestamp + refundTime;
