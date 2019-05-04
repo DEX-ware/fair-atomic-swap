@@ -15,7 +15,7 @@ pragma solidity ^0.5.0;
 contract AtomicSwapWithPremium {
     enum Kind { Initiator, Participant }
     enum State { Empty, Filled, Redeemed, Refunded }
-    enum PremiumState { Empty, Filled, Redeemed }
+    enum PremiumState { Empty, Filled, Redeemed } // TODO: combine?
 
     struct Swap {
         uint setupTimestamp;
@@ -68,6 +68,17 @@ contract AtomicSwapWithPremium {
         address initiator,
         address participant,
         uint256 value
+    );
+
+    //TODO: timestamp?
+    event PremiumFilled(
+        uint setupTimestamp,
+        uint refundTime,
+        bytes32 secretHash,
+        address initiator,
+        address participant,
+        uint256 value,
+        uint256 premiumValue
     );
 
     //TODO: premium here?
@@ -125,13 +136,17 @@ contract AtomicSwapWithPremium {
         _;
     }
 
+    modifier fulfillPremiumPayment(bytes32 secretHash) {
+        require(swaps[secretHash].premiumState == PremiumState.Empty);
+        require(swaps[secretHash].value == msg.value);
+        require(swaps[secretHash].Initiator == msg.sender);
+        _;
+    }
+
     modifier hasRefundTime(uint refundTime) {
         require(refundTime > 0);
         _;
     }
-
-    //TODO: status here?
-    function checkStatus(bytes32 secretHash) {}
 
     //TODO:
     // isInitiator?
@@ -169,21 +184,20 @@ contract AtomicSwapWithPremium {
         );
     }
 
-    //TODO:
-    function payPremium(bytes32 secretHash)
+    // the initiator needs to pay for the premium with premiumValue
+    function fillPremium(bytes32 secretHash)
         public
         payable
-        hasPremiumPayment(secretHash)
-        hasRefundTime(refundTime) // TODO:
-        isEmptyState(secretHash)
+        fulfillPremiumPayment(secretHash)
     {   
-        //TODO:
-        emit Initiated(
-            block.timestamp,
-            refundTime,
+        swaps[secretHash].premiumState = PremiumState.Filled;
+        emit PremiumFilled(
+            block.timestamp, // TODO:
+            swaps[secretHash].refundTime,
             secretHash,
-            initiator,
-            participant,
+            swaps[secretHash].initiator,
+            swaps[secretHash].participant,
+            swaps[secretHash].value,
             msg.value
         );
     }
