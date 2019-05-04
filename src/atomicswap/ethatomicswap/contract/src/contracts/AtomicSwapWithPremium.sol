@@ -18,7 +18,7 @@ contract AtomicSwapWithPremium {
 
     struct Swap {
         // TODO: use refundTimestamp?
-        uint256 refundTime;
+        uint256 refundTimestamp;
         bytes32 secretHash;
         bytes32 secret;
         address initiator;
@@ -34,7 +34,7 @@ contract AtomicSwapWithPremium {
     mapping(bytes32 => Swap) public swaps;
 
     event Refunded(
-        uint256 refundTime,
+        uint256 refundTimestamp,
         bytes32 secretHash,
         address refunder,
         uint256 value,
@@ -52,7 +52,7 @@ contract AtomicSwapWithPremium {
 
     event Participated(
         uint256 participateTimestamp,
-        uint256 refundTime,
+        uint256 refundTimestamp,
         bytes32 secretHash,
         address initiator,
         address participant,
@@ -64,7 +64,7 @@ contract AtomicSwapWithPremium {
 
     event Initiated(
         uint256 initiateTimestamp,
-        uint256 refundTime,
+        uint256 refundTimestamp,
         bytes32 secretHash,
         address initiator,
         address participant,
@@ -76,7 +76,7 @@ contract AtomicSwapWithPremium {
 
     event PremiumFilled(
         uint256 fillPremiumTimestamp,
-        uint256 refundTime,
+        uint256 refundTimestamp,
         bytes32 secretHash,
         address initiator,
         address participant,
@@ -132,7 +132,6 @@ contract AtomicSwapWithPremium {
     }
 
     modifier fulfillPayment(bytes32 secretHash) {
-        require((swaps[secretHash].state == State.Initiated) || (swaps[secretHash].state == State.Participated));
         require(swaps[secretHash].value == msg.value);
         _;
     }
@@ -208,7 +207,7 @@ contract AtomicSwapWithPremium {
         
         emit PremiumFilled(
             block.timestamp,
-            swaps[secretHash].refundTime,
+            swaps[secretHash].refundTimestamp,
             secretHash,
             msg.sender,
             swaps[secretHash].participant,
@@ -230,7 +229,7 @@ contract AtomicSwapWithPremium {
         
         emit Initiated(
             block.timestamp,
-            swaps[secretHash].refundTime,
+            swaps[secretHash].refundTimestamp,
             secretHash,
             msg.sender,
             swaps[secretHash].participant,
@@ -254,7 +253,7 @@ contract AtomicSwapWithPremium {
         
         emit Participated(
             block.timestamp,
-            swaps[secretHash].refundTime,
+            swaps[secretHash].refundTimestamp,
             secretHash,
             swaps[secretHash].initiator,
             msg.sender,
