@@ -24,18 +24,6 @@ In detail, Spots and Options differ in the following aspects:
 
 \subsubsection{Atomic Swaps for Currency Exchange and American Call Options}
 
-% design objecive: fairness
-% 1. cannot get both assets
-% 2. fair exchange of assets
-%   (how to define fair? currency exchange: no premium
-%    option: must pay premium
-% 3. initiator cannot painlessly abort
-% 4. participant can choose to or not to join, but cannot abort
-
-% why premium should be on blockchain2
-
-% timing constraint for each step
-
 The Atomic Swaps for the currency exchange and the American Call Option should be different, because of their different design objectives.
 
 \paragraph{Atomic Swaps for Currency Exchange}
@@ -112,7 +100,7 @@ If $\Delta_1$ expires, Alice can refund $pr$ back.''
 % else:
 %   initiator cannot refund $pr$
 %   if asset2 is refunded: // for currency exchange
-%   if asset2 is redeemed: // for options
+%   if asset2 is redeemed or refunded: // for options
 %     participant can redeem $pr$
 %   else:
 %     participant cannot redeem $pr$
