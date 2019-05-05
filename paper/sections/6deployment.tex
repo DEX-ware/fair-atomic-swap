@@ -78,6 +78,7 @@ For American Call Options
         require(swaps[secretHash].assetState == AssetState.Empty);
     }
     // Premium is redeemable for Bob when asset2 is redeemed or refunded
+    // which means Bob participates
     modifier isPremiumRedeemable(bytes32 secretHash) {
         // the premium should be deposited
         require(swaps[secretHash].premiumState == PremiumState.Filled);
