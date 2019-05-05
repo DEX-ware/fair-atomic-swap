@@ -87,11 +87,11 @@ $\mathcal{C}^{asset}_2$ is the same as in the original protocol.
 $\mathcal{C}^{pr}_2$ differs for the currency exchange and the American Call Options.
 
 For currency exchange, $\mathcal{C}^{pr}_2$ is that
-``Alice pays $pr$ to Bob with the condition: If Bob refunds $x_2$ $Coin_2$ before the timelock $\Delta_1$ (which is definite as $x_2$ $Coin_2$ is timelocked by $\Delta_2 < \Delta_1$), Bob can redeem $pr$, otherwise Bob cannot.
+``Alice pays $pr$ to Bob with the condition: If Bob refunds $x_2$ $Coin_2$ after the timelock $\Delta_2$ and before the timelock $\Delta_1$, Bob can redeem $pr$, otherwise Bob cannot.
 If $\Delta_1$ expires, Alice can refund $pr$ back.''
 
 For American Call Options, $\mathcal{C}^{pr}_2$ is that
-``Alice pays $pr$ to Bob with the condition: If Alice redeems or Bob refunds $x_2$ $Coin_2$ before the timelock $\Delta_2$ (note that $\Delta_2 < \Delta_1$), Bob can redeem $pr$, otherwise Bob cannot.
+``Alice pays $pr$ to Bob with the condition: If Alice redeems $x_2$ $Coin_2$ before the timelock $\Delta_2$ or Bob refunds $x_2$ $Coin_2$ after the timelock $\Delta_2$ (note that $\Delta_2 < \Delta_1$), Bob can redeem $pr$, otherwise Bob cannot.
 If $\Delta_1$ expires, Alice can refund $pr$ back.''
 
 % ``
