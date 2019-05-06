@@ -15,95 +15,161 @@
     \caption{Maintaining the state of the asset and the premium.}
 \end{figure}
 
+
 For currency exchange
 
 \begin{figure}
-    \begin{lstlisting}[language=Solidity, basicstyle=\tiny]
-    // Premium is refundable when
-    // 1. Alice initiates but Bob does not participate
-    //   after premium's timelock expires
-    // 2. asset2 is redeemed by Alice
-    modifier isPremiumRefundable(bytes32 secretHash) {
-        // the premium should be deposited
-        require(swaps[secretHash].premiumState == PremiumState.Filled);
-        // the initiator invokes this method to refund the premium
-        require(swaps[secretHash].initiator == msg.sender);
-        // the contract should be on the blockchain2
-        require(swaps[secretHash].kind == Kind.Participant);
-        // if the asset2 timelock is still valid
-        if block.timestamp <= swaps[secretHash].assetRefundTimestamp {
-            // the asset2 should be redeemded by Alice
-            require(swaps[secretHash].assetState == AssetState.Redeemed);
-        } else { // if the asset2 timelock is still valid
-            // the asset2 should not be refunded
-            require(swaps[secretHash].assetState != AssetState.Refunded);
-            // the premium timelock should be expired
-            require(block.timestamp > swaps[secretHash].premiumRefundTimestamp);
-        }
-        _;
+\begin{lstlisting}[language=Solidity, basicstyle=\tiny]
+// Premium is refundable when
+// 1. Alice initiates but Bob does not participate
+//   after premium's timelock expires
+// 2. asset2 is redeemed by Alice
+modifier isPremiumRefundable(bytes32 secretHash) {
+    // the premium should be deposited
+    require(swaps[secretHash].premiumState == PremiumState.Filled);
+    // the initiator invokes this method to refund the premium
+    require(swaps[secretHash].initiator == msg.sender);
+    // the contract should be on the blockchain2
+    require(swaps[secretHash].kind == Kind.Participant);
+    // if the asset2 timelock is still valid
+    if block.timestamp <= swaps[secretHash].assetRefundTimestamp {
+        // the asset2 should be redeemded by Alice
+        require(swaps[secretHash].assetState == AssetState.Redeemed);
+    } else { // if the asset2 timelock is still valid
+        // the asset2 should not be refunded
+        require(swaps[secretHash].assetState != AssetState.Refunded);
+        // the premium timelock should be expired
+        require(block.timestamp > swaps[secretHash].premiumRefundTimestamp);
     }
-    // Premium is redeemable for Bob when asset2 is refunded
-    // which means Alice holds the secret maliciously
-    modifier isPremiumRedeemable(bytes32 secretHash) {
-        // the premium should be deposited
-        require(swaps[secretHash].premiumState == PremiumState.Filled);
-        // the participant invokes this method to redeem the premium
-        require(swaps[secretHash].participant == msg.sender);
-        // the contract should be on the blockchain2
-        require(swaps[secretHash].kind == Kind.Participant);
-        // the asset2 should be refunded
-        // this also indicates the asset2 timelock is expired
-        require(swaps[secretHash].assetState == AssetState.Refunded);
-        // the premium timelock should not be expired
-        require(block.timestamp <= swaps[secretHash].premiumRefundTimestamp);
-        _;
-    }
-    \end{lstlisting}
-    \label{code:premium_condition_currency}
-    \caption{The condition to redeem and refund the premium for currency-exchange-style Atomic Swaps.}
+    _;
+}
+// Premium is redeemable for Bob when asset2 is refunded
+// which means Alice holds the secret maliciously
+modifier isPremiumRedeemable(bytes32 secretHash) {
+    // the premium should be deposited
+    require(swaps[secretHash].premiumState == PremiumState.Filled);
+    // the participant invokes this method to redeem the premium
+    require(swaps[secretHash].participant == msg.sender);
+    // the contract should be on the blockchain2
+    require(swaps[secretHash].kind == Kind.Participant);
+    // the asset2 should be refunded
+    // this also indicates the asset2 timelock is expired
+    require(swaps[secretHash].assetState == AssetState.Refunded);
+    // the premium timelock should not be expired
+    require(block.timestamp <= swaps[secretHash].premiumRefundTimestamp);
+    _;
+}
+\end{lstlisting}
+\label{code:premium_condition_currency}
+\caption{The condition to redeem and refund the premium for currency-exchange-style Atomic Swaps.}
 \end{figure}
 
 
 For American Call Options
 
 \begin{figure}
-    \begin{lstlisting}[language=Solidity, basicstyle=\tiny]
-    // Premium is refundable for Alice only when Alice initiates
-    // but Bob does not participate after premium's timelock expires
-    modifier isPremiumRefundable(bytes32 secretHash) {
-        // the premium should be deposited
-        require(swaps[secretHash].premiumState == PremiumState.Filled);
-        // the initiator invokes this method to refund the premium
-        require(swaps[secretHash].initiator == msg.sender);
-        // the contract should be on the blockchain2
-        require(swaps[secretHash].kind == Kind.Participant);
-        // premium timelock should be expired
-        require(block.timestamp > swaps[secretHash].premiumRefundTimestamp);
-        // asset2 should be empty
-        // which means Bob does not participate
-        require(swaps[secretHash].assetState == AssetState.Empty);
-    }
-    // Premium is redeemable for Bob when asset2 is redeemed or refunded
-    // which means Bob participates
-    modifier isPremiumRedeemable(bytes32 secretHash) {
-        // the premium should be deposited
-        require(swaps[secretHash].premiumState == PremiumState.Filled);
-        // the participant invokes this method to redeem the premium
-        require(swaps[secretHash].participant == msg.sender);
-        // the contract should be on the blockchain2
-        require(swaps[secretHash].kind == Kind.Participant);
-        // the asset2 should be refunded or redeemed
-        require(swaps[secretHash].assetState == AssetState.Refunded || swaps[secretHash].assetState == AssetState.Redeemed);
-        // the premium timelock should not be expired
-        require(block.timestamp <= swaps[secretHash].premiumRefundTimestamp);
-        _;
-    }
-    \end{lstlisting}
-    \label{code:premium_condition_options}
-    \caption{The condition to redeem and refund the premium for American Call Option-style Atomic Swaps.}
+\begin{lstlisting}[language=Solidity, basicstyle=\tiny]
+// Premium is refundable for Alice only when Alice initiates
+// but Bob does not participate after premium's timelock expires
+modifier isPremiumRefundable(bytes32 secretHash) {
+    // the premium should be deposited
+    require(swaps[secretHash].premiumState == PremiumState.Filled);
+    // the initiator invokes this method to refund the premium
+    require(swaps[secretHash].initiator == msg.sender);
+    // the contract should be on the blockchain2
+    require(swaps[secretHash].kind == Kind.Participant);
+    // premium timelock should be expired
+    require(block.timestamp > swaps[secretHash].premiumRefundTimestamp);
+    // asset2 should be empty
+    // which means Bob does not participate
+    require(swaps[secretHash].assetState == AssetState.Empty);
+}
+// Premium is redeemable for Bob when asset2 is redeemed or refunded
+// which means Bob participates
+modifier isPremiumRedeemable(bytes32 secretHash) {
+    // the premium should be deposited
+    require(swaps[secretHash].premiumState == PremiumState.Filled);
+    // the participant invokes this method to redeem the premium
+    require(swaps[secretHash].participant == msg.sender);
+    // the contract should be on the blockchain2
+    require(swaps[secretHash].kind == Kind.Participant);
+    // the asset2 should be refunded or redeemed
+    require(swaps[secretHash].assetState == AssetState.Refunded || swaps[secretHash].assetState == AssetState.Redeemed);
+    // the premium timelock should not be expired
+    require(block.timestamp <= swaps[secretHash].premiumRefundTimestamp);
+    _;
+}
+\end{lstlisting}
+\label{code:premium_condition_options}
+\caption{The condition to redeem and refund the premium for American Call Option-style Atomic Swaps.}
 \end{figure}
 
 \subsection{Bitcoin Scripts}
 
-% cannot
-% need one more opcode
+
+% Unfortunately, Bitcoin script cannot implement our protocols currently.
+
+% The reason is that the premium ownership is decided by the ownership of the asset2.
+
+% current Bitcoin script cannot check the ownership of a specific output.
+
+% to support this, we need to add an opcode OP_LOOKUP_OUTPUT
+
+% <output_id> OP_LOOKUP_OUTPUT -> <pubkeyhash> (a.k.a. de-base58ed address)
+
+% then our script is
+
+1. Currency Exchange
+
+Premium:
+
+\begin{figure}
+\begin{lstlisting}[language=Solidity, basicstyle=\tiny]
+ScriptSig:
+    Redeem: <Bob_sig> <Bob_pubkey> 1
+    Refund: <Alice_sig> <Alice_pubkey> 0
+ScriptPubKey:
+    OP_IF // Normal redeem path
+        // the owner of <asset2_output> should be Alice
+        // which means Alice has redeemed asset2
+        <asset2_output> OP_LOOKUP_OUTPUT <Alice_pubkeyhash> OP_EQUALVERIFY 
+        OP_DUP OP_HASH160 <Bob_pubkeyhash>
+    OP_ELSE // Refund path
+        // the premium timelock should be expired
+        <locktime> OP_CHECKLOCKTIMEVERIFY OP_DROP
+        OP_DUP OP_HASH160 <Alice pubkey hash>
+    OP_ENDIF
+    OP_EQUALVERIFY
+    OP_CHECKSIG
+\end{lstlisting}
+\end{figure}
+
+2. Options
+
+Premium:
+
+\begin{figure}
+\begin{lstlisting}[language=Solidity, basicstyle=\tiny]
+ScriptSig:
+    Redeem: <Bob_sig> <Bob_pubkey> 1
+    Refund: <Alice_sig> <Alice_pubkey> 0
+ScriptPubKey:
+    OP_IF // Normal redeem path
+        // the owner of the asset2 should not be the contract
+        // it should be either (redeemde by) Alice or (refunded by) Bob
+        // which means Alice has redeemed asset2
+        <asset2_output> OP_LOOKUP_OUTPUT <Alice_pubkeyhash> OP_NUMEQUAL
+        <asset2_output> OP_LOOKUP_OUTPUT <Bob_pubkeyhash> OP_NUMEQUAL
+        OP_ADD 1 OP_NUMEQUALVERIFY
+        OP_DUP OP_HASH160 <Bob_pubkeyhash>
+    OP_ELSE // Refund path
+        // the premium timelock should be expired
+        <locktime> OP_CHECKLOCKTIMEVERIFY OP_DROP
+        OP_DUP OP_HASH160 <Alice pubkey hash>
+    OP_ENDIF
+    OP_EQUALVERIFY
+    OP_CHECKSIG
+\end{lstlisting}
+\end{figure}
+
+% OP_LOOKUP_OUTPUT is from https://bitcoin.stackexchange.com/questions/36229/bitcoin-script-for-a-competitive-crowdfunding-like-contract
