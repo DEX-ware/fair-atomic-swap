@@ -124,7 +124,7 @@ contract RiskySpeculativeAtomicSwapSpot {
             require(swaps[secretHash].assetState == AssetState.Redeemed);
         } else {
             require(block.timestamp > swaps[secretHash].premiumRefundTimestamp);
-            require((swaps[secretHash].assetState == AssetState.Empty) || (swaps[secretHash].assetState == AssetState.Redeemed));
+            require(swaps[secretHash].assetState != AssetState.Refunded);
         }
         _;
     }

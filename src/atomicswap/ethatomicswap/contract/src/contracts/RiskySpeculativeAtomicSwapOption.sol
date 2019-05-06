@@ -123,7 +123,7 @@ contract RiskySpeculativeAtomicSwapSpot {
         _;
     }
 
-    // Premium is redeemable on blockchain2 for Bob if Bob participates and redeems
+    // Premium is redeemable on blockchain2 for Bob if Bob participates and refund
     // before premium's timelock expires
     modifier isPremiumRedeemable(bytes32 secretHash) {
         // on asset2 chain
@@ -133,7 +133,7 @@ contract RiskySpeculativeAtomicSwapSpot {
         // the participant invokes this method to redeem the premium
         require(swaps[secretHash].participant == msg.sender);
         // if Bob participates
-        require(swaps[secretHash].assetState != AssetState.Empty);
+        require(swaps[secretHash].assetState == AssetState.Refunded || swaps[secretHash].assetState == AssetState.Redeemed);
         // the premium timelock should not be expired
         require(block.timestamp <= swaps[secretHash].premiumRefundTimestamp);
         _;
