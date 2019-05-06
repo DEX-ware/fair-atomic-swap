@@ -28,15 +28,17 @@ For currency exchange
         require(swaps[secretHash].premiumState == PremiumState.Filled);
         // the initiator invokes this method to refund the premium
         require(swaps[secretHash].initiator == msg.sender);
+        // the contract should be on the blockchain2
+        require(swaps[secretHash].kind == Kind.Participant);
         // if the asset2 timelock is still valid
         if block.timestamp <= swaps[secretHash].assetRefundTimestamp {
             // the asset2 should be redeemded by Alice
-            require(swaps[secretHash].assetState == AssetState.Redeemed)
+            require(swaps[secretHash].assetState == AssetState.Redeemed);
         } else { // if the asset2 timelock is still valid
             // the asset2 should not be refunded
-            require(swaps[secretHash].assetState != AssetState.Refunded)
+            require(swaps[secretHash].assetState != AssetState.Refunded);
             // the premium timelock should be expired
-            require(block.timestamp > swaps[secretHash].premiumRefundTimestanp);
+            require(block.timestamp > swaps[secretHash].premiumRefundTimestamp);
         }
         _;
     }
@@ -47,6 +49,8 @@ For currency exchange
         require(swaps[secretHash].premiumState == PremiumState.Filled);
         // the participant invokes this method to redeem the premium
         require(swaps[secretHash].participant == msg.sender);
+        // the contract should be on the blockchain2
+        require(swaps[secretHash].kind == Kind.Participant);
         // the asset2 should be refunded
         // this also indicates the asset2 timelock is expired
         require(swaps[secretHash].assetState == AssetState.Refunded);
@@ -71,6 +75,8 @@ For American Call Options
         require(swaps[secretHash].premiumState == PremiumState.Filled);
         // the initiator invokes this method to refund the premium
         require(swaps[secretHash].initiator == msg.sender);
+        // the contract should be on the blockchain2
+        require(swaps[secretHash].kind == Kind.Participant);
         // premium timelock should be expired
         require(block.timestamp > swaps[secretHash].premiumRefundTimestamp);
         // asset2 should be empty
@@ -84,6 +90,8 @@ For American Call Options
         require(swaps[secretHash].premiumState == PremiumState.Filled);
         // the participant invokes this method to redeem the premium
         require(swaps[secretHash].participant == msg.sender);
+        // the contract should be on the blockchain2
+        require(swaps[secretHash].kind == Kind.Participant);
         // the asset2 should be refunded or redeemed
         require(swaps[secretHash].assetState == AssetState.Refunded || swaps[secretHash].assetState == AssetState.Redeemed);
         // the premium timelock should not be expired
