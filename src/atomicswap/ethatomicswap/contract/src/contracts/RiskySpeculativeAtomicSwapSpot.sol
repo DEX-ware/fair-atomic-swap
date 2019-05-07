@@ -100,9 +100,7 @@ contract RiskySpeculativeAtomicSwapSpot {
         address initiator,
         address participant,
         uint256 assetValue,
-        uint256 assetRefundTimestamp,
-        uint256 premiumValue,
-        uint256 premiumRefundTimestamp
+        uint256 premiumValue
     );
 
     constructor() public {}
