@@ -139,7 +139,7 @@ contract RiskySpeculativeAtomicSwapSpot {
 
     modifier isAssetRefundable(bytes32 secretHash) {
         require(swaps[secretHash].assetState == AssetState.Filled);
-        if(swaps[secretHash].kind == Kind.Initiator) {
+        if (swaps[secretHash].kind == Kind.Initiator) {
             require(swaps[secretHash].initiator == msg.sender);
         } else {
             require(swaps[secretHash].participant == msg.sender);
@@ -150,7 +150,7 @@ contract RiskySpeculativeAtomicSwapSpot {
 
     modifier isAssetRedeemable(bytes32 secretHash, bytes32 secret) {
         require(swaps[secretHash].assetState == AssetState.Filled);
-        if(swaps[secretHash].kind == Kind.Initiator) {
+        if (swaps[secretHash].kind == Kind.Initiator) {
             require(swaps[secretHash].participant == msg.sender);
         } else {
             require(swaps[secretHash].initiator == msg.sender);
@@ -219,7 +219,7 @@ contract RiskySpeculativeAtomicSwapSpot {
         swaps[secretHash].secretHash = secretHash;
         swaps[secretHash].initiator = initiator;
         swaps[secretHash].participant = participant;
-        if (premiumValue == 0) {
+        if (msg.sender == initiator) {
             swaps[secretHash].kind = Kind.Initiator;
         } else {
             swaps[secretHash].kind = Kind.Participant;
