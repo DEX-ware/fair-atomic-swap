@@ -100,9 +100,7 @@ contract RiskySpeculativeAtomicSwapSpot {
         address initiator,
         address participant,
         uint256 assetValue,
-        uint256 assetRefundTimestamp,
-        uint256 premiumValue,
-        uint256 premiumRefundTimestamp
+        uint256 premiumValue
     );
 
     constructor() public {}
@@ -127,7 +125,7 @@ contract RiskySpeculativeAtomicSwapSpot {
     // before premium's timelock expires
     modifier isPremiumRedeemable(bytes32 secretHash) {
         // on asset2 chain
-        require(swaps[secretHash].kind == Kind.Participant) {
+        require(swaps[secretHash].kind == Kind.Participant);
         // the premium should be deposited
         require(swaps[secretHash].premiumState == PremiumState.Filled);
         // the participant invokes this method to redeem the premium
@@ -210,13 +208,9 @@ contract RiskySpeculativeAtomicSwapSpot {
                     address payable initiator,
                     address payable participant,
                     uint256 assetValue,
-                    uint256 assetRefundTime,
-                    uint256 premiumValue,
-                    uint256 premiumRefundTime)
+                    uint256 premiumValue)
         public
         payable
-        checkRefundTimestampOverflow(assetRefundTime)
-        checkRefundTimestampOverflow(premiumRefundTime)
         isAssetEmptyState(secretHash)
         isPremiumEmptyState(secretHash)
     {
@@ -229,10 +223,8 @@ contract RiskySpeculativeAtomicSwapSpot {
             swaps[secretHash].kind = Kind.Participant;
         }
         swaps[secretHash].assetValue = assetValue;
-        swaps[secretHash].assetRefundTimestamp = block.timestamp + assetRefundTime;
         swaps[secretHash].assetState = AssetState.Empty;
         swaps[secretHash].premiumValue = premiumValue;
-        swaps[secretHash].premiumRefundTimestamp = block.timestamp + premiumRefundTime;
         swaps[secretHash].premiumState = PremiumState.Empty;
         
         emit SetUp(
@@ -240,21 +232,21 @@ contract RiskySpeculativeAtomicSwapSpot {
             initiator,
             participant,
             assetValue,
-            block.timestamp + assetRefundTime,
-            premiumValue, 
-            block.timestamp + premiumRefundTime
+            premiumValue
         );
     }
 
     // Initiator needs to pay for the premium with premiumValue
-    function fillPremium(bytes32 secretHash)
+    function fillPremium(bytes32 secretHash, uint256 premiumRefundTime)
         public
         payable
         isInitiator(secretHash)
         fulfillPremiumPayment(secretHash)
         isPremiumEmptyState(secretHash)
+        checkRefundTimestampOverflow(premiumRefundTime)
     {   
         swaps[secretHash].premiumState = PremiumState.Filled;
+        swaps[secretHash].premiumRefundTimestamp = block.timestamp + premiumRefundTime;
         
         emit PremiumFilled(
             block.timestamp,
@@ -268,14 +260,16 @@ contract RiskySpeculativeAtomicSwapSpot {
         );
     }
 
-    function initiate(bytes32 secretHash)
+    function initiate(bytes32 secretHash, uint256 assetRefundTime)
         public
         payable
         isInitiator(secretHash)
         fulfillAssetPayment(secretHash)
         isAssetEmptyState(secretHash)
+        checkRefundTimestampOverflow(assetRefundTime)
     {
         swaps[secretHash].assetState = AssetState.Filled;
+        swaps[secretHash].assetRefundTimestamp = block.timestamp + assetRefundTime;
         
         emit Initiated(
             block.timestamp,
@@ -289,15 +283,17 @@ contract RiskySpeculativeAtomicSwapSpot {
         );
     }
 
-    function participate(bytes32 secretHash)
+    function participate(bytes32 secretHash, uint256 assetRefundTime)
         public
         payable
         isParticipant(secretHash)
         fulfillAssetPayment(secretHash)
         isAssetEmptyState(secretHash)
         isPremiumFilledState(secretHash)
+        checkRefundTimestampOverflow(assetRefundTime)
     {
         swaps[secretHash].assetState = AssetState.Filled;
+        swaps[secretHash].assetRefundTimestamp = block.timestamp + assetRefundTime;        
         
         emit Participated(
             block.timestamp,
