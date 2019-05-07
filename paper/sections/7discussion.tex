@@ -1,9 +1,41 @@
 \section{Discussion}
 \label{sec:discussion}
 
-\subsection{Security Issues in Atomic Cross-Chain Swaps}
+\subsection{Security of Atomic Cross-Chain Swaps}
+
+Atomic Cross-Chain Swaps are not perfect, and have some security issues.
+
+% rely on blockchain security
+First, the security of Atomic Cross-Chain Swaps relies on the security of blockchains:
+If the blockchains involved in the swaps are insecure, the Atomic Cross-Chain Swaps are also insecure.
+
+% smart contract /script
+Second, the Atomic Cross-Chain Swap contracts are written by high-level languages.
+This means the compiled contracts can be insecure if the contract compilers are flawed.
+
+% 2 blockchain async
+Furthermore, the timing mechanism may not be reliable, while the Atomic Swaps are based on timelocks.
+% timestamp of blockchain
+In blockchains, events are timestamped by either two approaches: The relative time or the absolute time.
+% relative time
+The relative time uses the block height to represent the time.
+A block height cannot represent a precise time, as the new block generation is a random process.
+% abosolute time
+The absolute time uses the UNIX timestamp, and the consensus participants are responsible for timestamping blocks.
+However, the consensus participants may use the wrong time, either by purpose or by accident.
+% async blockhains
+Furthermore, blockchains are independent to each other, which means they are asynchronous in terms of time.
+This can lead to the inconsistency on the timelocks of $Coin_1$ and $Coin_2$.
+
 
 \subsection{Other Countermeasures for the Unfair Atomic Cross-Chain Swaps}
+
+1.  We could force that setting up the HTLCs requires payment.
+
+2.  Exchange nodes could increase their fees.
+
+3.  Exchange nodes could limit the timelock of cross-asset swaps.
+
 
 \subsection{Limitations of Our Solutions}
 
