@@ -1,22 +1,71 @@
 \section{Deployment}
 \label{sec:deployment}
 
+\subsection{Requirements}
+
+To implement our protocols, the blockchain should support the following functionalities:
+
+\begin{enumerate}
+    \item Stateful transactions
+    \item Timelock
+    \item Hashlock
+\end{enumerate}
+
+\paragraph{Stateful transactions}
+Transactions should be stateful: Executing a transaction can depend on prior transactions.
+In our protocols, whether $pr$ goes to Alice or Bob depends on the status of $Coin_2$.
+Therefore, the transaction of $pr$ relies on the status of $Coin_2$ payment transaction.
+
+\paragraph{Hashlock}
+The transactions should support the hashlock: A payment is proceeded only when the payee provides the preimage of a hash.
+In our protocols, exchanging $Coin_1$ and $Coin_2$ atomically is based on the hashlock -
+Alice redeems $Coin_2$ first by releasing the preimage, then Bob can redeem $Coin_1$ by using the released preimage.
+
+\paragraph{Timelock}
+The transactions should support the timelock: A payment will expire after a specified time if the payee cannot redeem the payment.
+Note that the payment can be conditional, e.g. by hashlock.
+In our protocols, the transactions of $Coin_1$, $Coin_2$ and $pr$ are all timelocked, in order to avoid locking money in transactions forever.
+
 \subsection{Smart Contracts}
 
-% can implement currency exchange and american call options
+Smart contracts support all aforementioned functionalities, so can easily implement our protocols.
+We use the Solidity - the programming language for Ethereum smart contracts - as an example.
 
-% state of asset and premium
+Our implementations are based on the original Atomic Swap Solidity implementation,
+but extend the premium mechanism.
+
+Extending the premium mechanism includes:
+
+\begin{enumerate}
+    \item The enumeration \textit{AssetState} for maintaining the premium payment state
+    \item The modifiers \textit{isPremiumRedeemable()} and \textit{isPremiumRefundable()} for checking whether the premium can be redeemed or refunded
+    \item The methods \textit{redeemPremium()} and \textit{refundPremium()} for redeeming and refunding the premium
+\end{enumerate}
+
+\paragraph{The premium payment state \textit{AssetState}}
+
+Similar with the \textit{PremiumState}, \textit{AssetState} has 4 states: empty, filled, redeemded and refunded.
+The code is shown in Figure~\cite{code:state}.
+\textit{Empty} means Alice has deposited the premium, indicating that Alice has not performed \textbf{initiate} yet.
+\textit{Filled} means Alice has deposited the premium, indicating that Alice has performed \textbf{initiate}, but neither Alice nor Bob \textbf{refunds} or \textbf{redeems} the premium.
+\textit{Redeemded} and \textit{refunded} means Bob redeems the premium and Alice refunds the premium, respectively.
+
 \begin{figure}
-    \begin{lstlisting}[language=Solidity, basicstyle=\tiny]
-    enum AssetState { Empty, Filled, Redeemed, Refunded }
-    enum PremiumState { Empty, Filled, Redeemed, Refunded }
-    \end{lstlisting}
-    \label{code:state}
-    \caption{Maintaining the state of the asset and the premium.}
+\begin{lstlisting}[language=Solidity, basicstyle=\tiny]
+enum AssetState { Empty, Filled, Redeemed, Refunded }
+enum PremiumState { Empty, Filled, Redeemed, Refunded }
+\end{lstlisting}
+\label{code:state}
+\caption{Maintaining the state of the asset and the premium.}
 \end{figure}
 
+\paragraph{\textit{isPremiumRedeemable()} and \textit{isPremiumRefundable()}}
+Checking whether the premium is redeemable or refundable is the most critical part of our protocols.
+Because the premium payment relies on the $Coin_2$ payment, checking the premium refundability and redeemability involves checking the $Coin_2$ status - \textit{AssetState} in our implementation.
 
-For currency exchange
+\textit{isPremiumRedeemable()} and \textit{isPremiumRefundable()} for the currency exchange-style Atomic Swap are shown in Figure~\ref{code:premium_condition_currency}, and for the American Call Option-style Atomic Swap are shown in Figure~\ref{code:premium_condition_options}.
+The currency exchange-style Atomic Swap and the American Call Option-style Atomic Swap differ when $AssetState = Redeemed$:
+In the currency exchange-style Atomic Swap the premium belongs to Alice while in the American Call Option-style Atomic Swap the premium belongs to Bob.
 
 \begin{figure}
 \begin{lstlisting}[language=Solidity, basicstyle=\tiny]
@@ -64,9 +113,6 @@ modifier isPremiumRedeemable(bytes32 secretHash) {
 \caption{The condition to redeem and refund the premium for currency-exchange-style Atomic Swaps.}
 \end{figure}
 
-
-For American Call Options
-
 \begin{figure}
 \begin{lstlisting}[language=Solidity, basicstyle=\tiny]
 // Premium is refundable for Alice only when Alice initiates
@@ -104,24 +150,84 @@ modifier isPremiumRedeemable(bytes32 secretHash) {
 \caption{The condition to redeem and refund the premium for American Call Option-style Atomic Swaps.}
 \end{figure}
 
-\subsection{Bitcoin Scripts}
 
 
-% Unfortunately, Bitcoin script cannot implement our protocols currently.
+\paragraph{\textit{redeemPremium()} and \textit{refundPremium()}}
 
-% The reason is that the premium ownership is decided by the ownership of the asset2.
+\textit{redeemPremium()} and \textit{refundPremium()} are similar with \textit{redeemAsset()} and \textit{refundAsset()}, and their executions are secured by \textit{isPremiumRedeemable()} and \textit{isPremiumRefundable()}.
+The code is shown in Figure~\ref{code:premium_redeem_refund_function}.
 
-% current Bitcoin script cannot check the ownership of a specific output.
+\begin{figure}
+\begin{lstlisting}[language=Solidity, basicstyle=\tiny]
+function redeemPremium(bytes32 secretHash)
+    public
+    isPremiumRedeemable(secretHash)
+{
+    // transfer the premium to Bob
+    swaps[secretHash].participant.transfer(swaps[secretHash].premiumValue);
+    // update the premium state to redeemded
+    swaps[secretHash].premiumState = PremiumState.Redeemed;
+    // notify the function invoker
+    emit PremiumRefunded(
+        block.timestamp,
+        swaps[secretHash].secretHash,
+        msg.sender,
+        swaps[secretHash].premiumValue
+    );
+}
+    function refundPremium(bytes32 secretHash)
+    public
+    isPremiumRefundable(secretHash)
+{
+    // transfer the premium to Alice
+    swaps[secretHash].initiator.transfer(swaps[secretHash].premiumValue);
+    // update the premium state to refunded
+    swaps[secretHash].premiumState = PremiumState.Refunded;
+    // notify the function invoker
+    emit PremiumRefunded(
+        block.timestamp,
+        swaps[secretHash].secretHash,
+        msg.sender,
+        swaps[secretHash].premiumValue
+    );
+}
+\end{lstlisting}
+\label{code:premium_redeem_refund_function}
+\caption{The functions for redeeming and refunding the premium.}
+\end{figure}
 
-% to support this, we need to add an opcode OP_LOOKUP_OUTPUT
 
-% <output_id> OP_LOOKUP_OUTPUT -> <pubkeyhash> (a.k.a. de-base58ed address)
+\subsection{Bitcoin Script}
 
-% then our script is
+% bitcoin cannot implement
+% because stateless
+Unfortunately, Bitcoin script cannot implement our protocols, because the Bitcoin script does not support the stateful transaction functionalities - it is designed to be stateless.
 
-1. Currency Exchange
+% new opcode
+\paragraph{New Opcode OP\_LOOKUP\_OUTPUT}
+In order to make Bitcoin script support our protocols, we propose a new opcode called OP\_LOOKUP\_OUTPUT.
+OP\_LOOKUP\_OUTPUT takes the id of an output, and produces the address of the output's owner.
+With OP\_LOOKUP\_OUTPUT, the Bitcoin script can decide whether Alice or Bob should take the premium by \textbf{<asset2\_output> OP\_LOOKUP\_OUTPUT <Alice\_pubkeyhash> OP\_EQUALVERIFY}.
 
-Premium:
+% implement opcode is easy
+Implementing OP\_LOOKUP\_OUTPUT is easy in Bitcoin - It only queries the ownership of an output from the indexed blockchain database, and does not require any computation.
+
+\paragraph{Decouples the contract creation and the contract invocation}
+For smart contracts, the contract is created and invoked in separate transactions.
+However, for Bitcoin script, the contract is created and invoked in the same transaction, which makes our protocols difficult to construct.
+First, the timelock starts right after the contract creation rather than the contract invocation.
+Second, the premium does not know which outputs belong to $Coin_2$.
+
+We solve this problem by constructing the contract offline:
+Alice and Bob create a 2-2 multisignature address, and merge the premium payment and the $Coin_2$ payment into a single transaction.
+First, Alice and Bob create a 2-2 multisignature address.
+In order to use the address to make a payment, both Alice and Bob should sign the transaction.
+Second, Bob creates the $Coin_2$ transaction (offline) which includes the unspent outputs, and sends it to Alice.
+Third, Alice adds the premium transaction to Bob's sent transaction.
+The premium transaction uses OP\_LOOKUP\_OUTPUT to check the ownership of outputs of $Coin_2$.
+Finally, both Alice and Bob sign and publish the transaction.
+
+The Bitcoin scripts for the currency exchange-style Atomic Swap and the American Call Option-style Atomic Swap are shown in Figure~\ref{code:bitcoin_contract_currency_exchange} and Figure~\ref{code:bitcoin_contract_option}, respectively.
 
 \begin{figure}
 \begin{lstlisting}[language=Solidity, basicstyle=\tiny]
@@ -142,11 +248,9 @@ ScriptPubKey:
     OP_EQUALVERIFY
     OP_CHECKSIG
 \end{lstlisting}
+\label{code:bitcoin_contract_currency_exchange}
+\caption{The currency exchange-style Atomic Swap contract in Bitcoin script}
 \end{figure}
-
-2. Options
-
-Premium:
 
 \begin{figure}
 \begin{lstlisting}[language=Solidity, basicstyle=\tiny]
@@ -170,6 +274,8 @@ ScriptPubKey:
     OP_EQUALVERIFY
     OP_CHECKSIG
 \end{lstlisting}
+\label{code:bitcoin_contract_option}
+\caption{The American Call Option-style Atomic Swap contract in Bitcoin script}
 \end{figure}
 
 % OP_LOOKUP_OUTPUT is from https://bitcoin.stackexchange.com/questions/36229/bitcoin-script-for-a-competitive-crowdfunding-like-contract
