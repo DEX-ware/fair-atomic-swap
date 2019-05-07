@@ -1,11 +1,19 @@
 \section{Evaluating the Unfairness of Atomic Cross-Chain Swaps}
 \label{sec:evaluation}
 
-\subsection{Intuitive Analysis}
+In this section, we evaluate the unfairness of Atomic Cross-Chain Swaps.
 
-% price change per 24h
+\subsection{Experimental Setting}
 
-\subsection{Pricing the Premium for Cryptocurrency Options}
+We collected exchange rate data of mainstream cryptocurrencies for one year, starting from May 3th 2018 to May 3th 2019.
+The data was retrieved from CoinGecko.
+All experiments run on a MacBook Pro with a 2.2 GHz Intel Core i7 Processor, a 16 GB DDR4 RAM and 256 SSD storage disk.
+
+\subsection{Exchange Rate Volatility Analysis}
+
+
+
+\subsection{Quantifying the Unpaid Premium}
 
 The unfair part of the Atomic Cross-Chain Swap for the participant is the unpaid premium from the initiator.
 We can evaluate the unfairness of the Atomic Cross-Chain Swap by estimating the premium which should be paid by the initiator.
@@ -99,5 +107,4 @@ C_{t - \Delta t, i} = max[e^{-r \Delta t} (p C_{t, i} + q C_{t, i+1}), K]
 
 The earliest option price $S_{0, 1}$ - the estimated option price - can be calculated by iteratively back-propagating the later option prices. 
 
-\subsubsection{Pricing}
-
+\subsubsection{Results}
