@@ -160,16 +160,6 @@ contract RiskySpeculativeAtomicSwapSpot {
         _;
     }
 
-    modifier isInitiator(bytes32 secretHash) {
-        require(swaps[secretHash].initiator == msg.sender);
-        _;
-    }
-
-    modifier isParticipant(bytes32 secretHash) {
-        require(swaps[secretHash].participant == msg.sender);
-        _;
-    }
-
     modifier isPremiumFilledState(bytes32 secretHash) {
         require(swaps[secretHash].premiumState == PremiumState.Filled);
         _;
@@ -185,20 +175,32 @@ contract RiskySpeculativeAtomicSwapSpot {
         _;
     }
 
-    modifier fulfillAssetPayment(bytes32 secretHash) {
-        require(swaps[secretHash].assetValue == msg.value);
-        _;
-    }
-
-    modifier fulfillPremiumPayment(bytes32 secretHash) {
-        require(swaps[secretHash].premiumValue == msg.value);
-        _;
-    }
-
     modifier checkRefundTimestampOverflow(uint256 refundTime) {
         uint256 refundTimestamp = block.timestamp + refundTime;
         require(refundTimestamp > block.timestamp, "calc refundTimestamp overflow");
         require(refundTimestamp > refundTime, "calc refundTimestamp overflow");
+        _;
+    }
+
+    modifier canInitiate(bytes32 secretHash) {
+        require(swaps[secretHash].initiator == msg.sender);
+        require(swaps[secretHash].assetValue == msg.value);
+        require(swaps[secretHash].assetState == AssetState.Empty);
+        _;
+    }
+
+    modifier canFillPremium(bytes32 secretHash) {
+        require(swaps[secretHash].initiator == msg.sender);
+        require(swaps[secretHash].premiumValue == msg.value);
+        require(swaps[secretHash].premiumState == PremiumState.Empty);
+        _;
+    }
+
+    modifier canParticipate(bytes32 secretHash) {
+        require(swaps[secretHash].participant == msg.sender);
+        require(swaps[secretHash].assetValue == msg.value);
+        require(swaps[secretHash].assetState == AssetState.Empty);
+        require(swaps[secretHash].premiumState == PremiumState.Filled);
         _;
     }
 
@@ -240,9 +242,7 @@ contract RiskySpeculativeAtomicSwapSpot {
     function fillPremium(bytes32 secretHash, uint256 premiumRefundTime)
         public
         payable
-        isInitiator(secretHash)
-        fulfillPremiumPayment(secretHash)
-        isPremiumEmptyState(secretHash)
+        canFillPremium(secretHash)
         checkRefundTimestampOverflow(premiumRefundTime)
     {   
         swaps[secretHash].premiumState = PremiumState.Filled;
@@ -263,9 +263,7 @@ contract RiskySpeculativeAtomicSwapSpot {
     function initiate(bytes32 secretHash, uint256 assetRefundTime)
         public
         payable
-        isInitiator(secretHash)
-        fulfillAssetPayment(secretHash)
-        isAssetEmptyState(secretHash)
+        canInitiate(secretHash)
         checkRefundTimestampOverflow(assetRefundTime)
     {
         swaps[secretHash].assetState = AssetState.Filled;
@@ -286,10 +284,7 @@ contract RiskySpeculativeAtomicSwapSpot {
     function participate(bytes32 secretHash, uint256 assetRefundTime)
         public
         payable
-        isParticipant(secretHash)
-        fulfillAssetPayment(secretHash)
-        isAssetEmptyState(secretHash)
-        isPremiumFilledState(secretHash)
+        canParticipate(secretHash)
         checkRefundTimestampOverflow(assetRefundTime)
     {
         swaps[secretHash].assetState = AssetState.Filled;
