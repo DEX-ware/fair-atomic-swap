@@ -1,14 +1,56 @@
 \section{Background}
 \label{sec:background}
 
-\subsection{Atomic Cross-Chain Swap}
+\subsection{Atomic Cross-Chain Swaps}
+
+An Atomic Cross-Chain Swap is that two parties exchange their assets ``atomically'' without trusted third parties:
+The swap either succeeds or fails for both parties.
+
+In Blockchain, the Atomic Cross-Chain Swap is realized by the Hashed Timelocked Contract (HTLC) mechanism.
+In HTLC-style transactions, the payee redeems the payment prior to a deadline by providing the preimage of a specific hash value.
+Otherwise, the payment will expire and the money goes back to the payer.
+HTLC is based on the hashlock - to lock the payment by a hash value, and the timelock - to limit the deadline for the payee to redeem.
+The Atomic Cross-Chain Swap protocol can be implemented on all blockchains supporting the timelock and the hashlock.
 
 \subsection{Option}
 
 % option
+In finance, an option is a contract which gives the option buyer the right to buy or sell an asset, at a specified price prior to or on a specified date.
+Here the option buyer can choose whether to fulfill the contract.
+The specified price is called the \textit{strike price};
+the specified date is called the \textit{strike time};
+the party proposing the option is called the \textit{option seller};
+the other party is called the \textit{option buyer};
+the asset is called the \textit{underlying asset};
+and fulfilling the contract is called \textit{exercising}.
 
 % american option and european option
+The option has two types: The American-style Option and the European-style Option.
+They differ from the \textit{strike time}:
+The European-style Option buyer can only exercise the contract on the strike time,
+and the American-style Option buyer can exercise the contract prior to or on the strike time.
 
 % call option and put option
+If the option buyer is buying the underlying asset, the option is called the Call Option, otherwise it is called the Put Option.
 
-% premium fee
+% what is premium
+Besides the underlying asset, the option contract itself is considered to have value.
+The value of the contract is called the \textit{premium}.
+The option buyer should pay for the \textit{premium} to the option seller besides exchanging the underlying asset.
+
+% option pricing
+The \textit{premium} is priced prior to the contract agreement.
+As the \textit{premium} is the only variable within the option contract,
+pricing the \textit{premium} is also known as the \textit{option pricing} problem.
+\textit{Option Pricing} is rather a complex task - It is still a hot research topic in Finance and Applied Mathematics.
+
+The Black-Scholes (BS) Model is the first widely used model for option pricing.
+It can estimate the theoretical value of European-style Options using historical price data of the underlying asset.
+The Cox-Ross-Rubinstein (CRR) model, also known as the Binomial Option Pricing model, extends the BS model for pricing American-style Options.
+
+\subsection{Optionality of Atomic Cross-Chain Swaps}
+
+As the Atomic Swap is not instant, it introduces the optionality - The contract is settled after the contract agreement.
+However, the Atomic Swap is designed for currency exchange rather than for implementing options.
+We will prove that the Atomic Swap is equivalent to the American Call Option
+where the underlying asset strike price is the current strike price in Section~\ref{sec:formalization}.

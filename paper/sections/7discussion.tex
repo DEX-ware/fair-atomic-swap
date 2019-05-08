@@ -30,17 +30,27 @@ This can lead to the inconsistency on the timelocks of $Coin_1$ and $Coin_2$.
 
 \subsection{Other Countermeasures for the Unfair Atomic Cross-Chain Swaps}
 
-1.  We could force that setting up the HTLCs requires payment.
+Besides our solutions, there are some other countermeasures to address the Atomic Swap unfairness.
+However, all of them significantly reduce the usability of Atomic Swaps.
 
-2.  Exchange nodes could increase their fees.
-
-3.  Exchange nodes could limit the timelock of cross-asset swaps.
-
+The first countermeasure is to make setting up HTLCs non-free, or increase the transaction fee of HTLCs.
+However, these two solutions affect all HTLCs, but not all HTLCs are set for Atomic Swaps.
+The second solution is to use shorter timelock for Atomic Swaps.
+Unfortunately, as the time of confirming a transaction is highly random,
+short timelocks may cause unexpected situations.
+For example, the new block arrives too late, but the timelock of $Coin_1$ has already expired.
 
 \subsection{Limitations of Our Solutions}
 
-% need some asset2 to do atomic swap
+Still, our solutions are not perfect.
 
-% not instant
+The biggest limitation is that initiators of Atomic Swaps should have some $Coin_2$ to initiate an Atomic Swap,
+for either the pledge of successful swaps or paying for the option.
+However, the initiators do not always have $Coin_2$: They may just hope to get some $Coin_2$ by some $Coin_1$.
+To mitigate this problem, an initiator should get some $Coin_2$ before doing an Atomic Cross-Chain Swap by arbitrary means.
+First, he can buy some $Coin_2$ from cryptocurrency exchanges.
+Second, he can initiate a smaller Atomic Swap with shorter timelocks and no premium.
 
-%...
+Another limitation is that our Atomic Swap protocols are still not ``Atomic''.
+For a perfectly Atomic Swap protocol, both parties should have equivalent money at any time slot.
+However, our protocols and the original Atomic Swap protocol fail to meet this requirement - redeeming does not happen simultaneously. 
