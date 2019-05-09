@@ -6,9 +6,9 @@ The Atomic Swap protocol is that two parties exchange their assets ``atomically'
 Atomic Swap is implemented on blockchains by using the Hashed Timelocked Contracts (HTLCs).
 The HTLC is a type of transaction that, the payee should provide the preimage of a hash value before the deadline, otherwise the payment fails.
 
-However, the fairness of the Atomic Swap is never studied formally:
-There is no study that models the Atomic Swap in order to analyze whether both parties in the swap are equal.
-In practise, %TODO initiator controls settlement, and price fluctuates
+However, the fairness of the Atomic Swap is never studied formally.
+First, there is no study that models the Atomic Swap in order to analyze whether both parties in the swap are equal.
+Second, the initiator in Atomic Swap can control the settlement time, while the asset price is fluctuating overtime.
 
 In this paper, we prove that the Atomic Swap is unfair to the participant, and extends the original Atomic Swap to make it fair.
 In particular, we formally model the Atomic Swap and the American Call Option in Finance,
