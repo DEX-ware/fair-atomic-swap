@@ -9,9 +9,20 @@ We collected exchange rate data of mainstream cryptocurrencies for one year, sta
 The data was retrieved from CoinGecko.
 All experiments run on a MacBook Pro with a 2.2 GHz Intel Core i7 Processor, a 16 GB DDR4 RAM and 256 SSD storage disk.
 
-\subsection{Exchange Rate Volatility Analysis}
+\subsection{Identifying the Unfairness by Market Volatility}
 
+%TODO
+\begin{figure}
+    \includegraphics[width=\linewidth]{unfair_diagram.eps}
+    \caption{Diagram showing the unfairness.}
+    \label{fig:unfair_diagram}
+\end{figure}
 
+\begin{figure*}
+    \includegraphics[width=\linewidth]{volatility_analysis.eps}
+    \caption{Diagram showing the unfairness.}
+    \label{fig:volatility_analysis}
+\end{figure*}
 
 \subsection{Quantifying the Unpaid Premium}
 
@@ -108,3 +119,5 @@ C_{t - \Delta t, i} = max[e^{-r \Delta t} (p C_{t, i} + q C_{t, i+1}), K]
 The earliest option price $S_{0, 1}$ - the estimated option price - can be calculated by iteratively back-propagating the later option prices. 
 
 \subsubsection{Results}
+
+%TODO
