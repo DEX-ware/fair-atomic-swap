@@ -53,13 +53,17 @@ In the currency exchange-style protocol, if the swap is successful, the premium 
 In the American Call Option-style protocol, the premium goes to the participant once the participant's asset is redeemed or refunded.
 
 \paragraph{We describe how to deploy our proposed protocols on existing blockchains.}
-%TODO
+We give solutions to deploy our protocols on existing blockchains, including blockchains supporting smart contracts and blockchains supporting scripts only.
+For blockchains supporting smart contracts such as Ethereum, our protocols can be directly deployed.
+For blockchains only supporting scripts such as Bitcoin, our protocols can be deployed by adding one more opcode.
+We call the opcode ``OP\_LOOKUP\_OUTPUT'', and it looks up the owner of a specific output.
+We use Solidity as an example of smart contracts, and the Bitcoin script code as an example of scripts.
 
 The paper is structured as follows.
 Section~\ref{sec:background} describes the background of Atomic Swap and options in Finance.
 Section~\ref{sec:formalization} formalizes the Atomic Swap protocol and the American Call Option, then proves the Atomic Swap protocol is equivalent to the premium-free American Call Option.
 Section~\ref{sec:evaluation} evaluates the Atomic Swap unfairness by analyzing the volatility and pricing the premium of mainstream cryptocurrency pairs.
 Section~\ref{sec:fair_atomic_swap} describes our proposed fair Atomic Swap protocols.
-Section~\ref{sec:deployment} describes how to deploy our proposed protocols on existing blockchains, including the smart contract example (in Solidity) and the Bitcoin script.
+Section~\ref{sec:deployment} describes how to deploy our proposed protocols on existing blockchains.
 Section~\ref{sec:discussion} discusses security issues of Atomic Swaps, other countermeasures for solving the Atomic Swap unfairness, and limitations of our protocols.
 Section~\ref{sec:conclusion} concludes our paper and outlines the future work.
