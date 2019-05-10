@@ -9,22 +9,67 @@ We collected exchange rate data of mainstream cryptocurrencies for one year, sta
 The data was retrieved from CoinGecko.
 All experiments run on a MacBook Pro with a 2.2 GHz Intel Core i7 Processor, a 16 GB DDR4 RAM and 256 SSD storage disk.
 
-\subsection{Identifying the Unfairness by Market Volatility}
+\subsection{Identifying and Quantifying the Unfairness by Market Volatility}
 
-%TODO
+We start from identifying the unfairness of Atomic Cross-Chain Swaps before evaluating it.
+The unfairness consists of two parts as shown in Figure~\ref{fig:unfair_diagram}, namely the profit when the initiator's asset price rises and the mitigated loss when the initiator's asset price drops.
+
 \begin{figure}
     \includegraphics[width=\linewidth]{unfair_diagram.eps}
-    \caption{Diagram showing the unfairness.}
+    \caption{Diagram showing the unfairness. %TODO}
     \label{fig:unfair_diagram}
 \end{figure}
 
+After identifying the unfairness, we then quantifying it by using the historical data.
+Our quantification is as follows:
+
+\paragraph{Scenario}
+Recall that 24 hours is the default timelock period of the participant,
+and the initiator has advantage over the participant within the timelock of 24 hours.
+We assume the initiator launches an atomic swap with the value of $x$ USD every day.
+For each day, the initiator may either profit a percent $\alpha$ of $x$ directly if his asset price rises,
+or mitigate a percent $\beta$ of $x$ by aborting the swap if his asset price drops on average.
+Assume the possibility for the initiator's asset price to rise is $P_{\alpha}$, and to drop is $P_{\beta}$.
+Then, the expected profit risk rate is $E_{\alpha} = \alpha P_{\alpha}$,
+and the expected mitigated risk rate is $E_{\beta} = \beta P_{\beta}$.
+Therefore, the expected unfairness is that the initiator profits $E_{\alpha} x$ unconditionally and mitigates the risk of losing $E_{\beta} x$.
+
+\paragraph{Methodology}
+In our scenario, quantifying the unfairness is to quantify $E_{\alpha}$ and $E_{\beta}$.
+We use the historical exchange rate to estimate $E_{\alpha}$ and $E_{\beta}$ for mainstream cryptocurrency pairs.
+In particular, we collect exchange rate data of 16 mainstream cryptocurrency paris from May 3th 2018 to May 3th 2019,
+and derive the daily percent changes of them.
+We then classify the daily percent changes to two groups by their trend (rising or dropping). 
+After that, we average each group of percent changes for each cryptocurrency pair to get $\alpha$ and $\beta$,
+and get the possibilities of rising and dropping $P_{\alpha}$ and $P_{\beta}$.
+Finally, we compute the profit rate $E_{\alpha} = \alpha P_{\alpha}$ and the mitigated loss rate $E_{\beta} = \beta P_{\beta}$.
+
+\paragraph{Results and Analysis}
+
 \begin{figure*}
     \includegraphics[width=\linewidth]{volatility_analysis.eps}
-    \caption{Diagram showing the unfairness.}
+    \caption{Diagram showing the unfairness. %TODO}
     \label{fig:volatility_analysis}
 \end{figure*}
 
-\subsection{Quantifying the Unpaid Premium}
+\begin{figure}
+    \includegraphics[width=\linewidth]{vol_scatter.eps}
+    \caption{Comparing the unfairness. %TODO}
+    \label{fig:vol_scatter}
+\end{figure}
+
+Figure~\ref{fig:volatility_analysis} shows the evaluation results of each cryptocurrency pair, including the estimated $E_\alpha$ and $E_\beta$, as well as the maximum profit $max_\alpha$ and the maximum mitigated loss $max_\beta$.
+
+We observe that %TODO
+
+\begin{enumerate}
+    \item For all chosen cryptocurrency pairs, the initiator is expected to profit approximately 1\% and mitigate the loss of 1\% per day.
+    \item For all chosen cryptocurrency pairs, $max_\alpha$ and $max_\beta$ are quite big - ranging from 8\% to 25\%.
+\end{enumerate}
+
+For the first result, %TODO
+
+\subsection{Estimating the Unpaid Premium}
 
 The unfair part of the Atomic Cross-Chain Swap for the participant is the unpaid premium from the initiator.
 We can evaluate the unfairness of the Atomic Cross-Chain Swap by estimating the premium which should be paid by the initiator.
