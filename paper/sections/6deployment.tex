@@ -4,6 +4,7 @@
 \HY{DEPLOYMENT happens after DEVELOPMENT. maybe you mean implementation?}
 
 \TODO{intro, and make this section Implementation}
+\TODO{figure ref ????}
 
 \subsection{Requirements}
 
@@ -231,8 +232,6 @@ Third, Alice adds the premium transaction to Bob's sent transaction.
 The premium transaction uses OP\_LOOKUP\_OUTPUT to check the ownership of outputs of $Coin_2$.
 Finally, both Alice and Bob sign and publish the transaction.
 
-The Bitcoin scripts for the currency exchange-style Atomic Swap and the American Call Option-style Atomic Swap are shown in Figure~\ref{code:bitcoin_contract_currency_exchange} and Figure~\ref{code:bitcoin_contract_option}, respectively.
-
 \begin{figure}
 \begin{lstlisting}[language=Solidity, basicstyle=\tiny]
 ScriptSig:
@@ -281,5 +280,7 @@ ScriptPubKey:
 \label{code:bitcoin_contract_option}
 \caption{The American Call Option-style Atomic Swap contract in Bitcoin script}
 \end{figure}
+
+Figure~\ref{code:bitcoin_contract_currency_exchange} and Figure~\ref{code:bitcoin_contract_option} show the Bitcoin scripts for the currency-style and the American Call Option-style Atomic Swaps, respectively.
 
 % OP_LOOKUP_OUTPUT is from https://bitcoin.stackexchange.com/questions/36229/bitcoin-script-for-a-competitive-crowdfunding-like-contract

@@ -5,25 +5,29 @@ In this section, we evaluate the unfairness of Atomic Cross-Chain Swaps. \TODO{m
 
 \subsection{Experimental Setting}
 
-We collected exchange rate data of mainstream cryptocurrencies for one year, starting from May 3th 2018 to May 3th 2019.
-The data was retrieved from CoinGecko.
+We collected relevant data of mainstream cryptocurrencies for one year, starting from May 3th 2018 to May 3th 2019.
+In particular, the cryptocurrency exchange rate data was retrieved from from CoinGecko;
+the stock index data was retrieved from Yahoo Finance;
+the currency exchange rate data was retrieved from Investing.com. \TODO{Give references or footnotes.}
+
 All experiments run on a MacBook Pro with a 2.2 GHz Intel Core i7 Processor, a 16 GB DDR4 RAM and 256 SSD storage disk.
 
-\subsection{Identifying and Quantifying the Unfairness by Market Volatility}
+\subsection{Quantifying the unfairness by market volatility}
+\label{subsec:volatility_analysis}
 
 We start from identifying the unfairness of Atomic Cross-Chain Swaps before evaluating it.
 The unfairness consists of two parts as shown in Figure~\ref{fig:unfair_diagram}, namely the profit when the initiator's asset price rises and the mitigated loss when the initiator's asset price drops.
 
 \begin{figure}
     \includegraphics[width=\linewidth]{unfair_diagram.eps}
-    \caption{Diagram showing the unfairness.} %TODO
+    \caption{Diagram showing the unfairness. \TODO{more words}}
     \label{fig:unfair_diagram}
 \end{figure}
 
-After identifying the unfairness, we then quantifying it by using the historical data.
-Our quantification is as follows:
+We then quantifying it by using the historical data.
 
-\paragraph{Scenario}
+% scenario
+\paragraph{Quantifying the unfairness.}
 Recall that 24 hours is the default timelock period of the participant,
 and the initiator has advantage over the participant within the timelock of 24 hours.
 We assume the initiator launches an atomic swap with the value of $x$ USD every day.
@@ -33,48 +37,65 @@ Assume the possibility for the initiator's asset price to rise is $P_{\alpha}$, 
 Then, the expected profit risk rate is $E_{\alpha} = \alpha P_{\alpha}$,
 and the expected mitigated risk rate is $E_{\beta} = \beta P_{\beta}$.
 Therefore, the expected unfairness is that the initiator profits $E_{\alpha} x$ unconditionally and mitigates the risk of losing $E_{\beta} x$.
+Also, as $E_\alpha$ and $E_\beta$ are equally calculated, they can be added together to derive the total unfairness as $E_\alpha + E_\beta$.
 
-\paragraph{Methodology}
-In our scenario, quantifying the unfairness is to quantify $E_{\alpha}$ and $E_{\beta}$.
-We use the historical exchange rate to estimate $E_{\alpha}$ and $E_{\beta}$ for mainstream cryptocurrency pairs.
-In particular, we collect exchange rate data of 16 mainstream cryptocurrency paris from May 3th 2018 to May 3th 2019,
-and derive the daily percent changes of them.
-We then classify the daily percent changes to two groups by their trend (rising or dropping). 
-After that, we average each group of percent changes for each cryptocurrency pair to get $\alpha$ and $\beta$,
-and get the possibilities of rising and dropping $P_{\alpha}$ and $P_{\beta}$.
-Finally, we compute the profit rate $E_{\alpha} = \alpha P_{\alpha}$ and the mitigated loss rate $E_{\beta} = \beta P_{\beta}$.
+\paragraph{Experimental methodology.}
+In our scenario, quantifying the unfairness is to estimate $E_{\alpha}$ and $E_{\beta}$.
+We estimate $E_{\alpha}$ and $E_{\beta}$ for each selected cryptocurrency pair.
+Furthermore,  we also evaluate the unfairness of stocks and fiat currencies in the same setting, in order to make comparisons.
+We use S\&P500 and Dow Jones Index (DJI) as examples of stocks, and USD-EUR and USD-GBP as examples of fiat currencies.
 
-\paragraph{Results and Analysis}
-
+\paragraph{Results and analysis.}
 
 \begin{figure*}
     \includegraphics[width=\linewidth]{volatility_analysis.eps}
-    \caption{Diagram showing the unfairness.} %TODO
+    \caption{Diagram showing the unfairness. \TODO{more words}}
     \label{fig:volatility_analysis}
 \end{figure*}
 
 \begin{figure}
     \includegraphics[width=\linewidth]{vol_scatter.eps}
-    \caption{Comparing the unfairness.} %TODO
+    \caption{Comparing the unfairness. \TODO{more words}}
     \label{fig:vol_scatter}
 \end{figure}
 
-Figure~\ref{fig:volatility_analysis} shows the evaluation results of each cryptocurrency pair, including the estimated $E_\alpha$ and $E_\beta$, as well as the maximum profit $max_\alpha$ and the maximum mitigated loss $max_\beta$.
+Figure~\ref{fig:volatility_analysis} shows the estimated $E_\alpha$, $E_\beta$, the maximum daily rises $max_\alpha$ and the maixmum daily drops $max_\beta$ for chosen 8 cryptocurrency pairs, stock indices (S\&P500 and DJI) and fiat currency exchange rates (USD-EUR and USD-GBP).
+Figure~\ref{fig:vol_scatter} visualizes $E_\alpha$ and $E_\beta$ of all evaluated items in Figure~\ref{fig:volatility_analysis}.
 
-We observe that 
+\TODO{analysis may be improved}
+We observe that for all chosen cryptocurrency pairs, $max_\alpha$ and $max_\beta$ are quite big - ranging from 8\% to 25\%.
+Meanwhile, $max_\alpha$ and $max_\beta$ of stock indices are much smaller than all cryptocurrency pairs,
+and $max_\alpha$ and $max_\beta$ of fiat currencies are even smaller than stock indices.
+This indicates that in the setting of an 24-hour Atomic Swap, the cryptocurrency is much more unfair than stocks, and the stocks are more unfair than fiat currencies.
 
-\begin{enumerate}
-    \item For all chosen cryptocurrency pairs, the initiator is expected to profit approximately 1\% and mitigate the loss of 1\% per day.
-    \item For all chosen cryptocurrency pairs, $max_\alpha$ and $max_\beta$ are quite big - ranging from 8\% to 25\%.
-    \item \TODO{MORE observations!}
-\end{enumerate}
+Also, for all chosen cryptocurrency pairs, $E_{\alpha}$ and $E_{\beta}$ are near and the value is approximately 1\%, ranging from 0.73\% to 1.69\%.
+For stock indices, the results of S\&P500 and DJI are the same - $E_\alpha = 0.33\%$ and $E_\beta = 0.29\%$, which are smaller than cryptocurrency pairs.
+For fiat currencies, $E_\alpha$ and $E_\beta$ are even smaller than stock indices: The value ranges from 0.13\% to 0.17\%.
+In addition to the unfairness results like the previous observation, we quantify the unfairness of Atomic Swaps for cryptocurrency pairs: It ranges from  1.65\% (BTC-XRP) to 2.97\% (BTC-BCH).
 
-For the first result, \TODO{analysis both figures!!!!}
 
-\subsection{Estimating the Unpaid Premium}
 
-The unfair part of the Atomic Cross-Chain Swap for the participant is the unpaid premium from the initiator.
-We can evaluate the unfairness of the Atomic Cross-Chain Swap by estimating the premium which should be paid by the initiator.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+\subsection{Estimating the unpaid premium}
+
+To make the Atomic Swap fair, the initiator should pay for the premium.
+In other words, the unfair part of the Atomic Swap is the unpaid premium from the initiator.
+We evaluate the unfairness of the Atomic Swap by estimating the premium.
 
 As the premium is the only variable in an option contract, estimating the premium is also called the ``Option Pricing'' problem.
 In finance, the Black-Scholes (BS) Model is utilized to price the European Call Options,
@@ -117,7 +138,7 @@ d &= e^{- \sigma_a \sqrt{\frac{T}{n}}} = \frac{1}{u}
 \end{align}
 
 \TODO{change it to ``where sigma is daily percent change...''}
-Here, $T$ is measured in years, and $\sigma_a$ is defined as the annual price standard deviation.
+Here, $T$ is measured in years, and $\sigma_a$ is defined as the standard deviation of the annual price.
 $\sigma_a$ can be computed from the daily price standard deviation $\sigma_d$ as below:
 
 \begin{align} 
@@ -126,7 +147,9 @@ $\sigma_a$ can be computed from the daily price standard deviation $\sigma_d$ as
 \end{align}
 
 where $d$ is the number of trading days within a year.
-For cryptocurrencies, it equals to the number of a days within a year.
+For cryptocurrencies, $d$ equals to the number of a days within a year.
+Note that $S_i$ is the percentage change of the price on day $i$, rather than the price itself.
+$\bar{S}$ is the average value of all $S_i$s within the $d$ days. 
 
 The asset price $S_{t, i}$ can also be computed as $S_{t, i} = S_{0, 1} \cdot u^{N_u - N_d}$, where $S_{0, 1}$ is the spot price, and $N_u, N_d$ are the numbers of move-up and move-down, respectively.
 
@@ -137,9 +160,7 @@ For each leaf node $\mathcal{T}_{n, i}$, the option price (for Call Options) is 
 
 \paragraph{Finding the option prices for earlier nodes}
 We back-propagate the option prices for leaf nodes to earlier option prices.
-The back propagation applies the ``risk neutrality'' assumption:
-Today's fair price of a derivative equals to the expected future value discounted by the risk-free rate. % TODO further analysis
-Based on this assumption, the earlier option price is calculated from the option prices of the later two nodes weighted by their state transition possibilities.
+More specifically, the earlier option price is calculated from the option prices of the later two nodes weighted by their state transition possibilities.
 The move-up and move-down possibility are $p$ and $q$ where $p + q = 1$, and the risk-free rate is $r = q$.
 
 The earlier option price is calculated from later option prices as:
@@ -150,7 +171,6 @@ C_{t - \Delta t, i} = e^{-r \Delta t} (p C_{t, i} + q C_{t, i+1})
 
 where $p, q, r$ are computed as
 
-\TODO{big bracket on the following equations}
 
 \begin{align} 
 p &= \frac{e^{(r-q)\Delta t} - d}{u - d}\\
@@ -168,6 +188,16 @@ C_{t - \Delta t, i} = max[e^{-r \Delta t} (p C_{t, i} + q C_{t, i+1}), K]
 
 The earliest option price $S_{0, 1}$ - the estimated option price - can be calculated by iteratively back-propagating the later option prices. 
 
-\subsubsection{Results}
+\subsubsection{Experiments}
+
+\paragraph{Experimental methodology}
+We use the same dataset as Section~\ref{subsec:volatility_analysis}.
+We 
 
 \TODO{Analysis based on CRR model}
+
+\begin{figure}
+    \includegraphics[width=\linewidth]{premium_pricing_result.eps}
+    \caption{Premium pricing result. \TODO{more words}}
+    \label{fig:premium_pricing_result}
+\end{figure}
