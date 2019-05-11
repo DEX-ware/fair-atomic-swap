@@ -1,7 +1,7 @@
 \section{Evaluating the Unfairness of Atomic Cross-Chain Swaps}
 \label{sec:evaluation}
 
-In this section, we evaluate the unfairness of Atomic Cross-Chain Swaps.
+In this section, we evaluate the unfairness of Atomic Cross-Chain Swaps. \TODO{more intro}
 
 \subsection{Experimental Setting}
 
@@ -46,6 +46,7 @@ Finally, we compute the profit rate $E_{\alpha} = \alpha P_{\alpha}$ and the mit
 
 \paragraph{Results and Analysis}
 
+
 \begin{figure*}
     \includegraphics[width=\linewidth]{volatility_analysis.eps}
     \caption{Diagram showing the unfairness.} %TODO
@@ -60,14 +61,15 @@ Finally, we compute the profit rate $E_{\alpha} = \alpha P_{\alpha}$ and the mit
 
 Figure~\ref{fig:volatility_analysis} shows the evaluation results of each cryptocurrency pair, including the estimated $E_\alpha$ and $E_\beta$, as well as the maximum profit $max_\alpha$ and the maximum mitigated loss $max_\beta$.
 
-We observe that %TODO
+We observe that 
 
 \begin{enumerate}
     \item For all chosen cryptocurrency pairs, the initiator is expected to profit approximately 1\% and mitigate the loss of 1\% per day.
     \item For all chosen cryptocurrency pairs, $max_\alpha$ and $max_\beta$ are quite big - ranging from 8\% to 25\%.
+    \item \TODO{MORE observations!}
 \end{enumerate}
 
-For the first result, %TODO
+For the first result, \TODO{analysis both figures!!!!}
 
 \subsection{Estimating the Unpaid Premium}
 
@@ -105,7 +107,7 @@ Each node $\mathcal{T}_{t, i}$ is attached with the asset price $S_{t, i}$ and t
 where $t \in \{0, \frac{T}{n}, \frac{2T}{n}, \dots, T\}$ is the point of time and $i$ is the number of the node at its level.
 The CRR model assumes that the asset price will either move up or down by a specific factor per step in $\mathcal{T}$.
 The move-up factor is $u$, and the move-down factor is $d$.
-Accordingly, the price after one move-up is $S_up = u \cdot S$, and the price after one move-down is $S_down = d \cdot S$.
+Accordingly, the price after one move-up is $S_{up} = u \cdot S$, and the price after one move-down is $S_{down} = d \cdot S$.
 
 $u$ and $d$ are calculated using the underlying annualized volatility $\sigma_a$ of the asset price:
 
@@ -114,6 +116,7 @@ u &= e^{\sigma_a \sqrt{\frac{T}{n}}}\\
 d &= e^{- \sigma_a \sqrt{\frac{T}{n}}} = \frac{1}{u}
 \end{align}
 
+\TODO{change it to ``where sigma is daily percent change...''}
 Here, $T$ is measured in years, and $\sigma_a$ is defined as the annual price standard deviation.
 $\sigma_a$ can be computed from the daily price standard deviation $\sigma_d$ as below:
 
@@ -147,6 +150,8 @@ C_{t - \Delta t, i} = e^{-r \Delta t} (p C_{t, i} + q C_{t, i+1})
 
 where $p, q, r$ are computed as
 
+\TODO{big bracket on the following equations}
+
 \begin{align} 
 p &= \frac{e^{(r-q)\Delta t} - d}{u - d}\\
 q &= 1 - p\\
@@ -165,4 +170,4 @@ The earliest option price $S_{0, 1}$ - the estimated option price - can be calcu
 
 \subsubsection{Results}
 
-%TODO
+\TODO{Analysis based on CRR model}

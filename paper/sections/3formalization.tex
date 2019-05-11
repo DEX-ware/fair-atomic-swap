@@ -1,6 +1,8 @@
 \section{Formalization}
 \label{sec:formalization}
 
+\TODO{intro}
+
 \subsection{American Call Option}
 
 The American Call Option is a contract that ``one can buy an amount of an asset with an agreed price prior to or on an agreed time in the future''. 
@@ -14,6 +16,8 @@ Note that the price of the asset changes over time. This makes the American Call
 
 \begin{definition}
 We define an American Call Option contract $\Pi$ as
+
+\TODO{notation of $y$ should be consistent w/ $K$}
 
 $$\Pi = (K, \pi_1, y, \pi_2, T, C)$$
 
@@ -38,6 +42,7 @@ The process of an American Call Option is as follows:
 \JS{Can a seller abort the contract in American Call Option? It seems that a seller can abort the contract in Atomic Cross-Chain Swap, but not in American Call Option. Is there a possible mismatching here between the two protocols?}
 \RC{Yes, there is a little difference, but the difference does not affect the model. In American Call Options, after $T$ the contract is expired automatically. In Atomic Swap, after Bob's timelock, Bob can choose to or not to abort the Atomic Swap. At that stage, Bob can refund, Alice can redeem or refund, and once Alice redeems Bob can refund, so they are fair.}
 
+\TODO{More comments on the defined ACO. e.g. who can abort, who should exercise, price changes $S$}
 
 \subsection{Atomic Cross-Chain Swap}
 
@@ -93,6 +98,8 @@ After Alice redeems $x_2$ $Coin_2$, $s$ is published, \HY{and hence revealed to 
 takes no parameters and returns the $\mathcal{V} \in \{true, false\}$ indicating if the refund is successful or not.
 Alice and Bob can perform the refund by publishing $tx_{\mathcal{R}, 1}$ and $tx_{\mathcal{R}, 2}$ after the timelock $\Delta_1$ and $\Delta
 _2$, respectively.
+
+\TODO{short discussion on why is it atomic.}
 
 \subsection{Modelling the Atomic Cross-Chain Swap as the American Call Option}
 

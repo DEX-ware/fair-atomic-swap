@@ -24,9 +24,11 @@ Both protocols can be deployed on existing blockchains:
 They can be directly deployed on blockchains supporting smart contracts (e.g. Ethereum),
 and can be deployed on blockchains supporting scripts (e.g. Bitcoin) by adding a single opcode.
 
+\subsection{Our contributions}
+
 Our contributions are as follows:
 
-\paragraph{We formalize the Atomic Swap and the American Call Option, and prove that the Atomic Swap is equivalent to the premium-free American Call Option.
+\paragraph{We formalize the Atomic Swap and the American Call Option, and prove that the Atomic Swap is equivalent to the premium-free American Call Option.}
 We use formal languages to define the Atomic Swap and the American Call Option.
 In particular, we describe them as protocols, and prove that the Atomic Swap is equivalent to the premium-free American Call Option:
 The initiator and the participant in Atomic Swap are the option buyer and the option seller in American Call Options, respectively;
@@ -36,6 +38,7 @@ The current price of the participant asset in Atomic Swap is the strike price in
 Redeeming cryptocurrencies in Atomic Swap is exercising the contract in the American Call Options.
 
 \paragraph{We observe that the Atomic Swap is unfair to the particiapant due to the unpaid premium, and evaluate its unfairness by estimating the premium for mainstream cryptocurrency pairs.}
+\TODO{Fix the inconsistency between this contribution and the evaluation section.}
 We point out that according to the option theory in Finance, the Atomic Swap - modelled as the premium-free American Call Option - is unfair to the participant, especially in the highly volatile cryptocurrency market.
 In practice, the initiator can decide whether to swap based on the exchange rate trend: If his asset price falls, he will exercise the contract, otherwise he can wait for the contract to expire.
 In this way, the initiator is risk-free towards the cryptocurrency market. 
@@ -59,6 +62,8 @@ For blockchains supporting smart contracts such as Ethereum, our protocols can b
 For blockchains only supporting scripts such as Bitcoin, our protocols can be deployed by adding one more opcode.
 We call the opcode ``OP\_LOOKUP\_OUTPUT'', and it looks up the owner of a specific output.
 We use Solidity as an example of smart contracts, and the Bitcoin script code as an example of scripts.
+
+\subsection{Paper structure}
 
 The paper is structured as follows.
 Section~\ref{sec:background} describes the background of Atomic Swap and options in Finance.

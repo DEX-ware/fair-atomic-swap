@@ -3,6 +3,8 @@
 
 \HY{DEPLOYMENT happens after DEVELOPMENT. maybe you mean implementation?}
 
+\TODO{intro, and make this section Implementation}
+
 \subsection{Requirements}
 
 To implement our protocols, the blockchain should support the following functionalities:
@@ -28,7 +30,7 @@ The transactions should support the timelock: A payment will expire after a spec
 Note that the payment can be conditional, e.g. by hashlock.
 In our protocols, the transactions of $Coin_1$, $Coin_2$ and $pr$ are all timelocked, in order to avoid locking money in transactions forever.
 
-\subsection{Smart Contracts}
+\subsection{Smart contracts}
 
 Smart contracts support all aforementioned functionalities, so can easily implement our protocols.
 We use the Solidity - the programming language for Ethereum smart contracts - as an example.
@@ -47,10 +49,10 @@ Extending the premium mechanism includes:
 \paragraph{The premium payment state \textit{AssetState}}
 
 Similar with the \textit{PremiumState}, \textit{AssetState} has 4 states: empty, filled, redeemded and refunded.
-The code is shown in Figure~\cite{code:state}.
-\textit{Empty} means Alice has \HY{not yet} deposited the premium, indicating that Alice has not performed \textbf{initiate} yet.
+The code is shown in Figure~\ref{code:state}.
+\textit{Empty} means Alice has not performed \textbf{initiate}, and has not deposited the premium yet.
 \textit{Filled} means Alice has deposited the premium, indicating that Alice has performed \textbf{initiate}, but neither Alice nor Bob \textbf{refunds} or \textbf{redeems} the premium.
-\textit{Redeemded} and \textit{refunded} means Bob redeems the premium and Alice refunds the premium, respectively. \HY{I'm a bit confused. Is this paragraph talking about PremiumState or AssetState?}
+\textit{Redeemded} and \textit{refunded} means Bob redeems the premium and Alice refunds the premium, respectively.
 
 \begin{figure}
 \begin{lstlisting}[language=Solidity, basicstyle=\tiny]
@@ -199,17 +201,17 @@ function redeemPremium(bytes32 secretHash)
 \end{figure}
 
 
-\subsection{Bitcoin Script}
+\subsection{Bitcoin script}
 
 % bitcoin cannot implement
 % because stateless
-Unfortunately, Bitcoin script cannot implement \HY{I guess the subject in this sentence is unsuitable. maybe use "does not support"} our protocols, because the Bitcoin script does not support the stateful transaction functionalities - it is designed to be stateless. \HY{Maybe explain why itz stateless? e.g., therez no such a thing as "world state"; and nothing about the state is stored?}
+Unfortunately, Bitcoin script does not support our protocols, because the Bitcoin script does not support the stateful transaction functionalities - it is designed to be stateless. \HY{Maybe explain why itz stateless? e.g., therez no such a thing as "world state"; and nothing about the state is stored?}
 
 % new opcode
 \paragraph{New Opcode OP\_LOOKUP\_OUTPUT}
 In order to make Bitcoin script support our protocols, we propose a new opcode called OP\_LOOKUP\_OUTPUT.
 OP\_LOOKUP\_OUTPUT takes the id of an output, and produces the address of the output's owner.
-With OP\_LOOKUP\_OUTPUT, the Bitcoin script can decide whether Alice or Bob should take the premium by \textbf{<asset2\_output> OP\_LOOKUP\_OUTPUT <Alice\_pubkeyhash> OP\_EQUALVERIFY}. \HY{The printed paragraph doesn't fit to the page margin, at least in mine.}
+With OP\_LOOKUP\_OUTPUT, the Bitcoin script can decide whether Alice or Bob should take the premium by  \textbf{<asset2\_output> OP\_LOOKUP\_OUTPUT <Alice\_pubkeyhash> OP\_EQUALVERIFY}. \HY{The printed paragraph doesn't fit to the page margin, at least in mine.}
 
 % implement opcode is easy
 Implementing OP\_LOOKUP\_OUTPUT is easy in Bitcoin - It only queries the ownership of an output from the indexed blockchain database, and does not require any computation.
