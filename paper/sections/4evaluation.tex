@@ -183,21 +183,27 @@ such that the related binomial distribution simulates the geometric Brownian mot
 For American Options, since the option can be exercised prior to expiry, the option price at each node is
 
 \begin{align}
-C_{t - \Delta t, i} = max[e^{-r \Delta t} (p C_{t, i} + q C_{t, i+1}), K]
+C_{t - \Delta t, i} = e^{-r \Delta t} (p C_{t, i} + q C_{t, i+1})
 \end{align}
 
 The earliest option price $S_{0, 1}$ - the estimated option price - can be calculated by iteratively back-propagating the later option prices. 
 
 \subsubsection{Experiments}
 
-\paragraph{Experimental methodology}
-We use the same dataset as Section~\ref{subsec:volatility_analysis}.
-We 
-
-\TODO{Analysis based on CRR model}
 
 \begin{figure}
     \includegraphics[width=\linewidth]{premium_pricing_result.eps}
     \caption{Premium pricing result. \TODO{more words}}
     \label{fig:premium_pricing_result}
 \end{figure}
+
+We price the same data as Section~\ref{subsec:volatility_analysis} by using the CRR model with $n = 36$ with the strike time $T$ ranging from $1$ to $300$.
+Figure~\ref{fig:premium_pricing_result} shows our pricing results.
+
+First, we observe that the premium of cryptocurrency pairs is much more expensive than stocks, and the premium of stocks is more expensive than fiat currencies at any given time.
+Recall the evaluated unfairness in Section~\ref{subsec:volatility_analysis}, its results are consistent with the premium pricing results: The higher the volatility is, the more unfair the Atomic Swap will be, and the higher the premium should be.
+
+Second, with the default strike time $T = 1$ of the Atomic Swap, the premium of cryptocurrency pairs vary from approximately 1\% to 2.3\% of the underlying asset value.
+
+Third, for all evaluated items, the premium values rise monotonically.
+This is because the longer expiration time lets the option buyer to have more control on the option - He has more time to predict the price and judges whether to exercise the option.
