@@ -1,22 +1,20 @@
 \section{Introduction}
 \label{sec:intro}
 
-\HY{Indentions not so consistent.}\\
-\HY{Space between paragraphs not so consistent.}
-
-The Atomic Swap protocol is that two parties exchange \HY{(perform the exchange of?)} their assets ``atomically'' without trusted third parties \HY{(without any trusted thirdparty?)}.
-``Atomic'' means the swap either succeeds or fails for both parties \HY{at any given time}.
-Atomic Swap is implemented on blockchains by using the \HY{(remove "the"?)} Hashed Timelocked Contracts (HTLCs).
-The HTLC is a type of transaction \HY{(contract?)} that, the payee should provide the preimage of a hash value before the deadline, otherwise the payment fails\HY{, and the payee will not receive the money}.
+The Atomic Swap protocol is that two parties exchange their assets ``atomically'' without trusted third parties.
+``Atomic'' means the swap either succeeds or fails for both parties at any given time.
+Atomic Swap is implemented on blockchains by using Hashed Timelocked Contracts (HTLCs).
+The HTLC is a type of transaction that, the payee should provide the preimage of a hash value before a specified deadline, otherwise the payment fails - The money goes back to the payer and the payee will not get any money.
 
 However, the fairness of the Atomic Swap is never studied formally.
 First, there is no study that models the Atomic Swap in order to analyze whether both parties in the swap are equal.
-Second, \HY{if having two parties reserving different rights, there is no research on the study of the risks they may encounter are equal, given that} the initiator in Atomic Swap can control the settlement time, while the asset price is fluctuating overtime.
+Second, in reality, the initiator in Atomic Swap can control the settlement time, while the asset price is fluctuating overtime.
 
-In this paper, we prove that the Atomic Swap is unfair to the participant, and extends the original Atomic Swap \HY{protocol} to make it \HY{more} fair.
+In this paper, we prove that the Atomic Swap is unfair to the participant, and extends the original Atomic Swap protocol to make it fairer.
 In particular, we formally model the Atomic Swap and the American Call Option in Finance,
 and prove that the Atomic Swap is equivalent to a premium-free American Call Option.
-Then we point out that the Atomic Swap is unfair to the participant, because the initiator is not required to pay for the premium \HY{, whereas it can speculate without any risk, making use of price fluctuations}.
+Then we point out that the Atomic Swap is unfair to the participant, because the initiator is not required to pay for the premium.
+In this way, the initiator can speculate without any risk, by exploiting the exchange rate fluctuation.
 Based on this observation, we evaluate the unfairness of the Atomic Swap by estimating how much the premium should be for mainstream cryptocurrency pairs.
 Estimating the premium is based on the Cox-Ross-Rubinstein option pricing model in Finance, which is a conventional model to price the American-style options.
 % TODO evaluation result
@@ -28,7 +26,7 @@ and can be deployed on blockchains supporting scripts (e.g. Bitcoin) by adding a
 
 Our contributions are as follows:
 
-\paragraph{We formalize the Atomic Swap and the American Call Option, and prove that the Atomic Swap is equivalent to the premium-free American Call Option.\HY{"a... is a..."?}} 
+\paragraph{We formalize the Atomic Swap and the American Call Option, and prove that the Atomic Swap is equivalent to the premium-free American Call Option.
 We use formal languages to define the Atomic Swap and the American Call Option.
 In particular, we describe them as protocols, and prove that the Atomic Swap is equivalent to the premium-free American Call Option:
 The initiator and the participant in Atomic Swap are the option buyer and the option seller in American Call Options, respectively;
