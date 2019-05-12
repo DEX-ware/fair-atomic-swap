@@ -34,9 +34,9 @@ In our protocols, the transactions of $Coin_1$, $Coin_2$ and $pr$ are all timelo
 \subsection{Smart contracts}
 
 Smart contracts support all aforementioned functionalities, so can easily implement our protocols.
-We use the Solidity - the programming language for Ethereum smart contracts - as an example.
+We use the Solidity - the programming language for Ethereum smart contracts~\cite{wood2014ethereum} - as an example.
 
-Our implementations are based on the original Atomic Swap Solidity implementation,
+Our implementations are based on the original Atomic Swap Solidity implementation~\footnote{\url{https://github.com/AltCoinExchange/ethatomicswap}.},
 but extend the premium mechanism.
 
 Extending the premium mechanism includes:
@@ -217,7 +217,7 @@ With OP\_LOOKUP\_OUTPUT, the Bitcoin script can decide whether Alice or Bob shou
 % implement opcode is easy
 Implementing OP\_LOOKUP\_OUTPUT is easy in Bitcoin - It only queries the ownership of an output from the indexed blockchain database, and does not require any computation.
 
-\paragraph{Decouples the contract creation and the contract invocation}
+\paragraph{Decoupling the contract creation and the contract invocation}
 For smart contracts, the contract is created and invoked in separate transactions.
 However, for Bitcoin script, the contract is created and invoked in the same transaction, which makes our protocols difficult to construct.
 First, the timelock starts right after the contract creation rather than the contract invocation.

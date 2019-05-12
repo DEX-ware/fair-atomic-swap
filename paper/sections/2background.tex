@@ -9,10 +9,10 @@
 \subsection{Atomic Swaps}
 \TODO{More explanations on atomic swap}
 
-An Atomic Swap is that two parties exchange their assets ``atomically'' without trusted third parties:
+An Atomic Swap~\cite{nolan2013alt} is that two parties exchange their assets ``atomically'' without trusted third parties:
 The swap either succeeds or fails for both parties.
 
-In Blockchain, the Atomic Swap is realized by the Hashed Timelocked Contract (HTLC) mechanism.
+In Blockchain, the Atomic Swap is realized by the Hashed Timelocked Contract (HTLC)~\cite{poon2016bitcoin}.
 In HTLC-style transactions, the payee redeems the payment prior to a deadline by providing the preimage of a specific hash value.
 Otherwise, the payment will expire and the money goes back to the payer.
 HTLC is based on the hashlock - to lock the payment by a hash value, and the timelock - to limit the deadline for the payee to redeem.
