@@ -1,18 +1,16 @@
-\section{A Fair Atomic Cross-Chain Swap}
+\section{Fair Atomic Swaps}
 \label{sec:fair_atomic_swap}
+
+In this section, we propose two fair variants of the original Atomic Swap protocol, of which one is for currency exchange and the other is for American Call Options.
 
 \subsection{Design}
 
-\TODO{intro?}
-
 \subsubsection{Difference between Currency Exchange and Options}
 
-\TODO{intro?}
-
-Before designing a fair Atomic Cross-Chain Swap protocol, we should know the design objective:
+Before designing a fair Atomic Swap protocol, we should know the design objective:
 Is the protocol aiming at currency exchange or the American Call Options?
 
-To our knowledge, the Atomic Cross-Chain Swap protocol is originally designed for the fair exchange between different cryptocurrencies.
+To our knowledge, the Atomic Swap protocol is originally designed for the fair exchange between different cryptocurrencies.
 However, according to our analysis, the protocol is equivalent to the premium-free American Call Options, and is unfair due to the free premium.
 
 The currency exchange and the American Call Option differ in finance: the currency exchange is a type of Spots~\cite{hull1991introduction}, while the American Call Option is a type of Options.
@@ -57,7 +55,7 @@ Therefore, the premium in the American Call Options by Atomic Swaps should follo
 
 \subsection{Our Protocol Construction}
 
-We define an Atomic Cross-Chain Swap protocol $\mathcal{AS}'$ as
+We define an Atomic Swap protocol $\mathcal{AS}'$ as
 
 $$\mathcal{AS}' = (x_1, Coin_1, x_2, Coin_2, pr)$$
 
