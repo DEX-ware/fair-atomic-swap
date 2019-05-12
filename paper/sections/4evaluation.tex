@@ -137,7 +137,6 @@ u &= e^{\sigma_a \sqrt{\frac{T}{n}}}\\
 d &= e^{- \sigma_a \sqrt{\frac{T}{n}}} = \frac{1}{u}
 \end{align}
 
-\TODO{change it to ``where sigma is daily percent change...''}
 Here, $T$ is measured in years, and $\sigma_a$ is defined as the standard deviation of the annual price.
 $\sigma_a$ can be computed from the daily price standard deviation $\sigma_d$ as below:
 
@@ -183,7 +182,7 @@ such that the related binomial distribution simulates the geometric Brownian mot
 For American Options, since the option can be exercised prior to expiry, the option price at each node is
 
 \begin{align}
-C_{t - \Delta t, i} = e^{-r \Delta t} (p C_{t, i} + q C_{t, i+1})
+C_{t - \Delta t, i} = max[e^{-r \Delta t} (p C_{t, i} + q C_{t, i+1}), K]
 \end{align}
 
 The earliest option price $S_{0, 1}$ - the estimated option price - can be calculated by iteratively back-propagating the later option prices. 

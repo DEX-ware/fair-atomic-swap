@@ -3,21 +3,25 @@
 
 \TODO{intro}
 
-\subsection{Atomic Cross-Chain Swaps}
+\subsection{Payment Channels}
+\TODO{payment channel subsec}
+
+\subsection{Atomic Swaps}
 \TODO{More explanations on atomic swap}
-An Atomic Cross-Chain Swap is that two parties exchange their assets ``atomically'' without trusted third parties:
+
+An Atomic Swap is that two parties exchange their assets ``atomically'' without trusted third parties:
 The swap either succeeds or fails for both parties.
 
-In Blockchain, the Atomic Cross-Chain Swap is realized by the Hashed Timelocked Contract (HTLC) mechanism.
+In Blockchain, the Atomic Swap is realized by the Hashed Timelocked Contract (HTLC) mechanism.
 In HTLC-style transactions, the payee redeems the payment prior to a deadline by providing the preimage of a specific hash value.
 Otherwise, the payment will expire and the money goes back to the payer.
 HTLC is based on the hashlock - to lock the payment by a hash value, and the timelock - to limit the deadline for the payee to redeem.
-The Atomic Cross-Chain Swap protocol can be implemented on all blockchains supporting the timelock and the hashlock.
+The Atomic Swap protocol can be implemented on all blockchains supporting the timelock and the hashlock.
 
 \subsection{Option}
-\HY{put some citations.}
+
 % option
-In finance, an option is a contract which gives the option buyer the right to buy or sell an asset, at a specified price prior to or on a specified date.
+In finance, an option is a contract which gives the option buyer the right to buy or sell an asset, at a specified price prior to or on a specified date~\cite{higham2004introduction}.
 Here the option buyer can choose whether to fulfill the contract.
 The specified price is called the \textit{strike price};
 the specified date is called the \textit{strike time};
@@ -46,11 +50,12 @@ As the \textit{premium} is the only variable within the option contract,
 pricing the \textit{premium} is also known as the \textit{option pricing} problem.
 \textit{Option Pricing} is rather a complex task - It is still a hot research topic in Finance and Applied Mathematics.
 
-The Black-Scholes (BS) Model is the first widely used model for option pricing.
+The Black-Scholes (BS) Model is the first widely used model for option pricing~\cite{black1973pricing}.
 It can estimate the theoretical value of European-style Options using historical price data of the underlying asset.
-The Cox-Ross-Rubinstein (CRR) model, also known as the Binomial Option Pricing model, extends the BS model for pricing American-style Options.
+The Cox-Ross-Rubinstein (CRR) model~\cite{cox1979option}, also known as the Binomial Option Pricing model, extends the BS model for pricing American-style Options.
 
-\subsection{Optionality of Atomic Cross-Chain Swaps}
+\subsection{Optionality of Atomic Swaps}
+
 \TODO{More deep observations on optionality}
 As the Atomic Swap is not instant, it introduces the optionality - The contract is settled after the contract agreement.
 However, the Atomic Swap is designed for currency exchange rather than for implementing options.
