@@ -23,7 +23,7 @@ The unfairness consists of two parts as shown in Figure~\ref{fig:unfair_diagram}
 
 \begin{figure}
     \includegraphics[width=\linewidth]{unfair_diagram.eps}
-    \caption{Diagram showing the unfairness. \TODO{more words}}
+    \caption{Visualizing the unfairness. The x-axis is time (in days), and the y-axis is the exchange rate change in percentage. For a point $(x, y)$, if $y > 0$, the point falls to the profit area (the red area on the figure), and the Atomic Swap initiator will profit $y$ today. If $y < 0$ the point falls to the risk area (the red area on the figure), and the Atomic Swap initiator will mitigate the loss of $y$ today.}
     \label{fig:unfair_diagram}
 \end{figure}
 
@@ -37,7 +37,7 @@ We assume the initiator launches an atomic swap with the value of $x$ USD every 
 For each day, the initiator may either profit a percent $\alpha$ of $x$ directly if his asset price rises,
 or mitigate a percent $\beta$ of $x$ by aborting the swap if his asset price drops on average.
 Assume the possibility for the initiator's asset price to rise is $P_{\alpha}$, and to drop is $P_{\beta}$.
-Then, the expected profit risk rate is $E_{\alpha} = \alpha P_{\alpha}$,
+Then, the expected profit rate is $E_{\alpha} = \alpha P_{\alpha}$,
 and the expected mitigated risk rate is $E_{\beta} = \beta P_{\beta}$.
 Therefore, the expected unfairness is that the initiator profits $E_{\alpha} x$ unconditionally and mitigates the risk of losing $E_{\beta} x$.
 Also, as $E_\alpha$ and $E_\beta$ are equally calculated, they can be added together to derive the total unfairness as $E_\alpha + E_\beta$.
@@ -52,13 +52,13 @@ We use S\&P500 and Dow Jones Index (DJI) as examples of stocks, and USD-EUR and 
 
 \begin{figure*}
     \includegraphics[width=\linewidth]{volatility_analysis.eps}
-    \caption{Diagram showing the unfairness. \TODO{more words}}
+    \caption{The daily percentage changes for all selected cryptocurrency pairs, stock indices and fiat currency pairs over one year (from 03/05/2018 to 03/05/2019). For each figure, $E_{\alpha}$, $E_{\beta}$, $max_\alpha$ and $max_\beta$ are the expected profit rate, the expected mitigated risk rate, the maximum daily profit and the maximum daily mitigated risk, respectively.}
     \label{fig:volatility_analysis}
 \end{figure*}
 
 \begin{figure}
     \includegraphics[width=\linewidth]{vol_scatter.eps}
-    \caption{Comparing the unfairness. \TODO{more words}}
+    \caption{Visualizing the expected profit rate $E_\alpha$ and the expected mitigated risk rate $E_\beta$ for each cryptocurrency pair, stock index and fiat currency pair.}
     \label{fig:vol_scatter}
 \end{figure}
 
@@ -195,7 +195,7 @@ The earliest option price $S_{0, 1}$ - the estimated option price - can be calcu
 
 \begin{figure}
     \includegraphics[width=\linewidth]{premium_pricing_result.eps}
-    \caption{Premium pricing result. \TODO{more words}}
+    \caption{Estimated premium with different strike times for each cryptocurrency pair, stock index and fiat currency pair. Lines with the marker ``x'' are for stocks; lines with the marker ``o'' are for fiat currencies; and lines without marker are for cryptocurrency pairs.}
     \label{fig:premium_pricing_result}
 \end{figure}
 
