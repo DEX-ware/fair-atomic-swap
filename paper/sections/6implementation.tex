@@ -210,7 +210,11 @@ Unfortunately, Bitcoin script does not support our protocols, because the Bitcoi
 \paragraph{New Opcode OP\_LOOKUP\_OUTPUT}
 In order to make Bitcoin script support our protocols, we propose a new opcode called OP\_LOOKUP\_OUTPUT.
 OP\_LOOKUP\_OUTPUT takes the id of an output, and produces the address of the output's owner.
-With OP\_LOOKUP\_OUTPUT, the Bitcoin script can decide whether Alice or Bob should take the premium by  \textbf{<asset2\_output> OP\_LOOKUP\_OUTPUT <Alice\_pubkeyhash> OP\_EQUALVERIFY}. \HY{The printed paragraph doesn't fit to the page margin, at least in mine.}
+With OP\_LOOKUP\_OUTPUT, the Bitcoin script can decide whether Alice or Bob should take the premium by 
+
+\begin{lstlisting}[language=Solidity, basicstyle=\tiny, numbers=none]
+<asset2_output> OP_LOOKUP_OUTPUT <Alice_pubkeyhash> OP_EQUALVERIFY
+\end{lstlisting}
 
 % implement opcode is easy
 Implementing OP\_LOOKUP\_OUTPUT is easy in Bitcoin - It only queries the ownership of an output from the indexed blockchain database, and does not require any computation.
@@ -221,6 +225,7 @@ However, for Bitcoin script, the contract is created and invoked in the same tra
 First, the timelock starts right after the contract creation rather than the contract invocation.
 Second, the premium does not know which outputs belong to $Coin_2$.
 
+\TODO{more detailed description on Bitcoin construction}
 We solve this problem by constructing the contract offline:
 Alice and Bob create a 2-2 multisignature address, and merge the premium payment and the $Coin_2$ payment into a single transaction.
 First, Alice and Bob create a 2-2 multisignature address.
