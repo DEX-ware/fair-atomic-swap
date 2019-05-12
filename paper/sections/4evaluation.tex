@@ -1,12 +1,12 @@
-\section{Evaluating the Unfairness of Atomic Cross-Chain Swaps}
+\section{Evaluating the unfairness of Atomic Swaps}
 \label{sec:evaluation}
 
-In this section, we evaluate the unfairness of Atomic Cross-Chain Swaps.
+In this section, we evaluate the unfairness of Atomic Swaps.
 In particular, our evaluation consists of two parts: quantifying the unfairness and estimating the unpaid premium.
 Quantifying the unfairness is based on analyzing the historical exchange rate volatility, while estimating the unpaid premium is based on the Cox-Ross-Rubinstein option pricing model - the conventional option pricing model for American-style options.
 Furthermore, we also evaluate conventional financial assets - the stocks and the currency exchanges - and compare their results with cryptocurrencies.
 
-\subsection{Experimental Setting}
+\subsection{Experimental setting}
 
 We collected relevant data of mainstream cryptocurrencies for one year, starting from May 3th 2018 to May 3th 2019.
 In particular, the cryptocurrency exchange rate data was retrieved from from CoinGecko~\footnote{\url{https://www.coingecko.com}.};
@@ -18,7 +18,7 @@ All experiments run on a MacBook Pro with a 2.2 GHz Intel Core i7 Processor, a 1
 \subsection{Quantifying the unfairness by market volatility}
 \label{subsec:volatility_analysis}
 
-We start from identifying the unfairness of Atomic Cross-Chain Swaps before evaluating it.
+We start from identifying the unfairness of Atomic Swaps before evaluating it.
 The unfairness consists of two parts as shown in Figure~\ref{fig:unfair_diagram}, namely the profit when the initiator's asset price rises and the mitigated loss when the initiator's asset price drops.
 
 \begin{figure}
@@ -103,7 +103,7 @@ We evaluate the unfairness of the Atomic Swap by estimating the premium.
 As the premium is the only variable in an option contract, estimating the premium is also called the ``Option Pricing'' problem.
 In finance, the Black-Scholes (BS) Model is utilized to price the European Call Options,
 while the Cox-Ross-Rubinstein (CRR) Model is utilized to price the American Call Options.
-Therefore, we utilize the CRR Model to evaluate the unfairness of the Atomic Cross-Chain Swap.
+Therefore, we utilize the CRR Model to evaluate the unfairness of the Atomic Swap.
 
 \subsubsection{The Cox-Ross-Rubinstein Model Explained}
 

@@ -3,56 +3,48 @@
 
 \TODO{may rewrite}
 
-\subsection{Security of Atomic Cross-Chain Swaps}
+\subsection{Security of Atomic Swaps}
 
-Atomic Cross-Chain Swaps are not perfect, and have some security issues.
+Although already widely adopted, Atomic Swap has some security issues.
 
 % rely on blockchain security
-First, the security of Atomic Cross-Chain Swaps relies on the security of blockchains:
-If the blockchains involved in the swaps are insecure, the Atomic Cross-Chain Swaps are also insecure.
+First, the security of Atomic Swaps relies on the security of blockchains:
+If the blockchains involved in the swaps are insecure, the Atomic Swaps are also insecure.
 
 % smart contract /script
-Second, the Atomic Cross-Chain Swap contracts are written by high-level languages.
-This means the compiled contracts can be insecure if the contract compilers are flawed.
+Second, the Atomic Swap contracts are written in high-level languages, so the compiled contracts can be insecure if the contract compilers are flawed.
 
 % 2 blockchain async
-Furthermore, the timing mechanism may not be reliable, while the Atomic Swaps are based on timelocks.
+Third, the timelock is unreliable in the cross-chain scenario, because the times in different blockchains are never synchronized.
 % timestamp of blockchain
-In blockchains, events are timestamped by either two approaches: The relative time or the absolute time.
+Blockchains timestamp events by either two approaches: Using the block height or using the UNIX timestamp.
 % relative time
-The relative time uses the block height to represent the time.
-A block height cannot represent a precise time, as the new block generation is a random process.
+The block height can serialize events on a blockchain by time, but cannot serialize events outside the blockchain.
+In addition, the new block generation is a random process, so the block height cannot indicate the precise time in reality.
 % abosolute time
-The absolute time uses the UNIX timestamp, and the consensus participants are responsible for timestamping blocks.
-However, the consensus participants may use the wrong time, either by purpose or by accident.
-% async blockhains
-Furthermore, blockchains are independent to each other, which means they are asynchronous in terms of time.
-This can lead to the inconsistency on the timelocks of $Coin_1$ and $Coin_2$.
+Using the UNIX timestamp doesn't work, too.
+This is because the consensus participants are responsible for timestamping events, and the consensus participants can be unreliable: They may use the wrong time, either by purpose or by accident.
 
 
-\subsection{Other Countermeasures for the Unfair Atomic Cross-Chain Swaps}
+\subsection{Other countermeasures to address the Atomic Swaps unfairness}
 
-Besides our solutions, there are some other countermeasures to address the Atomic Swap unfairness.
-However, all of them significantly reduce the usability of Atomic Swaps.
+Besides our proposal, there are some other countermeasures to address the Atomic Swap unfairness.
+Unfortunately, to our knowledge, all of them either have security flaws or significantly reduce the usability of Atomic Swaps.
 
-The first countermeasure is to make setting up HTLCs non-free \HY{"chargeable"}, or increase the transaction fee of HTLCs.
-However, these two solutions affect all HTLCs, but not all HTLCs are set for Atomic Swaps.
+The first countermeasure is to make Atomic Swap costly by charging setting up HTLCs, or increasing the transaction fee of HTLCs.
+However, these two solutions do not only significantly reduce the usability of Atomic Swaps, but also affect HTLCs not aiming at setting up Atomic Swaps.
+
 The second solution is to use shorter timelock for Atomic Swaps.
-Unfortunately, as the time of confirming a transaction is highly random,
-short timelocks may cause unexpected situations.
-For example, the new block arrives too late, but the timelock of $Coin_1$ has already expired.
+Unfortunately, short timelocks may cause unexpected situations.
+Confirming transactions for setting up Atomic Swaps take time, and the needed time is highly random.
+With short timelocks, the transactions for setting up Atomic Swaps may be confirmed after the expiration of timelocks.
 
-\subsection{Limitations of Our Solutions}
+
+\subsection{Limitations of our solutions}
 
 Still, our solutions are not perfect.
-
-The biggest limitation is that initiators of Atomic Swaps should have some $Coin_2$ to initiate an Atomic Swap,
-for either the pledge of successful swaps or paying for the option.
-However, the initiators do not always have $Coin_2$: They may just hope to get some $Coin_2$ by some $Coin_1$.
-To mitigate this problem, an initiator should get some $Coin_2$ before doing an Atomic Cross-Chain Swap by arbitrary means.
-First, he can buy some $Coin_2$ from cryptocurrency exchanges.
-Second, he can initiate a smaller Atomic Swap with shorter timelocks and no premium.
-
-Another limitation is that our Atomic Swap protocols are still not ``Atomic''.
-For a perfectly Atomic Swap protocol, both parties should have equivalent money at any time slot.
-However, our protocols and the original Atomic Swap protocol fail to meet this requirement - redeeming does not happen simultaneously. 
+The initiators of Atomic Swaps should have some participant's asset to initiate an Atomic Swap,
+for either collateralizing successful swaps or paying for the option itself.
+Unfortunately, the initiators do not always have participant's asset: They may just hope to get some participant's asset with only his asset.
+Before doing an Atomic Swap, the initiator should get some participant's asset by arbitrary means.
+For example, he can buy some participant's asset from cryptocurrency exchanges, or initiate a smaller Atomic Swap with shorter timelocks and no premium.
