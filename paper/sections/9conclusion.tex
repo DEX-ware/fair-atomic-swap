@@ -2,13 +2,14 @@
 \label{sec:conclusion}
 
 
-We model the Atomic Swap protocol by using the American Call Option,
+We model the Atomic Swap protocol as the American Call Option,
 and observe that the Atomic Swap protocol is unfair to the participant.
 In particular, we prove that the Atomic Swap protocol is equivalent to an American Call Option without the premium,
 and the unpaid premium is the unfair part of the protocol.
 % evaluate
-We then evaluate the unfairness of the Atomic Swap protocols by analyzing the volatility and pricing the expected premium for mainstream cryptocurrency pairs.
-\TODO{evaluate find that...}
+We then evaluate the Atomic Swap unfairness, and compare the unfairness between cryptocurrency pairs and conventional financial assets.
+Our evaluation consists of quantifying the unfairness and estimating the unpaid premium,
+and shows that the Atomic Swap of cryptocurrencies is much more unfair than American Call Options with stocks and fiat currencies in the same setting.
 % propose
 Furthermore, we propose two fair Atomic Swap protocols, both of which extend the original protocol by implementing the premium mechanism.
 One of our proposed protocols is for currency exchange, and the other is for American Call Options.
@@ -16,5 +17,6 @@ For both protocols, the initiator creates all contracts when setup, and deposits
 For the currency exchange-style protocol, the premium goes back to the initiator if the swap is successful, and otherwise goes to the participant.
 For the American Call Option-style protocol, the premium goes to the participant once the participant's asset is redeemed or refunded.
 
+\TODO{future work rewrite}
 Our future work is to formally verify the security of the Atomic Swap protocol,
 then construct a provably secure and fair Atomic Swap protocol which does not require the initiator to hold some participant's asset.
