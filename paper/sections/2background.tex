@@ -9,13 +9,22 @@
 \subsection{Atomic Swaps}
 \TODO{More explanations on atomic swap}
 
-An Atomic Swap~\cite{nolan2013alt} is that two parties exchange their assets ``atomically'' without trusted third parties:
-The swap either succeeds or fails for both parties.
+An Atomic Swap~\cite{nolan2013alt} is that two parties exchange their assets ``atomically'':
+The swap itself is an indivisible and irreducible series of operations so that the swap either succeeds (operations occurred in whole) or fails (nothing occurs) for both parties. \TODO{rephrase due to high similarity with \url{https://en.wikipedia.org/wiki/Atomicity_(database_systems)}}\\
 
-In Blockchain, the Atomic Swap is realized by the Hashed Timelocked Contract (HTLC)~\cite{poon2016bitcoin}.
+In Blockchain, considering different assets are stored on different corresponding chains, the atomic swap will require the capability of \textit{Chain Interoperability}, for the purpose of value circulation between two varied chains. As stated by Buterin V., 
+there are three primary categories of strategies to achieve \textit{Chain Interoperability}~\cite{buterin2016chain}:\\
+
+\begin{enumerate}
+    \item \textit{Notary schemes},
+    \item \textit{Sidechains/relays},
+    \item and \textit{Hash-locking},\\
+\end{enumerate}
+
+Unlike \textit{Notary schemes} and \textit{Sidechains/relays}, \textit{Hash-locking}, where the Hashed Timelocked Contract (HTLC)~\cite{poon2016bitcoin} is used, empowers the Atomic Swap to be realized without trusted third parties.
 In HTLC-style transactions, the payee redeems the payment prior to a deadline by providing the preimage of a specific hash value.
 Otherwise, the payment will expire and the money goes back to the payer.
-HTLC is based on the hashlock - to lock the payment by a hash value, and the timelock - to limit the deadline for the payee to redeem.
+HTLC is based on the hashlock - to lock the payment by a hash value, and the timelock - to limit the deadline for the payee to redeem, in case the money is locked forever, resulting in that the payer lose it forever.
 The Atomic Swap protocol can be implemented on all blockchains supporting the timelock and the hashlock.
 
 \subsection{Option}
