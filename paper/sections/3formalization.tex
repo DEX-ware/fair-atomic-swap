@@ -1,50 +1,68 @@
 \section{Formalization}
 \label{sec:formalization}
 
-\TODO{intro}
+In this section, we formalize the American Call Option and the Atomic Swap protocol,
+then prove that the Atomic Swap is equivalent to an American Call Option without the premium.
 
 \subsection{American Call Option}
 
 The American Call Option is a contract that ``one can buy an amount of an asset with an agreed price prior to or on an agreed time in the future''. 
 The agreed price is usually called the \textit{spot price}, and the buying is called \textit{exercising}.
-For American Call Option, the buyer can exercise in advanced of the agreed exercise time.
+For American Call Option, the option buyer can exercise in advanced of the agreed exercise time.
 The price of the asset when exercising is called the \textit{strike price}.
-Apart from the asset, the option contract itself has value, called the \textit{premium}.
-The buyer should pay for both the asset and the premium when participating in the contract.
+As mentioned in Section~\label{subsec:background_option}, the option contract itself has value, and its value is called the \textit{premium}.
+The option buyer should pay for both the asset and the premium when participating in the contract.
 
 Note that the price of the asset changes over time. This makes the American Call Option ``speculative'': One may profit from the contract by buying the asset with a lower price then sell it with a higher price.
 
 \begin{definition}
 We define an American Call Option contract $\Pi$ as
 
-\TODO{notation of $y$ should be consistent w/ $K$}
-
-$$\Pi = (K, \pi_1, y, \pi_2, T, C)$$
+$$\Pi = (\pi_1, \pi_2, K, A, T, C)$$
 
 where
-$K$ is the strike price - the amount of the currency $\pi_1$ that the buyer needs to pay.
-$y$ is the amount of the asset $\pi_2$ that the seller wants to sell.
-$T$ is the agreed strike time.
-$C$ is the \textit{premium}.
+$\pi_1$ and $\pi_2$ is the currency of the option buyer and the asset of the option seller, respectively; 
+$K$ is the strike price with the unit $\pi_2 / \pi_1$ - the price of an unit of $\pi_2$ by using $\pi_1$;
+$A$ is the amount of the asset $\pi_2$ that the option seller wants to sell;
+$T$ is the agreed strike time;
+$C$ is the \textit{premium} with the unit $\pi_1$.
 \end{definition}
 
 The process of an American Call Option is as follows:
 
 \begin{enumerate}
-    \item \textbf{Advertise}: The buyer creates and advertises an American Call Option contract $\Pi = (K, \pi_1, y, \pi_2, T, C)$.
-    \item \textbf{Contract}: The seller finds $\Pi$ is profitable, so he signs $\Pi$.
-    The buyer should pay $C$ to the seller.
-    Note that the buyer does not pay for $\pi_2$ at this stage.
-    \item \textbf{Hold}: The buyer keeps not exercising $\Pi$. If he doesn't exercise $\Pi$ before $T$, $\Pi$ will abort.
-    \item \textbf{Exercise}: The buyer exercises $\Pi$ - The buyer pays $K$ $\pi_1$ to the seller, and the seller gives $y$ $\pi_2$ to the buyer. The buyer can exercise $\Pi$ before $T$ or on $T$.
+    \item \textbf{Advertise}: The option seller creates and advertises an American Call Option contract $\Pi = (\pi_1, \pi_2, K, A, T, C)$.
+    \item \textbf{Contract}: The option buyer finds $\Pi$ is profitable, so he participates in $\Pi$.
+    To participate, the option buyer should pay $C$ to the option seller first.
+    Note that the option buyer does not pay for $A$ $\pi_2$ at this stage.
+    Also note that the option seller cannot abort $\Pi$ after the option buyer participates in $\Pi$.
+    \item \textbf{Hold}: The option buyer keeps not exercising $\Pi$. If he doesn't exercise $\Pi$ before $T$, $\Pi$ will abort.
+    \item \textbf{Exercise}: The option buyer exercises $\Pi$ - The option buyer pays $AK$ $\pi_1$ to the option seller, and the option seller gives $y$ $\pi_2$ to the option buyer. The option buyer can exercise $\Pi$ before or on $T$.
 \end{enumerate}
 
-\JS{Can a seller abort the contract in American Call Option? It seems that a seller can abort the contract in Atomic Cross-Chain Swap, but not in American Call Option. Is there a possible mismatching here between the two protocols?}
-\RC{Yes, there is a little difference, but the difference does not affect the model. In American Call Options, after $T$ the contract is expired automatically. In Atomic Swap, after Bob's timelock, Bob can choose to or not to abort the Atomic Swap. At that stage, Bob can refund, Alice can redeem or refund, and once Alice redeems Bob can refund, so they are fair.}
+% asset underlying value
+The underlying value of $\pi_2$ is fluctuating over time due to the market mechanism.
+Intuitively, if the price of $\pi_2$ rises when the option buyer exercises $\Pi$, the option buyer profits, because he buys $\pi_2$ with the price lower than the current market price.
+Formally, we denote the asset's underlying value (with the unit $\pi_2 / \pi_1$) at the time $t$ as $S_t$.
+Assume the option buyer exercises $\Pi$ at a time $T' \leq T$, he can profit $[(S_{T'} - K) A - C]$ $\pi_1$.
+Note that the profit can be negative.
 
-\TODO{More comments on the defined ACO. e.g. who can abort, who should exercise, price changes $S$}
 
-\subsection{Atomic Cross-Chain Swap}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+\subsection{Atomic Swap}
 
 \begin{definition}
 We define an Atomic Swap $\mathcal{AS}$ as
@@ -99,38 +117,67 @@ takes no parameters and returns the $\mathcal{V} \in \{true, false\}$ indicating
 Alice and Bob can perform the refund by publishing $tx_{\mathcal{R}, 1}$ and $tx_{\mathcal{R}, 2}$ after the timelock $\Delta_1$ and $\Delta
 _2$, respectively.
 
-\TODO{short discussion on why is it atomic.}
+Similar to conventional finance assets, $Coin_2$'s value is also fluctuating due to the market mechanism.
+We denote the asset's underlying value (with the unit $Coin_2 / Coin_1$) at the time $t$ as $S_t$.
 
-\subsection{Modelling the Atomic Cross-Chain Swap as the American Call Option}
 
-We model the Atomic Cross-Chain Swap protocol as the American Call Option.
-In detail, the Atomic Cross-Chain Swap protocol is equivalent to a premium-free American Call Option.
 
-Assume Alice \textbf{initiates} an Atomic Cross-Chain Swap $\mathcal{AS} = (x_1, Coin_1, x_2, Coin_2)$ and Bob \textbf{participates} $\mathcal{AS}$.
+
+
+
+
+
+
+
+
+
+
+
+\subsection{Modelling the Atomic Swap as the American Call Option}
+
+We model the Atomic Swap protocol as the American Call Option.
+In detail, the Atomic Swap protocol is equivalent to a premium-free American Call Option.
+
+Assume Alice \textbf{initiates} an Atomic Swap $\mathcal{AS} = (x_1, Coin_1, x_2, Coin_2)$ and Bob \textbf{participates} $\mathcal{AS}$.
 
 \begin{theorem}
 $\mathcal{AS} = (x_1, Coin_1, x_2, Coin_2)$ is equivalent to the American Call Option contract
 
 $$
-\Pi = (\frac{x_2 Coin_2}{Coin_1}, Coin_1, x_2, Coin_2, \Delta_2, 0)
+\Pi = (Coin_1, Coin_2, \frac{x_2}{x_1}, x_2, \Delta_2, 0)
 $$
+
 \end{theorem}
- 
+
+
 \begin{proof}
 % model the atomic swap as aco
-In the American Call Option context, the buyer Alice wants to buy $x_2$ $Coin_2$ from the participant Bob by using $x_1$ $Coin_1$.
+In the American Call Option context, the option buyer Alice wants to buy $x_2$ $Coin_2$ from the participant Bob by using $x_1$ $Coin_1$.
 $Coin_1$ is the currency Alice uses, $Coin_2$ is the asset Bob has.
-$\frac{Coin_2}{Coin_1}$ is the price of the asset from Alice's perspective.
-Alice needs to pay for the strike price $K = \frac{x_2 Coin_2}{Coin_1}$, of which the value is equal to $x_2 Coin_2$ in the Atomic Cross-Chain Swap scenario.
+$\frac{x_2}{x_1}$ is the price of the asset from Alice's perspective, so $\frac{x_2}{x_1}$.
 $\Delta_2$ is the timelock of the contract transaction on $BC_2$.
-It is equivalent to the strike time of $\Pi$, because after $\Delta_2$ Bob can refund his asset back.
+It is equivalent to the strike time of $\Pi$, because after $\Delta_2$ Bob can refund his asset back and invalidate $\mathcal{AS}$, but before $\Delta_2$ Bob cannot abort $\mathcal{AS}$ if Alice \textbf{participates}.
 Establishing the Atomic Swap does not require Alice to pay anything other than the asset to Bob, so the premium here is zero.
 \end{proof}
 
-Recall that the premium is the price paid by the buyer for signing the option contract with the seller.
-It is the price for the seller to take the risk of the market.
-However, in the Atomic Cross-Chain Swap case, Alice is not required to pay for the premium.
-That is, Alice can losslessly choose to sign, exercise or abort the contract according to the market, but Bob can only follow Alice's decision while taking the risk of the market.
-Therefore, the premium-free American Call Option is unfair to the seller, and the Atomic Cross-Chain Swap is unfair to the participant.
 
-% The components of an option premium include its intrinsic value, its time value and the implied volatility of the underlying asset.
+
+
+
+
+
+
+
+
+
+
+
+\subsection{Atomic Swap is unfair}
+
+Recall that the premium is the price paid by the option buyer for signing the option contract with the option seller.
+In the Atomic Swap, Alice is not required to pay for the premium.
+In this way, the initiator can decide whether to proceed the swap while investigating the cryptocurrency market.
+This enables the initiator to speculate without any risk: If the initiator's asset price rises right before the strike time, he will proceed the swap to profit, otherwise he will abort the swap to avoid the loss.
+Therefore, without the premium, the initiator of an Atomic Swap is risk-free towards the market.
+
+\TODO{maybe some math in this subsec?}
