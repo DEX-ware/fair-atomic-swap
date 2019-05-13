@@ -204,12 +204,17 @@ function redeemPremium(bytes32 secretHash)
 
 % bitcoin cannot implement
 % because stateless
-Unfortunately, Bitcoin script does not support our protocols, because the Bitcoin script does not support the stateful transaction functionalities - it is designed to be stateless. \HY{Maybe explain why itz stateless? e.g., therez no such a thing as "world state"; and nothing about the state is stored?}
+Unfortunately, Bitcoin does not support our protocols, because Bitcoin does not support the stateful transaction functionalities.
+First, the Bitcoin script is designed to be stateless~\ref{okupski2014bitcoin}.
+Second, there is no such things like the Ethereum's ``world state''~\cite{wood2014ethereum} in Bitcoin:
+The only state in Bitcoin is the Unspent Transaction Outputs (UTXOs)~\cite{nakamoto2008bitcoin}.
+
 
 % new opcode
 \paragraph{New Opcode OP\_LOOKUP\_OUTPUT}
-In order to make Bitcoin script support our protocols, we propose a new opcode called OP\_LOOKUP\_OUTPUT.
-OP\_LOOKUP\_OUTPUT takes the id of an output, and produces the address of the output's owner.
+In order to make Bitcoin script support our protocols, we use an opcode called OP\_LOOKUP\_OUTPUT.
+OP\_LOOKUP\_OUTPUT was proposed, but has not implemented in Bitcoin yet~\cite{op-lookup-output-origin}.
+It takes the id of an output, and produces the address of the output's owner.
 With OP\_LOOKUP\_OUTPUT, the Bitcoin script can decide whether Alice or Bob should take the premium by 
 
 \begin{lstlisting}[language=Solidity, basicstyle=\tiny, numbers=none]
@@ -217,23 +222,42 @@ With OP\_LOOKUP\_OUTPUT, the Bitcoin script can decide whether Alice or Bob shou
 \end{lstlisting}
 
 % implement opcode is easy
-Implementing OP\_LOOKUP\_OUTPUT is easy in Bitcoin - It only queries the ownership of an output from the indexed blockchain database, and does not require any computation.
+Implementing OP\_LOOKUP\_OUTPUT is easy in Bitcoin - It only queries the ownership of an output from the indexed blockchain database.
+This neither requires any computation, nor breaks the ``stateless'' design of the Bitcoin script.
+
 
 \paragraph{Decoupling the contract creation and the contract invocation}
-For smart contracts, the contract is created and invoked in separate transactions.
-However, for Bitcoin script, the contract is created and invoked in the same transaction, which makes our protocols difficult to construct.
-First, the timelock starts right after the contract creation rather than the contract invocation.
-Second, the premium does not know which outputs belong to $Coin_2$.
+For smart contracts, the contract is created and invoked in separate transactions:
+Creating the contract is by publishing a transaction which creates the smart contract,
+and invoking the contract is by publishing a transaction which invokes a method in the smart contract.
+However, Bitcoin has no smart contracts, and the ``contract'' is created and invoked in a single transaction.
+In this way, the timelock starts right after the contract creation rather than the contract invocation.
+This is problematic: The contract is invoked when Bob \textbf{participate}s in the contract.
 
-\TODO{more detailed description on Bitcoin construction}
-We solve this problem by constructing the contract offline:
-Alice and Bob create a 2-2 multisignature address, and merge the premium payment and the $Coin_2$ payment into a single transaction.
-First, Alice and Bob create a 2-2 multisignature address.
-In order to use the address to make a payment, both Alice and Bob should sign the transaction.
-Second, Bob creates the $Coin_2$ transaction (offline) which includes the unspent outputs, and sends it to Alice.
-Third, Alice adds the premium transaction to Bob's sent transaction.
-The premium transaction uses OP\_LOOKUP\_OUTPUT to check the ownership of outputs of $Coin_2$.
-Finally, both Alice and Bob sign and publish the transaction.
+
+Thanks to the multi-signature transaction functionality in Bitcoin,
+Alice and Bob can first create the contract off-chain, then invoke the contract on-chain.
+
+Multi-signature transactions refer to transactions signed by multiple accounts~\cite{okupski2014bitcoin}.
+A M-of-N ($M \leq N$) multi-signature transaction means the transaction requires $M$ out of $N$ accounts to sign it.
+If less than $M$ accounts sign the transaction, the transaction cannot be verified as valid by blockchain participants.
+In Bitcoin, constructing a multi-signature transaction requires accounts to create a multi-signature address first~\cite{okupski2014bitcoin}.
+
+With multi-signature transactions, we can decouple the contract creation and invocation as follows:
+First, Alice and Bob create a 2-of-2 multi-signature address. 
+Second, Alice and Bob mutually construct and sign a transaction which includes the premium payment and the $Coin_2$ payment.
+Finally, both Alice and Bob sign and publish the transaction with the 2-2 multi-signature address.
+
+Note that the second step above is done off-chain:
+First, Bob creates the $Coin_2$ transaction and sends it to Alice.
+Second, Alice creates the premium transaction which uses OP\_LOOKUP\_OUTPUT to check the ownership of $Coin_2$ transaction outputs.
+Thrid, Alice merges the $Coin_2$ transaction and the premium transaction to a single transaction, signs the transaction, and sends it to Bob.
+Finally, Bob signs the transaction and sends it to Alice.
+At this stage, both Alice and Bob have the mutually signed transaction containing both the premium transaction and the $Coin_2$ transaction.
+
+\paragraph{The premium transaction}
+Figure~\ref{code:bitcoin_contract_currency_exchange} and Figure~\ref{code:bitcoin_contract_option} show the premium transaction in the Bitcoin script
+, for both the currency-style and the American Call Option-style Atomic Swaps, respectively.
 
 \begin{figure}
 \begin{lstlisting}[language=Solidity, basicstyle=\tiny]
@@ -283,7 +307,5 @@ ScriptPubKey:
 \label{code:bitcoin_contract_option}
 \caption{The American Call Option-style Atomic Swap contract in Bitcoin script}
 \end{figure}
-
-Figure~\ref{code:bitcoin_contract_currency_exchange} and Figure~\ref{code:bitcoin_contract_option} show the Bitcoin scripts for the currency-style and the American Call Option-style Atomic Swaps, respectively.
 
 % OP_LOOKUP_OUTPUT is from https://bitcoin.stackexchange.com/questions/36229/bitcoin-script-for-a-competitive-crowdfunding-like-contract
