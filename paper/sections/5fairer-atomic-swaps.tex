@@ -3,20 +3,23 @@
 
 In this section, we propose two fair variants of the original Atomic Swap protocol, of which one is for currency exchange and the other is for American Call Options.
 
+
+
+
 \subsection{Design}
 
 \subsubsection{Difference between Currency Exchange and Options}
+\label{subsubsec:diff_spot_option}
 
-Before designing a fair Atomic Swap protocol, we should know the design objective:
+Before designing a fair Atomic Swap protocol, we should know its design objective:
 Is the protocol aiming at currency exchange or the American Call Options?
 
 To our knowledge, the Atomic Swap protocol is originally designed for the fair exchange between different cryptocurrencies.
 However, according to our analysis, the protocol is equivalent to the premium-free American Call Options, and is unfair due to the free premium.
 
-The currency exchange and the American Call Option differ in finance: the currency exchange is a type of Spots~\cite{hull1991introduction}, while the American Call Option is a type of Options.
+The currency exchange and the American Call Option differ in Finance: the currency exchange is a type of Spots~\cite{hull1991introduction}, while the American Call Option is a type of Options.
 The Spot Contract and the Option Contract aim at different application scenarios: The Spot Contract aims at exchanging the ownership of assets, while the Option Contract aims at providing the option buyer an ``option'' to trade.
-
-In detail, Spots and Options differ in the following aspects:
+More specifically, Spots and Options differ in the following aspects:
 
 \begin{itemize}
     \item The Spot Contract is exercised immediately, while the Option Contract is exercised on a specified future date.
@@ -25,52 +28,67 @@ In detail, Spots and Options differ in the following aspects:
 \end{itemize}
 
 \subsubsection{Atomic Swaps for Currency Exchange and American Call Options}
+\label{subsubsec:design_obj}
 
-The Atomic Swaps for the currency exchange and the American Call Option should be different, because of their different design objectives.
+According to Section~\ref{subsubsec:diff_spot_option}, the currency exchange-style Atomic Swaps and the American Call Option-style Atomic Swaps differ in design objectives.
 
 \paragraph{Atomic Swaps for Currency Exchange}
 For the currency exchange, both parties should not abort the contract once signed.
-However, the Atomic Swaps are not guaranteed to succeed because HTLCs' timelock is limited by time.
-Instead, we can use the premium mechanism to discourage the option buyer to abort the contract: The option buyer should deposit the premium when signing the contract, then
+However, in Atomic Swaps, Alice can abort the swap by not releasing the hash preimage.
+Therefore, we should discourage Alice to abort the swap.
+To achieve this, we can use the premium mechanism as the collateral: Alice should deposit the premium besides her asset when \textbf{initiate}
+The premium should follow that:
 
 \begin{itemize}
-    \item If the contract is settled correctly, the premium will go back to the option buyer.
-    \item If the option buyer aborts the contract after signing, the premium will go to the option seller.
-    \item If the option seller aborts the contract after signing, the premium will go to the option buyer.
+    \item If the swap is settled or Bob aborts the swap, the premium will go back to Alice.
+    \item If Alice aborts the swap, the premium will go to Bob.
 \end{itemize}
 
 \paragraph{Atomic Swaps for American Call Options}
-For the American Call Options, the option buyer should pay for the premium besides the bought asset, regardless whether the contract is settled correctly or not. \HY{will this sentence be misleading? making people thinking that the contract can also be "settled incorrectly"? And it draws my attention that "settle correctly" showing up of a couple of times. As for me, I might switch from "settled correctly", "settled", "settled eventually", etc.}
-For the conventional Options, the option sellers are trustworthy and never abort the contracts: Option sellers are usually operated and endorsed by the governments.
-However, the option sellers in Atomic Swaps are not trustworthy, 
-\HY{maybe like "itz never safe to assume that the option sellers in Atomic Swaps are trustworthy as they can be individuals under no supervison"? } and they may abort the contracts like the option buyers.
-Once the option seller aborts a contract, the option buyer should get the premium back.
-Therefore, the premium in the American Call Options by Atomic Swaps should follow that: 
+For the American Call Options, the option buyer should pay for the premium besides the bought asset, regardless whether the contract is settled or aborted.
+In reality, the option sellers are trustworthy - They never abort the contract.
+However, in Atomic Swaps, the participant Bob can abort the contracts like the initiator Alice.
+To keep the Atomic Swap consistent with the American Call Options,
+the premium in American Call Option-style Atomic Swaps should follow that: 
 
 \begin{itemize}
-    \item If the contract is settled correctly or the option buyer aborts the contract, the premium will go to the option seller.
-    \item If the option seller aborts the contract, the premium will go back to the option buyer.
+    \item If the swap is settled or Alice aborts the swap, the premium will go to Bob.
+    \item If Bob aborts the swap, the premium will go back to Alice.
 \end{itemize}
 
 
-\subsection{Our Protocol Construction}
 
-We define an Atomic Swap protocol $\mathcal{AS}'$ as
+
+
+
+
+
+
+
+
+
+\subsection{Our Protocols}
+
+We propose two fair Atomic Swap protocols based on the original Atomic Swap protocol and our identified design objectives in Section~\ref{subsubsec:design_obj}.
+One of the two protocols is for currency exchange, and the other one is for American Call Options.
+
+Formally, define an Atomic Swap protocol $\mathcal{AS}'$ as
 
 $$\mathcal{AS}' = (x_1, Coin_1, x_2, Coin_2, pr)$$
 
-where $pr$ is the premium amount that the initiator should lock on $BC_2$, measured in $Coin_2$.
+where $pr$ is the amount of the premium measured in $Coin_2$.
+In our protocols, Alice should lock $pr$ on $BC_2$, which will de described later.
 
 The protocol follows the steps below:
 
 \begin{enumerate}
     \item \textbf{Setup}: Alice and Bob create addresses on both blockchains.
     In addition, Alice creates both contracts $\mathcal{C}_1$ and $\mathcal{C}_2$ and publishes them as transactions $tx_{\mathcal{C}, 1}$ and $tx_{\mathcal{C}, 2}$ on $BC_1$ and $BC_2$. 
-    \item \textbf{Initiate}: Alice locks her $x_1$ $Coin_1$ on $BC_1$, and lock her $pr$ on $BC_2$.
-    \item \textbf{Participate}: Bob locks his $x_2$ $Coin_2$ on $BC_2$. Note that Bob's timelock expires earlier than Alice's.
-    \item \textbf{Redeem}: Alice redeems $x_2$ $Coin_2$ and Bob redeems $x_1$ $Coin_1$. Alice should redeem earlier than Bob.
-    \item \textbf{Refund}: If Alice does not redeem $x_2$ $Coin_2$ before Bob's timelock expires, Bob can refund $x_2$ $Coin_2$ and redeem $pr$.
-    If Bob does not redeem $x_1$ $Coin_1$ before Alice's timelock expires, Alice can refund $x_1$ $Coin_1$ and $pr$.
+    \item \textbf{Initiate}: Alice locks her $x_1$ $Coin_1$ on $BC_1$, and lock her $pr$ on $BC_2$, both with the timelock $\Delta_1$.
+    \item \textbf{Participate}: Bob locks his $x_2$ $Coin_2$ on $BC_2$ with the timelock $\Delta_2 < \Delta_1$.
+    \item \textbf{Redeem}: Alice redeems $x_2$ $Coin_2$ first, then Bob redeems $x_1$ $Coin_1$.
+    \item \textbf{Refund}: If Alice does not redeem $x_2$ $Coin_2$ before $\Delta_2$ expires, Bob can refund $x_2$ $Coin_2$ and redeem $pr$.
+    If Bob does not redeem $x_1$ $Coin_1$ before $\Delta_1$ expires, Alice can refund $x_1$ $Coin_1$ and $pr$.
 \end{enumerate}
 
 \paragraph{Setup}
@@ -86,30 +104,22 @@ $\mathcal{C}_1$ remains the same as the original protocol, while $\mathcal{C}_2$
     \item $\mathcal{C}^{pr}_2$: The contract for the premium $pr$
 \end{itemize}
 
-$\mathcal{C}^{asset}_2$ is the same as in the original protocol.
+$\mathcal{C}^{asset}_2$ is the same as in the original protocol $\mathcal{AS}$.
 $\mathcal{C}^{pr}_2$ differs for the currency exchange and the American Call Options.
 
-For currency exchange, $\mathcal{C}^{pr}_2$ is that
-``Alice pays $pr$ to Bob with the condition: If Bob refunds $x_2$ $Coin_2$ after the timelock $\Delta_2$ and before the timelock $\Delta_1$, Bob can redeem $pr$, otherwise Bob cannot.
-If $\Delta_1$ expires, Alice can refund $pr$ back.''
+The content of $\mathcal{C}^{pr}_2$ for currency exchange-style $\mathcal{AS}'$ and American Call Option-style $\mathcal{AS}'$ are shown below:
 
-For American Call Options, $\mathcal{C}^{pr}_2$ is that
-``Alice pays $pr$ to Bob with the condition: If Alice redeems $x_2$ $Coin_2$ before the timelock $\Delta_2$ or Bob refunds $x_2$ $Coin_2$ after the timelock $\Delta_2$ but before the timelock $Delta_1$ (note that $\Delta_2 < \Delta_1$), Bob can redeem $pr$, otherwise Bob cannot.
-If $\Delta_1$ expires, Alice can refund $pr$ back.''
+\begin{description}
+    \item[Currency Exchange] Alice pays $pr$ to Bob with the condition:
+    Bob refunds $x_2$ $Coin_2$ after $\Delta_2$ and before $\Delta_1$.
+    If $\Delta_1$ expires, Alice can refund $pr$ back.
+    \item[American Call Options] Alice pays $pr$ to Bob with one of the two conditions:
+    1) Alice redeems $x_2$ $Coin_2$ before $\Delta_2$.
+    2) Bob refunds $x_2$ $Coin_2$ after $\Delta_2$ but before $Delta_1$ (note that $\Delta_2 < \Delta_1$).
+    If $\Delta_1$ expires, Alice can refund $pr$ back.
+\end{description}
 
-% ``
-% if $\Delta_1$ is expired:
-%   initiator can refund $pr$
-% else:
-%   initiator cannot refund $pr$
-%   if asset2 is refunded: // for currency exchange
-%   if asset2 is redeemed or refunded: // for options
-%     participant can redeem $pr$
-%   else:
-%     participant cannot redeem $pr$
-% ''
-
-Note that $\Delta_1$ in $\mathcal{C}_1$ is the same as in $\mathcal{C}^{pr}_2$, and $\mathcal{C}^{asset}_2$ is with the timelock $\Delta_2$.
+Note that $\Delta_1$ in $\mathcal{C}_1$ is the same as in $\mathcal{C}^{pr}_2$, and $\mathcal{C}^{asset}_2$ is with $\Delta_2$.
 
 Also note that neither of them triggers contracts at this stage.
 Instead, Alice and Bob can enter the contracts in the future.
@@ -124,7 +134,6 @@ Note that Alice can specify an arbitrary amount for $pr$ when creating $\mathcal
 \paragraph{Participate}
 If Bob thinks $\mathcal{AS}'$ is fair for him, he will participate in $\mathcal{AS}'$ by depositing $x_2$ $Coin_2$ in $\mathcal{C}^{asset}_2$, and triggers the the hash-locked payment to Alice.
 
-
 \paragraph{Redeem}
 Same as the original protocol, Alice redeems $x_2$ $Coin_2$ in $\mathcal{C}^{asset}_2$ by releasing $s$, then Bob can redeem  $x_1$ $Coin_1$ in $\mathcal{C}_1$ using the released $s$.
 Note that once Bob redeems $x_1$ $Coin_1$, he cannot redeem $pr$ anymore according to $\mathcal{C}^{pr}_2$.
@@ -133,5 +142,3 @@ Note that once Bob redeems $x_1$ $Coin_1$, he cannot redeem $pr$ anymore accordi
 Refunding $x_2$ $Coin_2$ for Alice and $x_1$ $Coin_1$ for Bob are the same as in the original protocol.
 Alice can refund $pr$ after $\Delta_1$ if Bob has not refunded $x_1$ $Coin_1$.
 If Bob refunds $x_1$ $Coin_1$ before $\Delta_2$ (which is definitely before $\Delta_1$ as $\Delta_2 < \Delta_1$), Bob can also redeem $pr$.
-
-\TODO{Analysis on the correctness}
