@@ -18,7 +18,9 @@ Three strategies can be utilized to achieve \textit{Chain Interoperability}:\TOD
     \item and \textit{Hash-locking},\\
 \end{enumerate}
 
-Unlike \textit{Sidechains/relays} and \textit{Notary schemes}, \textit{Hash-locking}, where the Hashed Timelocked Contract (HTLC)~\cite{poon2016bitcoin} is used, empowers the Atomic Swap to be realized without any framework or trusted third party. The HTLC was originally introduced to secure routing across multiple payment channels~\cite{paychannel2018btcwiki} - which aim at accerelating up trasactions by allowing users to make multiple transactions without commiting all of them.
+Unlike \textit{Sidechains/relays} and \textit{Notary schemes}, \textit{Hash-locking} empowers the Atomic Swap to be realized without any framework or trusted third party.
+Atomic Swap supports the Chain Interoperability by using the Hashed Timelocked Contract (HTLC)~\cite{poon2016bitcoin} - the time-locked version of Hash-locking.
+The HTLC was originally introduced to secure routing across multiple payment channels~\cite{paychannel2018btcwiki} - which aim at accerelating up trasactions by allowing users to make multiple transactions without commiting all of them.
 In HTLC-style transactions, the payee redeems the payment prior to a deadline by providing the preimage of a specific hash value.
 Otherwise, the payment will expire and the money goes back to the payer.
 HTLC is based on the hashlock - to lock the payment by a hash value, and the timelock - to limit the deadline for the payee to redeem, in case the money is locked forever, resulting in that the payer lose it forever.
