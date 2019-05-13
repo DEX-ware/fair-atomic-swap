@@ -215,11 +215,8 @@ The only state in Bitcoin is the Unspent Transaction Outputs (UTXOs)~\cite{nakam
 In order to make Bitcoin script support our protocols, we use an opcode called OP\_LOOKUP\_OUTPUT.
 OP\_LOOKUP\_OUTPUT was proposed, but has not implemented in Bitcoin yet~\cite{op-lookup-output-origin}.
 It takes the id of an output, and produces the address of the output's owner.
-With OP\_LOOKUP\_OUTPUT, the Bitcoin script can decide whether Alice or Bob should take the premium by 
-
-\begin{lstlisting}[language=Solidity, basicstyle=\tiny, numbers=none]
-<asset2_output> OP_LOOKUP_OUTPUT <Alice_pubkeyhash> OP_EQUALVERIFY
-\end{lstlisting}
+With OP\_LOOKUP\_OUTPUT, the Bitcoin script can decide whether Alice or Bob should take the premium by
+``<asset2\_output> OP\_LOOKUP\_OUTPUT <Alice\_pubkeyhash> OP\_EQUALVERIFY''.
 
 % implement opcode is easy
 Implementing OP\_LOOKUP\_OUTPUT is easy in Bitcoin - It only queries the ownership of an output from the indexed blockchain database.
