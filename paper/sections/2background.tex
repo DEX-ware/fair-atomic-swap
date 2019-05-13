@@ -23,8 +23,9 @@ Atomic Swap supports the Chain Interoperability by using the Hashed Timelocked C
 The HTLC was originally introduced to secure routing across multiple payment channels~\cite{paychannel2018btcwiki} - which aim at accerelating up trasactions by allowing users to make multiple transactions without commiting all of them.
 In HTLC-style transactions, the payee redeems the payment prior to a deadline by providing the preimage of a specific hash value.
 Otherwise, the payment will expire and the money goes back to the payer.
-HTLC is based on the hashlock - to lock the payment by a hash value, and the timelock - to limit the deadline for the payee to redeem, in case the money is locked forever, resulting in that the payer lose it forever.
+HTLC is based on the hashlock - to lock the payment by a hash value, and the timelock - to limit the deadline of redeeming. The timelock avoids locking money in a payment forever when the payee cannot provide the preimage.
 The Atomic Swap protocol can be implemented on all blockchains supporting the timelock and the hashlock.
+
 
 \subsection{Option}
 \label{subsec:background_option}
