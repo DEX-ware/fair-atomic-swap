@@ -4,11 +4,12 @@
 In this section, we briefly explain the basic concept of Atomic Swaps and Option (in Finance), and their relationship.
 
 \subsection{Atomic Swaps}
-\TODO{1. Combine with ``Payment Channels''; 2. More explanations on atomic swap.}
+\TODO{More explanations on atomic swap.}
 
 An Atomic Swap~\cite{nolan2013alt} is that two parties exchange their assets ``atomically'' without trusted third parties:
-The swap either succeeds or fails for both parties.\\
-In Blockchain, the Atomic Swap is realized by the Hashed Timelocked Contract (HTLC)~\cite{poon2016bitcoin}.
+The swap either succeeds or fails for both parties.
+
+In Blockchain, the Atomic Swap is realized by the Hashed Timelocked Contract (HTLC)~\cite{poon2016bitcoin}. The HTLC was originally introduced to secure routing across multiple payment channels~\cite{paymentchan-btcwiki} - which aim at accerelating up trasactions by allowing users to make multiple transactions without commiting all of them.
 In HTLC-style transactions, the payee redeems the payment prior to a deadline by providing the preimage of a specific hash value.
 Otherwise, the payment will expire and the money goes back to the payer.
 HTLC is based on the hashlock - to lock the payment by a hash value, and the timelock - to limit the deadline for the payee to redeem.
