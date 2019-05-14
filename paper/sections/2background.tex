@@ -1,22 +1,20 @@
 \section{Background}
 \label{sec:background}
 
-\TODO{intro}
-
-\subsection{Payment Channels}
-\TODO{payment channel subsec}
+In this section, we briefly explain the basic concept of Atomic Swaps and Option (in Finance), and their relationship.
 
 \subsection{Atomic Swaps}
-\TODO{More explanations on atomic swap}
+\TODO{More explanations on atomic swap.}
 
-An Atomic Swap~\cite{nolan2013alt} is that two parties exchange their assets ``atomically'' without trusted third parties:
-The swap either succeeds or fails for both parties.
+An Atomic Swap~\cite{nolan2013alt} is that two parties exchange their assets ``atomically'':
+The swap itself is an indivisible and irreducible series of operations so that the swap either succeeds (operations occurred in whole) or fails (nothing occurs) for both parties. \TODO{rephrase due to high similarity with \url{https://en.wikipedia.org/wiki/Atomicity_(database_systems)}}\\
 
-In Blockchain, the Atomic Swap is realized by the Hashed Timelocked Contract (HTLC)~\cite{poon2016bitcoin}.
+In Blockchain, utilizing the Hashed Timelocked Contract (HTLC)~\cite{poon2016bitcoin} can accomplish the Atomic Swap without trusted third parties. HTLC was originally introduced to secure routing across multiple payment channels~\cite{paychannel2018btcwiki}.
 In HTLC-style transactions, the payee redeems the payment prior to a deadline by providing the preimage of a specific hash value.
 Otherwise, the payment will expire and the money goes back to the payer.
-HTLC is based on the hashlock - to lock the payment by a hash value, and the timelock - to limit the deadline for the payee to redeem.
+HTLC is based on the hashlock - to lock the payment by a hash value, and the timelock - to limit the deadline of redeeming. The timelock avoids locking money in a payment forever when the payee cannot provide the preimage.
 The Atomic Swap protocol can be implemented on all blockchains supporting the timelock and the hashlock.
+
 
 \subsection{Option}
 \label{subsec:background_option}
