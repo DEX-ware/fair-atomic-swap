@@ -124,8 +124,15 @@ Formally, pricing the American Call Option $\Pi = (\pi_1, \pi_2, K, A, T, C)$ by
     \item Finding the option prices for earlier nodes 
 \end{enumerate}
 
+
+\begin{figure}
+    \includegraphics[width=\linewidth]{binomial-tree.eps}
+    \caption{The binomial price tree $\mathcal{T}$.}
+    \label{fig:binomial_tree}
+\end{figure}
+
 \paragraph{Creating the binomial price tree}
-The binomial price tree $\mathcal{T}$ of the height $n$ represents the possible future prices within the time period $T$ discretely.
+The binomial price tree $\mathcal{T}$ of the height $n$ represents the possible future prices within the time period $T$ discretely, as shown in Fig.~\ref{fig:binomial_tree}.
 $n$ can be picked arbitrarily. With larger $n$, the result will be more accurate, but the computing overhead will be heavier.
 Each node $\mathcal{T}_{t, i}$ is attached with the asset price $S_{t, i}$ and the option price $C_{t, i}$,
 where $t \in \{0, \frac{T}{n}, \frac{2T}{n}, \dots, T\}$ is the point of time and $i$ is the number of the node at its level.

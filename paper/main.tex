@@ -16,12 +16,13 @@
 
 \usepackage{listings, xcolor}
 
+\pagestyle{plain}
+
 \renewcommand\_{\textunderscore\allowbreak}
 
 \newcommand{\JS}[1]{{\color{blue} [JS] #1}}
 \newcommand{\RC}[1]{{\color{gray} [RC] #1}}
 \newcommand{\HY}[1]{{\color{orange} [HY] #1}}
-
 \newcommand{\TODO}[1]{{\color{red} [TODO] #1}}
 
 
@@ -32,10 +33,33 @@
 }
 
 \begin{abstract}
-\TODO{}
+Atomic Swap enables two parties to atomically exchange their own cryptocurrencies without trusted third parties.
+However, no evidence shows that the Atomic Swap protocol is fair for both the swap initiator and the swap participant.
+
+In this paper, we investigate the fairness of the Atomic Swap protocol.
+In particular,
+\textbf{1)} we prove that an Atomic Swap is equivalent to an American Call Option without the premium, so it is unfair to the swap participant;
+\textbf{2)} we evaluate how unfair the Atomic Swap is to the swap participant, and show that Atomic Swaps with cryptocurrencies are much more unfair than with conventional financial assets (stocks and fiat currencies);
+\textbf{3)} we propose two fair Atomic Swap protocols based on the original protocol, and describe how to implement our proposed protocols on blockchains supporting scripts and smart contracts. 
+
+First, we model the Atomic Swap as the American Call Option,
+and prove that an Atomic Swap is equivalent to an American Call Option without the premium.
+Thus, the Atomic Swap is unfair to the swap participant.
+
+\TODO{rewrite the evaluation}
+Second, we evaluate the unfairness of the Atomic Swap and compare their unfairness with conventional financial assets (stocks and fiat currencies).
+Our evaluation consists of two parts, namely quantifying the unfairness and estimating the premium.
+The unfairness quantification shows that the Atomic Swaps of cryptocurrencies are much more unfair than stocks and fiat currencies the same setting.
+We use the Cox-Ross-Rubinstein option pricing model to estimate the premium, and the results show that the premium for cryptocurrencies is 2\%~3\% of the asset value, while the premium for stocks and fiat currencies is negligible.
+
+Third, we propose two fair Atomic Swap protocols,
+one is for currency exchange and the other is for American Call Options.
+Our protocols are based on the original Atomic Swap protocol, but implement the premium mechanism.
+Blockchains supporting smart contracts such as Ethereum support our protocols directly.
+Blockchains only supporting scripts such as Bitcoin can support our protocols by adding a simple opcode.
 \end{abstract}
 
-\keywords{\TODO{}}
+\keywords{Blockchain; Atomic Swap; Cross-Chain Transactions; American Call Option}
 
 \maketitle
 
