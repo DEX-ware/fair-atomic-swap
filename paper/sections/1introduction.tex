@@ -2,8 +2,8 @@
 \label{sec:intro}
 
 The Atomic Swap protocol is that two parties exchange their assets ``atomically'' without trusted third parties.
-``Atomic'' means the swap either succeeds or fails for both parties at any given time. \TODO{(Add conjunction words in these sentenses for better cohesion.)}
-Atomic Swap is implemented on blockchains by using Hashed Timelocked Contracts (HTLCs).
+``Atomic'' means the swap either succeeds or fails for both parties at any given time.
+In blockchains, Atomic Swap is usually implemented by using Hashed Timelocked Contracts (HTLCs).
 The HTLC is a type of transaction that, the payee should provide the preimage of a hash value before a specified deadline, otherwise the payment fails - The money goes back to the payer and the payee will not get any money.
 
 However, the fairness of the Atomic Swap is never studied formally.
