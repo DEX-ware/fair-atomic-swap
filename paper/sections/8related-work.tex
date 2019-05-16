@@ -5,10 +5,12 @@
 The Atomic Swap protocol was first proposed on the BitcoinTalk forum informally in 2013~\cite{nolan2013alt}.
 Herlihy et al. first formalized the Atomic Swap protocol~\cite{herlihy2018atomic}.
 Meyden et al. first formally analyzed the Atomic Swap smart contracts~\cite{van2018specification}.
+Several Atomic Swap variants were proposed for sidechains~\cite{robinson2019atomic} and solving conflicts due to concurrent operations~\cite{zakhary2019atomic}.
 
 \paragraph{Optionality of Atomic Swaps}
 The optionality of atomic swaps was first identified by an anonymous person entitled ZmnSCPxj in the Lightning-dev mail list informally in 2018~\cite{optionality-origin}.
 Eizinger et al. first tried to address the optionality problem by implementing the premium mechanism\cite{first-attempt-optionality}.
+Liu et al. used the Atomic Swap to construct the option~\cite{liu2018atomic}, but paying for the premium requires an extra blockchain besides the two blockchains, and its fairness is left unjustified.
 
 \paragraph{Option Pricing}
 The Black-Scholes model is the first model to price the European options~\cite{black1973pricing}.
