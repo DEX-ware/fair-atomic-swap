@@ -7,8 +7,8 @@ Atomic Swap is implemented on blockchains by using Hashed Timelocked Contracts (
 The HTLC is a type of transaction that, the payee should provide the preimage of a hash value before a specified deadline, otherwise the payment fails - The money goes back to the payer and the payee will not get any money.
 
 However, the fairness of the Atomic Swap is never studied formally.
-First, there is no study that models the Atomic Swap in order to analyze whether both parties in the swap are equal.
-Second, in reality, \TODO{not the participant, but} the initiator in Atomic Swap can control the settlement time, while the asset price is fluctuating overtime. \TODO{(need to show why the second point is related to fairness.)}
+In particular, in Atomic Swaps, the initiator can control the settlement time, but the participant cannot.
+Whether this fact influences the fairness of the Atomic Swap remain unknown.
 
 In this paper, we prove that the Atomic Swap is unfair to the participant, and extends the original Atomic Swap protocol to make it fairer.
 In particular, we formally model the Atomic Swap and the American Call Option in Finance,
@@ -16,7 +16,7 @@ and prove that the Atomic Swap is equivalent to a premium-free American Call Opt
 Then we point out that the Atomic Swap is unfair to the participant, because the initiator is not required to pay for the premium.
 In this way, the initiator can speculate without any risk, by exploiting the exchange rate fluctuation.
 Based on this observation, we evaluate the unfairness of the Atomic Swap by estimating how much the premium should be for mainstream cryptocurrency pairs.
-Estimating the premium is based on the Cox-Ross-Rubinstein option pricing model, which is a conventional \sout{model} \TODO{one} to price the American-style options in Finance.
+Estimating the premium is based on the Cox-Ross-Rubinstein model - the conventional model for pricing the American-style options in Finance.
 After that, we propose two fair Atomic Swap protocols, which implement the premium mechanism upon the original Atomic Swap protocol.
 One of our proposed protocols is for the currency exchange, and the other is for the American Call Options.
 Both protocols can be deployed on existing blockchains:
@@ -37,13 +37,13 @@ The current price of the participant asset in Atomic Swap is the strike price in
 Redeeming cryptocurrencies in Atomic Swap is exercising the contract in the American Call Options.
 
 \paragraph{Based on our formalization, we prove that the Atomic Swap is unfair to the participant.}
-We point out that\TODO{,} according to the option theory in Finance, the Atomic Swap - modelled as the premium-free American Call Option - is unfair to the participant, especially in the highly volatile cryptocurrency market.
+We point out that, according to the option theory in Finance, the Atomic Swap - modelled as the premium-free American Call Option - is unfair to the participant, especially in the highly volatile cryptocurrency market.
 In practice, the initiator can decide whether to proceed the swap while investigating the cryptocurrency market.
 However, proceeding or aborting the swap does not require the initiator to pay for the premium.
-This leads to the scenario that, if the initiator's asset price rises right before the strike time, he will proceed the swap to profit, otherwise he will abort the swap to mitigate \TODO{use ``avert'' since ``mitigate'' means ``makeing sth. less severe'' (\url{https://en.oxforddictionaries.com/definition/mitigate}), which does not match the ``risk-free'' scenario.} the loss.
+This leads to the scenario that, if the initiator's asset price rises right before the strike time, he will proceed the swap to profit, otherwise he will abort the swap to avoid losing money, which does not match the ``risk-free'' scenario.} the loss.
 In this way, the initiator is risk-free towards the market.
 
-\paragraph{We evaluate the Atomic Swap unfairness of cryptocurrencies, and compare it \sout{to} \TODO{with} \TODO{that of} conventional finance assets.}
+\paragraph{We evaluate the Atomic Swap unfairness of cryptocurrencies, and compare it with that of conventional finance assets.
 We evaluate the unfairness of the Atomic Swaps for mainstream cryptocurrency paris, and also make comparisons between cryptocurrencies and conventional finance assets - stocks and fiat currencies.
 Our evaluation and comparison consist of two parts: 1) quantifying the profit and the mitigated risk of the initiator, 2) estimating how much the premium should be.
 % first

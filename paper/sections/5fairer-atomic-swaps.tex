@@ -91,7 +91,7 @@ The protocol follows the steps below:
     If Bob does not redeem $x_1$ $Coin_1$ before $\Delta_1$ expires, Alice can refund $x_1$ $Coin_1$ and $pr$.
 \end{enumerate}
 
-\paragraph{Setup}
+\paragraph{\textbf{Setup}}
 In addition to the address generation in the original protocol,
 Alice creates and publishes both contracts on $BC_1$ and $BC_2$.
 In the original protocol, Alice and Bob create $\mathcal{C}_1$ and $\mathcal{C}_2$, and publish $tx_{\mathcal{C}, 1}$ and $tx_{\mathcal{C}, 2}$ on $BC_1$ and $BC_2$, respectively.
@@ -125,20 +125,20 @@ Also note that neither of them triggers contracts at this stage.
 Instead, Alice and Bob can enter the contracts in the future.
 In this stage, Bob can decide whether to participate in $\mathcal{AS}'$ by auditing $tx_{\mathcal{C}, 1}$ and $tx_{\mathcal{C}, 2}$: If both contracts are fair, Bob will participate, otherwise Bob will not participate in this contract and find contracts from others.
 
-\paragraph{Initiate}
+\paragraph{\textbf{Initiate}}
 Alice initiates the swap by entering $\mathcal{C}_1$ and $\mathcal{C}^{pr}_2$.
 First, Alice deposits her $x_1$ $Coin_1$ in $\mathcal{C}_1$, and triggers the hash-locked payment to Bob.
 Second, Alice deposits her $pr$ in $\mathcal{C}^{pr}_2$, and triggers the conditional payment to Bob.
 Note that Alice can specify an arbitrary amount for $pr$ when creating $\mathcal{C}_2$, and Alice should have enough $Coin_2$ to deposit $pr$.
 
-\paragraph{Participate}
+\paragraph{\textbf{Participate}}
 If Bob thinks $\mathcal{AS}'$ is fair for him, he will participate in $\mathcal{AS}'$ by depositing $x_2$ $Coin_2$ in $\mathcal{C}^{asset}_2$, and triggers the the hash-locked payment to Alice.
 
-\paragraph{Redeem}
+\paragraph{\textbf{Redeem}}
 Same as the original protocol, Alice redeems $x_2$ $Coin_2$ in $\mathcal{C}^{asset}_2$ by releasing $s$, then Bob can redeem  $x_1$ $Coin_1$ in $\mathcal{C}_1$ using the released $s$.
 Note that once Bob redeems $x_1$ $Coin_1$, he cannot redeem $pr$ anymore according to $\mathcal{C}^{pr}_2$.
 
-\paragraph{Refund}
+\paragraph{\textbf{Refund}}
 Refunding $x_2$ $Coin_2$ for Alice and $x_1$ $Coin_1$ for Bob are the same as in the original protocol.
 Alice can refund $pr$ after $\Delta_1$ if Bob has not refunded $x_1$ $Coin_1$.
 If Bob refunds $x_1$ $Coin_1$ before $\Delta_2$ (which is definitely before $\Delta_1$ as $\Delta_2 < \Delta_1$), Bob can also redeem $pr$.
