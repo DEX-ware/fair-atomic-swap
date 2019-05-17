@@ -18,14 +18,14 @@ All experiments run on a MacBook Pro with a 2.2 GHz Intel Core i7 Processor, a 1
 \subsection{Quantifying the unfairness by market volatility}
 \label{subsec:volatility_analysis}
 
-We start from identifying the unfairness of Atomic Swaps before evaluating it.
-The unfairness consists of two parts as shown in Figure~\ref{fig:unfair_diagram}, namely the profit when the initiator's asset price rises and the mitigated loss when the initiator's asset price drops.
-
 \begin{figure}
     \includegraphics[width=\linewidth]{unfair_diagram.eps}
     \caption{Visualizing the unfairness. The x-axis is time (in days), and the y-axis is the exchange rate change in percentage. For a point $(x, y)$, if $y > 0$, the point falls to the profit area (the red area on the figure), and the Atomic Swap initiator will profit $y$ today. If $y < 0$ the point falls to the risk area (the red area on the figure), and the Atomic Swap initiator will mitigate the loss of $y$ today.}
     \label{fig:unfair_diagram}
 \end{figure}
+
+We start from identifying the unfairness of Atomic Swaps before evaluating it.
+The unfairness consists of two parts as shown in Figure~\ref{fig:unfair_diagram}, namely the profit when the initiator's asset price rises and the mitigated loss when the initiator's asset price drops.
 
 We then quantifying it by using the historical data.
 

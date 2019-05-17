@@ -47,31 +47,25 @@ Extending the premium mechanism includes:
 
 \paragraph{The premium payment state \textit{AssetState}}
 
-Similar with the \textit{PremiumState}, \textit{AssetState} has 4 states: empty, filled, redeemded and refunded.
-The code is shown in Figure~\ref{code:state}.
-\textit{Empty} means Alice has not \textbf{initiate}d, and has not deposited the premium yet.
-\textit{Filled} means Alice has deposited the premium, indicating that Alice has \textbf{initiate}d, but neither Alice nor Bob \textbf{refund}s or \textbf{redeem}s the premium.
-\textit{Redeemded} and \textit{refunded} means Bob redeems the premium and Alice refunds the premium, respectively.
-
-\begin{figure}
-\begin{lstlisting}[language=Solidity, basicstyle=\tiny]
+\begin{figure}[htb]
+\begin{lstlisting}[
+    language=Solidity, 
+    basicstyle=\tiny,
+    label={lst:state},
+    caption={Maintaining the state of the asset and the premium.}
+]
 enum AssetState { Empty, Filled, Redeemed, Refunded }
 enum PremiumState { Empty, Filled, Redeemed, Refunded }
 \end{lstlisting}
-\label{code:state}
-\caption{Maintaining the state of the asset and the premium.}
 \end{figure}
 
-\paragraph{\textit{isPremiumRedeemable()} and \textit{isPremiumRefundable()}}
-Checking whether the premium is redeemable or refundable is the most critical part of our protocols.
-Because the premium payment relies on the $Coin_2$ payment, checking the premium refundability and redeemability involves checking the $Coin_2$ status - \textit{AssetState} in our implementation.
-
-\textit{isPremiumRedeemable()} and \textit{isPremiumRefundable()} for the currency exchange-style Atomic Swap are shown in Figure~\ref{code:premium_condition_currency}, and for the American Call Option-style Atomic Swap are shown in Figure~\ref{code:premium_condition_options}.
-The currency exchange-style Atomic Swap and the American Call Option-style Atomic Swap differ when $AssetState = Redeemed$:
-In the currency exchange-style Atomic Swap the premium belongs to Alice while in the American Call Option-style Atomic Swap the premium belongs to Bob.
-
-\begin{figure}
-\begin{lstlisting}[language=Solidity, basicstyle=\tiny]
+\begin{figure}[htb]
+\begin{lstlisting}[
+    language=Solidity, 
+    basicstyle=\tiny,
+    label={lst:premium_condition_currency},
+    caption={The condition to redeem and refund the premium for currency-exchange-style Atomic Swaps.}
+]
 // Premium is refundable when
 // 1. Alice initiates but Bob does not participate
 //   after premium's timelock expires
@@ -112,12 +106,15 @@ modifier isPremiumRedeemable(bytes32 secretHash) {
     _;
 }
 \end{lstlisting}
-\label{code:premium_condition_currency}
-\caption{The condition to redeem and refund the premium for currency-exchange-style Atomic Swaps.}
 \end{figure}
 
-\begin{figure}
-\begin{lstlisting}[language=Solidity, basicstyle=\tiny]
+\begin{figure}[htb]
+\begin{lstlisting}[
+    language=Solidity, 
+    basicstyle=\tiny,
+    label={lst:premium_condition_options},
+    caption={The condition to redeem and refund the premium for American Call Option-style Atomic Swaps.}
+]
 // Premium is refundable for Alice only when Alice initiates
 // but Bob does not participate after premium's timelock expires
 modifier isPremiumRefundable(bytes32 secretHash) {
@@ -149,19 +146,34 @@ modifier isPremiumRedeemable(bytes32 secretHash) {
     _;
 }
 \end{lstlisting}
-\label{code:premium_condition_options}
-\caption{The condition to redeem and refund the premium for American Call Option-style Atomic Swaps.}
 \end{figure}
 
+Similar with the \textit{PremiumState}, \textit{AssetState} has 4 states: empty, filled, redeemded and refunded.
+The code is shown in Listing~\ref{lst:state}.
+\textit{Empty} means Alice has not \textbf{initiate}d, and has not deposited the premium yet.
+\textit{Filled} means Alice has deposited the premium, indicating that Alice has \textbf{initiate}d, but neither Alice nor Bob \textbf{refund}s or \textbf{redeem}s the premium.
+\textit{Redeemded} and \textit{refunded} means Bob redeems the premium and Alice refunds the premium, respectively.
 
+\paragraph{\textit{isPremiumRedeemable()} and \textit{isPremiumRefundable()}}
+Checking whether the premium is redeemable or refundable is the most critical part of our protocols.
+Because the premium payment relies on the $Coin_2$ payment, checking the premium refundability and redeemability involves checking the $Coin_2$ status - \textit{AssetState} in our implementation.
+
+\textit{isPremiumRedeemable()} and \textit{isPremiumRefundable()} for the currency exchange-style Atomic Swap are shown in Figure~\ref{lst:premium_condition_currency}, and for the American Call Option-style Atomic Swap are shown in Figure~\ref{lst:premium_condition_options}.
+The currency exchange-style Atomic Swap and the American Call Option-style Atomic Swap differ when $AssetState = Redeemed$:
+In the currency exchange-style Atomic Swap the premium belongs to Alice while in the American Call Option-style Atomic Swap the premium belongs to Bob.
 
 \paragraph{\textit{redeemPremium()} and \textit{refundPremium()}}
 
 \textit{redeemPremium()} and \textit{refundPremium()} are similar with \textit{redeemAsset()} and \textit{refundAsset()}, and their executions are secured by \textit{isPremiumRedeemable()} and \textit{isPremiumRefundable()}.
-The code is shown in Figure~\ref{code:premium_redeem_refund_function}.
+The code is shown in Listing~\ref{lst:premium_redeem_refund_function}.
 
-\begin{figure}
-\begin{lstlisting}[language=Solidity, basicstyle=\tiny]
+\begin{figure}[htb]
+\begin{lstlisting}[
+    language=Solidity, 
+    basicstyle=\tiny,
+    label={lst:premium_redeem_refund_function},
+    caption={The functions for redeeming and refunding the premium.}
+]
 function redeemPremium(bytes32 secretHash)
     public
     isPremiumRedeemable(secretHash)
@@ -195,17 +207,14 @@ function redeemPremium(bytes32 secretHash)
     );
 }
 \end{lstlisting}
-\label{code:premium_redeem_refund_function}
-\caption{The functions for redeeming and refunding the premium.}
 \end{figure}
-
 
 \subsection{Bitcoin script}
 
 % bitcoin cannot implement
 % because stateless
 Unfortunately, Bitcoin does not support our protocols, because Bitcoin does not support the stateful transaction functionalities.
-First, the Bitcoin script is designed to be stateless~\ref{okupski2014bitcoin}.
+First, the Bitcoin script is designed to be stateless~\cite{okupski2014bitcoin}.
 Second, there is no such things like the Ethereum's ``world state''~\cite{wood2014ethereum} in Bitcoin:
 The only state in Bitcoin is the Unspent Transaction Outputs (UTXOs)~\cite{nakamoto2008bitcoin}.
 
@@ -253,11 +262,16 @@ Finally, Bob signs the transaction and sends it to Alice.
 At this stage, both Alice and Bob have the mutually signed transaction containing both the premium transaction and the $Coin_2$ transaction.
 
 \paragraph{The premium transaction}
-Figure~\ref{code:bitcoin_contract_currency_exchange} and Figure~\ref{code:bitcoin_contract_option} show the premium transaction in the Bitcoin script
+Listing~\ref{lst:bitcoin_contract_currency_exchange} and Listing~\ref{lst:bitcoin_contract_option} show the premium transaction in the Bitcoin script
 , for both the currency-style and the American Call Option-style Atomic Swaps, respectively.
 
-\begin{figure}
-\begin{lstlisting}[language=Solidity, basicstyle=\tiny]
+\begin{figure}[htb]
+\begin{lstlisting}[
+    language=Solidity, 
+    basicstyle=\tiny,
+    label={lst:bitcoin_contract_currency_exchange},
+    caption={The currency exchange-style Atomic Swap contract in Bitcoin script.}
+]
 ScriptSig:
     Redeem: <Bob_sig> <Bob_pubkey> 1
     Refund: <Alice_sig> <Alice_pubkey> 0
@@ -274,13 +288,16 @@ ScriptPubKey:
     OP_ENDIF
     OP_EQUALVERIFY
     OP_CHECKSIG
-\end{lstlisting}
-\label{code:bitcoin_contract_currency_exchange}
-\caption{The currency exchange-style Atomic Swap contract in Bitcoin script}
+\end{lstlisting}  
 \end{figure}
 
-\begin{figure}
-\begin{lstlisting}[language=Solidity, basicstyle=\tiny]
+\begin{figure}[htb]
+\begin{lstlisting}[
+    language=Solidity, 
+    basicstyle=\tiny,
+    label={lst:bitcoin_contract_option},
+    caption={The American Call Option-style Atomic Swap contract in Bitcoin script.}
+]
 ScriptSig:
     Redeem: <Bob_sig> <Bob_pubkey> 1
     Refund: <Alice_sig> <Alice_pubkey> 0
@@ -301,8 +318,6 @@ ScriptPubKey:
     OP_EQUALVERIFY
     OP_CHECKSIG
 \end{lstlisting}
-\label{code:bitcoin_contract_option}
-\caption{The American Call Option-style Atomic Swap contract in Bitcoin script}
 \end{figure}
 
 % OP_LOOKUP_OUTPUT is from https://bitcoin.stackexchange.com/questions/36229/bitcoin-script-for-a-competitive-crowdfunding-like-contract
