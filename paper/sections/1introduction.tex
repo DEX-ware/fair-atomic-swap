@@ -19,9 +19,9 @@ Based on this observation, we evaluate the unfairness of the Atomic Swap by esti
 Estimating the premium is based on the Cox-Ross-Rubinstein model - the conventional model for pricing the American-style options in Finance.
 After that, we propose two fair Atomic Swap protocols, which implement the premium mechanism upon the original Atomic Swap protocol.
 One of our proposed protocols is for the currency exchange, and the other is for the American Call Options.
-Both protocols can be deployed on existing blockchains:
-They can be directly deployed on blockchains supporting smart contracts (e.g. Ethereum),
-and can be deployed on blockchains supporting scripts (e.g. Bitcoin) by adding a single opcode.
+Both protocols can be implemented on existing blockchains:
+They can be directly implemented on blockchains supporting smart contracts (e.g. Ethereum),
+and can be implemented on blockchains supporting scripts (e.g. Bitcoin) by adding a single opcode.
 
 \subsection{Our contributions}
 
@@ -62,10 +62,10 @@ The two protocols achieve the fairness by implementing the premium mechanism upo
 In the currency exchange-style protocol, if the swap is successful, the premium goes back to the initiator, otherwise it goes to the participant.
 In the American Call Option-style protocol, the premium goes to the participant once the participant's asset is redeemed or refunded.
 
-\paragraph{We describe how to deploy our proposed protocols on existing blockchains.}
-We give solutions to deploy our protocols on existing blockchains, including blockchains supporting smart contracts and blockchains supporting scripts only.
-For blockchains supporting smart contracts such as Ethereum, our protocols can be directly deployed.
-For blockchains only supporting scripts such as Bitcoin, our protocols can be deployed by adding one more opcode.
+\paragraph{We describe how to implement our proposed protocols on existing blockchains.}
+We give solutions to implement our protocols on existing blockchains, including blockchains supporting smart contracts and blockchains supporting scripts only.
+For blockchains supporting smart contracts such as Ethereum, our protocols can be directly implemented.
+For blockchains only supporting scripts such as Bitcoin, our protocols can be implemented by adding one more opcode.
 We call the opcode ``OP\_LOOKUP\_OUTPUT'', and it looks up the owner of a specific output.
 We use Solidity as an example of smart contracts, and the Bitcoin script code as an example of scripts.
 
