@@ -17,12 +17,12 @@ Is the protocol aiming at currency exchange or the American Call Options?
 To our knowledge, the Atomic Swap protocol is originally designed for the fair exchange between different cryptocurrencies.
 However, according to our analysis, the protocol is equivalent to the premium-free American Call Options, and is unfair due to the free premium.
 
-The currency exchange and the American Call Option differ in Finance: the currency exchange is a type of Spots~\cite{hull1991introduction}, while the American Call Option is a type of Options.
+The currency exchange and the American Call Option differ in Finance: The currency exchange is a type of Spots~\cite{hull1991introduction}, while the American Call Option is a type of Options.
 The Spot Contract and the Option Contract aim at different application scenarios: The Spot Contract aims at exchanging the ownership of assets, while the Option Contract aims at providing the option buyer an ``option'' to trade.
 More specifically, Spots and Options differ in the following aspects:
 
 \begin{itemize}
-    \item The Spot Contract is exercised immediately, while the Option Contract is exercised on a specified future date.
+    \item The Spot Contract is exercised immediately, while the Option Contract is exercised on or prior to a specified date in the future.
     \item The Spot Contract cannot be aborted once signed by both parties, while in the Option Contract the option buyer can abort the contract with the loss of the premium.
     \item The Spot Contract itself has no value, while the Option Contract itself has value - the premium.
 \end{itemize}
@@ -36,7 +36,7 @@ According to Section~\ref{subsubsec:diff_spot_option}, the currency exchange-sty
 For the currency exchange, both parties should not abort the contract once signed.
 However, in Atomic Swaps, Alice can abort the swap by not releasing the hash preimage.
 Therefore, we should discourage Alice to abort the swap.
-To achieve this, we can use the premium mechanism as the collateral: Alice should deposit the premium besides her asset when \textbf{initiate}
+To achieve this, we can use the premium mechanism as the collateral: Alice should deposit the premium besides her asset when \textbf{initiate}.
 The premium should follow that:
 
 \begin{itemize}
@@ -69,8 +69,8 @@ the premium in American Call Option-style Atomic Swaps should follow that:
 
 \subsection{Our protocols}
 
-We propose two fair Atomic Swap protocols based on the original Atomic Swap protocol and our identified design objectives in Section~\ref{subsubsec:design_obj}.
-One of the two protocols is for currency exchange, and the other one is for American Call Options.
+We propose two fair Atomic Swap protocols based on the original Atomic Swap protocol and our design objectives in Section~\ref{subsubsec:design_obj}.
+One of the two protocols is for currency exchange, and the other is for American Call Options.
 
 Formally, define an Atomic Swap protocol $\mathcal{AS}'$ as
 

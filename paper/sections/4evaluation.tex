@@ -107,21 +107,21 @@ Therefore, we utilize the CRR Model to evaluate the unfairness of the Atomic Swa
 
 \subsubsection{The Cox-Ross-Rubinstein Model Explained}
 
-The CRR Model, which is also called the Binomial Options Pricing Model (BOPM), provides a generalizable numerical method for pricing the options.
+The CRR Model - a.k.a. the Binomial Options Pricing Model (BOPM) - provides a generalizable numerical method for pricing the options.
 Intuitively, the CRR model enumerates all possible prices of the asset in the near future based on the price volatility,
 then reverse-engineers the option price based on the enumerated prices.
 % binomial tree
-Enumerating the possible prices utilizes a binomial tree, where each node represents a point of time.
 The model assume that for each step on the binomial tree, the price rises or falls by a fixed rate.
+Enumerating the possible prices constructs a binomial tree, where each node represents a possible price at a point of time.
 % reverse engineering
-Reverse engineering the option price relies on iteratively back propagating the option price for each level of the binomial tree.
+By iteratively back propagating the option price from the leaves to the root of the binomial tree, the option price will be revealed.
 
-Formally, pricing the American Call Option $\Pi = (\pi_1, \pi_2, K, A, T, C)$ by using the CRR model is as follows:
+Formally, using the CRR model to price the American Call Option $\Pi = (\pi_1, \pi_2, K, A, T, C)$ with the underlying price $S_t$ of $\pi_2$ follows the steps below:
 
 \begin{enumerate}
     \item Creating the binomial price tree
-    \item Finding the option prices for leaf nodes
-    \item Finding the option prices for earlier nodes 
+    \item Calculating the option prices for leaf nodes
+    \item Iteratively reconstructing the option prices for earlier nodes 
 \end{enumerate}
 
 
@@ -132,7 +132,7 @@ Formally, pricing the American Call Option $\Pi = (\pi_1, \pi_2, K, A, T, C)$ by
     \label{fig:binomial_tree}
 \end{figure}
 
-\paragraph{Creating the binomial price tree}
+\paragraph{Creating the binomial price tree.}
 The binomial price tree $\mathcal{T}$ of the height $n$ represents the possible future prices within the time period $T$ discretely, as shown in Fig.~\ref{fig:binomial_tree}.
 $n$ can be picked arbitrarily. With larger $n$, the result will be more accurate, but the computing overhead will be heavier.
 Each node $\mathcal{T}_{t, i}$ is attached with the asset price $S_{t, i}$ and the option price $C_{t, i}$,
@@ -163,24 +163,23 @@ $\bar{S}$ is the average value of all $S_i$s within the $d$ days.
 
 The asset price $S_{t, i}$ can also be computed as $S_{t, i} = S_{0, 1} \cdot u^{N_u - N_d}$, where $S_{0, 1}$ is the spot price, and $N_u, N_d$ are the numbers of move-up and move-down, respectively.
 
-\paragraph{Finding the option price for each leaf node}
+\paragraph{Calculating the option prices for leaf nodes.}
 In the first step, only the asset prices are determined rather than the option prices.
 This step further determines the option prices for leaf nodes.
 For each leaf node $\mathcal{T}_{n, i}$, the option price (for Call Options) is $C_{n, i} = max[(S_{n, i} - K), 0]$.
 
-\paragraph{Finding the option prices for earlier nodes}
+\paragraph{Iteratively reconstructing the option prices for earlier nodes.}
 We back-propagate the option prices for leaf nodes to earlier option prices.
 More specifically, the earlier option price is calculated from the option prices of the later two nodes weighted by their state transition possibilities.
 The move-up and move-down possibility are $p$ and $q$ where $p + q = 1$, and the risk-free rate is $r = q$.
 
-The earlier option price is calculated from later option prices as:
+The earlier option price $C_{t - \Delta t, i}$ is calculated from later option prices as:
 
-\begin{align} 
+\begin{align}
 C_{t - \Delta t, i} = e^{-r \Delta t} (p C_{t, i} + q C_{t, i+1})
 \end{align}
 
-where $p, q, r$ are computed as
-
+where $\Delta t = \frac{T}{n}$, and $p, q, r$ are computed as
 
 \begin{align} 
 p &= \frac{e^{(r-q)\Delta t} - d}{u - d}\\
@@ -188,13 +187,7 @@ q &= 1 - p\\
 r &= q
 \end{align}
 
-such that the related binomial distribution simulates the geometric Brownian motion of the underlying asset value with parameters $r$ and $\sigma$.
-
-For American Options, since the option can be exercised prior to expiry, the option price at each node is
-
-\begin{align}
-C_{t - \Delta t, i} = max[e^{-r \Delta t} (p C_{t, i} + q C_{t, i+1}), K]
-\end{align}
+such that the option price distribution simulates the geometric Brownian motion with parameters $r$ and $\sigma$.
 
 The earliest option price $S_{0, 1}$ - the estimated option price - can be calculated by iteratively back-propagating the later option prices. 
 

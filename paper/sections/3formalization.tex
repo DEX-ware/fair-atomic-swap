@@ -22,7 +22,7 @@ $$\Pi = (\pi_1, \pi_2, K, A, T, C)$$
 
 where
 $\pi_1$ and $\pi_2$ is the currency of the option buyer and the asset of the option seller, respectively; 
-$K$ is the strike price with the unit $\pi_2 / \pi_1$ - the price of an unit of $\pi_2$ by using $\pi_1$;
+$K$ is the strike price with the unit $\pi_2 / \pi_1$ - the price of $\pi_2$ measured in $\pi_1$;
 $A$ is the amount of the asset $\pi_2$ that the option seller wants to sell;
 $T$ is the agreed strike time;
 $C$ is the \textit{premium} with the unit $\pi_1$.
@@ -45,7 +45,7 @@ The underlying value of $\pi_2$ is fluctuating over time due to the market mecha
 Intuitively, if the price of $\pi_2$ rises when the option buyer exercises $\Pi$, the option buyer profits, because he buys $\pi_2$ with the price lower than the current market price.
 Formally, we denote the asset's underlying value (with the unit $\pi_2 / \pi_1$) at the time $t$ as $S_t$.
 Assume the option buyer exercises $\Pi$ at a time $T' \leq T$, he can profit $[(S_{T'} - K) A - C]$ $\pi_1$.
-Note that the profit can be negative.
+Note that the value can be negative.
 
 
 
@@ -114,6 +114,7 @@ Alice and Bob can perform the refund by publishing $tx_{\mathcal{R}, 1}$ and $tx
 _2$, respectively.
 
 % procedure
+\paragraph{Process.}
 Alice and Bob proceeds the Atomic Swap as follows:
 Alice and Bob first creates addresses by \textbf{Setup}.
 Alice then \textbf{initiate}s the swap, and Bob \textbf{participate}s in the swap.
