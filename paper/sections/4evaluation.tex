@@ -1,4 +1,4 @@
-\section{Evaluating the unfairness of Atomic Swaps}
+\section{Unfairness of Atomic Swaps}
 \label{sec:evaluation}
 
 In this section, we evaluate the unfairness of Atomic Swaps.
@@ -20,7 +20,7 @@ All experiments run on a MacBook Pro with a 2.2 GHz Intel Core i7 Processor, a 1
 
 \begin{figure}
     \includegraphics[width=\linewidth]{unfair_diagram.eps}
-    \caption{Visualizing the unfairness. The x-axis is time (in days), and the y-axis is the exchange rate change in percentage. For a point $(x, y)$, if $y > 0$, the point falls to the profit area (the red area on the figure), and the Atomic Swap initiator will profit $y$ today. If $y < 0$ the point falls to the risk area (the red area on the figure), and the Atomic Swap initiator will mitigate the loss of $y$ today.}
+    \caption{Visualizing the unfairness. The x-axis is time (in days), and the y-axis is the exchange rate change in percentage. For a point $(x, y)$, if $y > 0$, the point falls to the profit area (the red area on the figure), and the Atomic Swap initiator will profit $y$ today. If $y < 0$ the point falls to the risk area (the red area on the figure), and the Atomic Swap initiator will mitigate the loss of $y$ today. \JS{I very much like this figure, but somehow this is not connected to any analysis, e.g. figure 2 (added by Runchao)}}
     \label{fig:unfair_diagram}
 \end{figure}
 
@@ -31,11 +31,11 @@ We then quantifying it by using the historical data.
 
 % scenario
 \paragraph{Quantifying the unfairness.}
-Recall that 24 hours is the default timelock period of the participant,
+Recall that 24 hours is the default timelock period of the participant, \JS{The “24 hours” was not mentioned before in the protocol. In fact, our discussion on this unfairness w.r.t. 24hour-48hour is not presented in the paper.}
 and the initiator has advantage over the participant within the timelock of 24 hours.
-We assume the initiator launches an atomic swap with the value of $x$ USD every day.
+We assume the initiator launches an atomic swap with the value of $x$ USD every day. \JS{This is not a realistic and convincing assumption, we should present it in a different way. In fact, we only need to say that we test the unfairness by using a value of x usd, then we show the degree of unfairness in dollars based on the historical data. (added by Runchao)}
 For each day, the initiator may either profit a percent $\alpha$ of $x$ directly if his asset price rises,
-or mitigate a percent $\beta$ of $x$ by aborting the swap if his asset price drops on average.
+or mitigate a percent $\beta$ of $x$ by aborting the swap if his asset price drops on average. \JS{The analysis here does not see correct. Let’s talk and check.}
 Assume the possibility for the initiator's asset price to rise is $P_{\alpha}$, and to drop is $P_{\beta}$.
 Then, the expected profit rate is $E_{\alpha} = \alpha P_{\alpha}$,
 and the expected mitigated risk rate is $E_{\beta} = \beta P_{\beta}$.

@@ -1,10 +1,10 @@
 \section{Introduction}
 \label{sec:intro}
 
-The Atomic Swap protocol is that two parties exchange their assets ``atomically'' without trusted third parties.
+The Atomic Swap protocol allows two parties to exchange their assets ``atomically'' without trusted third parties.
 ``Atomic'' means the swap either succeeds or fails for both parties at any given time.
 In blockchains, Atomic Swap is usually implemented by using Hashed Timelocked Contracts (HTLCs).
-The HTLC is a type of transaction that, the payee should provide the preimage of a hash value before a specified deadline, otherwise the payment fails - The money goes back to the payer and the payee will not get any money.
+The HTLC is a type of transaction that, the payee should provide the preimage of a hash value before a specified deadline, otherwise the payment fails - the money goes back to the payer and the payee will not get any money.
 
 However, the fairness of the Atomic Swap is never studied formally.
 In particular, in Atomic Swaps, the initiator can control the settlement time, but the participant cannot.
@@ -14,9 +14,10 @@ In this paper, we prove that the Atomic Swap is unfair to the participant, and e
 In particular, we formally model the Atomic Swap and the American Call Option in Finance,
 and prove that the Atomic Swap is equivalent to a premium-free American Call Option.
 Then we point out that the Atomic Swap is unfair to the participant, because the initiator is not required to pay for the premium.
+\TODO{explain more how initiator can speculate without any risk}
 In this way, the initiator can speculate without any risk, by exploiting the exchange rate fluctuation.
 Based on this observation, we evaluate the unfairness of the Atomic Swap by estimating how much the premium should be for mainstream cryptocurrency pairs.
-Estimating the premium is based on the Cox-Ross-Rubinstein model - the conventional model for pricing the American-style options in Finance.
+Estimating the premium is based on the Cox-Ross-Rubinstein model~\cite{cox1979option} - the conventional model for pricing the American-style options in Finance.
 After that, we propose two fair Atomic Swap protocols, which implement the premium mechanism upon the original Atomic Swap protocol.
 One of our proposed protocols is for the currency exchange, and the other is for the American Call Options.
 Both protocols can be implemented on existing blockchains:
@@ -31,10 +32,10 @@ Our contributions are as follows:
 We use formal languages to define the Atomic Swap and the American Call Option.
 In particular, we describe them as protocols, and prove that the Atomic Swap is equivalent to the premium-free American Call Option:
 The initiator and the participant in Atomic Swap are the option buyer and the option seller in American Call Options, respectively;
-The initiator asset and the participant asset in Atomic Swap are the used currency and the underlying asset in American Call Options, respectively;
-The participant asset's timelock in Atomic Swap is the strike time in American Call Options;
-The current price of the participant asset in Atomic Swap is the strike price in American Call Options;
-Redeeming cryptocurrencies in Atomic Swap is exercising the contract in the American Call Options.
+the initiator asset and the participant asset in Atomic Swap are the used currency and the underlying asset in American Call Options, respectively;
+the participant asset's timelock in Atomic Swap is the strike time in American Call Options;
+the current price of the participant asset in Atomic Swap is the strike price in American Call Options;
+redeeming cryptocurrencies in Atomic Swap is exercising the contract in the American Call Options.
 
 \paragraph{Based on our formalization, we prove that the Atomic Swap is unfair to the participant.}
 We point out that, according to the option theory in Finance, the Atomic Swap - modelled as the premium-free American Call Option - is unfair to the participant, especially in the highly volatile cryptocurrency market.
@@ -48,7 +49,7 @@ We evaluate the unfairness of the Atomic Swaps for mainstream cryptocurrency par
 Our evaluation and comparison consist of two parts: 1) quantifying the profit and the mitigated risk of the initiator, 2) estimating how much the premium should be.
 % first
 First, we quantify the profit and the mitigated risk of the initiator based on historical exchange rate volatility.
-Our results show that with the default strike time of 24 hours, the profit and the mitigated risks of our selected cryptocurrency pairs are about 1\%, while for stocks and fiat currencies the values are abour 0.3\% and 0.15\%, respectively.
+Our results show that with the default strike time of 24 hours, the profit and the mitigated risks of our selected cryptocurrency pairs are about 1\%, while for stocks and fiat currencies the values are about 0.3\% and 0.15\%, respectively.
 % second
 Second, we use the Cox-Ross-Rubinstein option pricing model to estimate how much the premium should be for Atomic Swaps in cryptocurrencies.
 In Finance, the Cox-Ross-Rubinstein model is the conventional option pricing model for American-style options.
@@ -59,8 +60,9 @@ Also, the premium values rise for all items with the strike time increasing, the
 Based on our observation that the unfairness is introduced by the unpaid premium,
 we then propose two fair Atomic Swap protocols, one is for currency exchange and the other is for American Call Options.
 The two protocols achieve the fairness by implementing the premium mechanism upon the original protocol - The initiator should deposit the premium on the participant's blockchain when initiating the swap.
-In the currency exchange-style protocol, if the swap is successful, the premium goes back to the initiator, otherwise it goes to the participant.
-In the American Call Option-style protocol, the premium goes to the participant once the participant's asset is redeemed or refunded.
+\TODO{maybe more explanation}
+In the currency exchange-style protocol, the premium will go to the participant if the initiator misbehaves, otherwise it will go back to the initiator.
+In the American Call Option-style protocol, the premium goes to the participant if the participant behaves well, otherwise it will go back to the initiator.
 
 \paragraph{We describe how to implement our proposed protocols on existing blockchains.}
 We give solutions to implement our protocols on existing blockchains, including blockchains supporting smart contracts and blockchains supporting scripts only.
