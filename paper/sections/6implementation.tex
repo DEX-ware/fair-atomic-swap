@@ -257,7 +257,7 @@ Finally, both Alice and Bob sign and publish the transaction with the 2-2 multi-
 Note that the second step above is done off-chain:
 First, Bob creates the $Coin_2$ transaction and sends it to Alice.
 Second, Alice creates the premium transaction which uses OP\_LOOKUP\_OUTPUT to check the ownership of $Coin_2$ transaction outputs.
-Thrid, Alice merges the $Coin_2$ transaction and the premium transaction to a single transaction, signs the transaction, and sends it to Bob.
+Third, Alice merges the $Coin_2$ transaction and the premium transaction to a single transaction, signs the transaction, and sends it to Bob.
 Finally, Bob signs the transaction and sends it to Alice.
 At this stage, both Alice and Bob have the mutually signed transaction containing both the premium transaction and the $Coin_2$ transaction.
 
