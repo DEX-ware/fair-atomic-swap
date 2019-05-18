@@ -85,9 +85,10 @@ Also, the premium values rise for all items with the strike time increasing, the
 Based on our observation that the unfairness is introduced by the unpaid premium,
 we then propose two fair Atomic Swap protocols, one is for currency exchange and the other is for American Call Options.
 The two protocols achieve the fairness by implementing the premium mechanism upon the original protocol - The initiator should deposit the premium on the participant's blockchain when initiating the swap.
-\TODO{maybe more explanation}
+\MOD{
 In the currency exchange-style protocol, the premium will go to the participant if the initiator misbehaves, otherwise it will go back to the initiator.
 In the American Call Option-style protocol, the premium goes to the participant if the participant behaves well, otherwise it will go back to the initiator.
+}
 
 \paragraph{We describe how to implement our proposed protocols on existing blockchains.}
 We give solutions to implement our protocols on existing blockchains, including blockchains supporting smart contracts and blockchains supporting scripts only.
