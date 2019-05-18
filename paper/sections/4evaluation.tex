@@ -112,7 +112,7 @@ In addition to the unfairness results like the previous observation, we quantify
 
 
 \subsection{Estimating the premium}
-
+\JS{Mention that the premium is used to guarantee the good behaviors, and eliminate the unfairness coming from the fact that the initiator can abort the contract with no punishment. (added by Runchao)}
 To make the Atomic Swap fair, the initiator should pay for the premium.
 In other words, the unfair part of the Atomic Swap is the unpaid premium from the initiator.
 We evaluate the unfairness of the Atomic Swap by estimating the premium.
@@ -124,7 +124,7 @@ Therefore, we utilize the CRR Model to evaluate the unfairness of the Atomic Swa
 
 \subsubsection{The Cox-Ross-Rubinstein Model Explained}
 
-The CRR Model - a.k.a. the Binomial Options Pricing Model (BOPM) - provides a generalizable numerical method for pricing the options.
+The Cox-Ross-Rubinstein (CRR) Model~\cite{cox1979option} - a.k.a. the Binomial Options Pricing Model (BOPM) - provides a generalizable numerical method for pricing the options.
 Intuitively, the CRR model enumerates all possible prices of the asset in the near future based on the price volatility,
 then reverse-engineers the option price based on the enumerated prices.
 % binomial tree
