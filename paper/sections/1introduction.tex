@@ -6,33 +6,49 @@ The Atomic Swap protocol allows two parties to exchange their assets ``atomicall
 In blockchains, Atomic Swap is usually implemented by using Hashed Timelocked Contracts (HTLCs).
 The HTLC is a type of transaction that, the payee should provide the preimage of a hash value before a specified deadline, otherwise the payment fails - the money goes back to the payer and the payee will not get any money.
 
-However, the fairness of the Atomic Swap is never studied formally.
-In particular, in Atomic Swaps, the initiator can control the settlement time, but the participant cannot.
+% research problem
+However, the Atomic Swap is atomic does not mean it is fair.
+In particular, in an Atomic Swap, the swap initiator can decide whether to proceed the swap, and the default maximum time for him to decide is 24 hours~\cite{nolan2013alt}.
 Whether this fact influences the fairness of the Atomic Swap remains unknown.
 
-\MOD{
-\textbf{Optionality of the Atomic Swap.}
-The Atomic Swap takes a long time - the default maximum time of an Atomic Swap is 24 hours~\cite{nolan2013alt}.
-More specifically, in an Atomic Swap, the swap initiator can decide whether to proceed the swap, and the default maximum time for him to decide is 24 hours.
-This makes the Atomic Swap to have Optionality.
-In Finance, an investment is said to have Optionality if settling it is optional rather than mandatory.
-However, the Atomic Swap is designed for currency exchange, and the Atomic Swap should not have optionality - it should be settled instantly without any chance of aborting.}
+% optionality
+We further observe that, this fact makes the Atomic Swap to have Optionality.
+In Finance, an investment is said to have Optionality if 1) settling this investment happens in the future rather than instantly; 2) settling this investment is optional rather than mandatory.
+For an investment with Optionality, the option itself has value besides the underlying asset~\cite{higham2004introduction}, and the value is called the \textit{premium}.
 
-In this paper, we prove that the Atomic Swap is unfair to the participant, and extends the original Atomic Swap protocol to fair ones.
-In particular, we formally model the Atomic Swap and the American Call Option in \MOD{f}inance,
-and prove that the Atomic Swap is equivalent to a premium-free American Call Option.
-Then we point out that the Atomic Swap is unfair to the participant, because the initiator is not required to pay for the premium.
-\MOD{Without premium, the initiator can abort the swap without any loss.
-In this way, the initiator can speculate without any risk - he can choose to proceed the swap when his asset price rises, and abort the swap when his asset price drops.}
-Based on this observation, we evaluate the unfairness of the Atomic Swap by estimating how much the premium should be for mainstream cryptocurrency pairs.
-Estimating the premium is based on the Cox-Ross-Rubinstein model~\cite{cox1979option} - the conventional model for pricing the American-style options in \MOD{f}inance.
-After that, we propose two fair Atomic Swap protocols, which implement the premium mechanism upon the original Atomic Swap protocol.
-One of our proposed protocols is for the currency exchange, and the other is for the American Call Options.
-Both protocols can be implemented on existing blockchains: \HY{Will it be better not to capitalize? (While it is acceptable to capitalize the first letter after the colon in American English, it is not the case in British English, except where a proper noun immediately follows a colon. \url{https://en.wikipedia.org/wiki/Colon_(punctuation)})}
-They can be directly implemented on blockchains supporting smart contracts (e.g. Ethereum),
-and can be implemented on blockchains supporting scripts (e.g. Bitcoin) by adding a single opcode.
+% atomic swap should not have optionality
+However, the Atomic Swap is designed for currency exchange rather than options, and the currency exchange should not have Optionality.
+Once agreed by both parties, the currency exchange is settled without any chance for both parties to regret.
+Moreover, the Atomic Swap does not have the premium mechanism.
+Although the swap initiator decides whether to proceed or abort the swap, he does not need to pay for the option.
+
+% what we do briefly
+In this paper, we prove that the Atomic Swap is unfair to the participant, and propose two fair Atomic Swap variants.
+We start from formally modeling the Atomic Swap and the American Call Option in Finance,
+then prove that the Atomic Swap is equivalent to a premium-free American Call Option based on our model.
+Following this proof, we then evaluate how unfair the Atomic Swap is from two different perspectives: quantifying the unfairness and estimating the premium.
+After that, we propose two fair Atomic Swap protocols with the premium mechanism, in which one is for currency exchange while the other is for American Call Options.
+Both protocols can be implemented on existing blockchains, and we give reference implementations as well.
+Blockchains with smart contracts (e.g. Ethereum) directly support our protocols, and blockchains with scripts only (e.g. Bitcoin) can support out protocols by adding a simple opcode.
+
+
+
 
 \subsection{Our contributions}
+
+% In this paper, we prove that the Atomic Swap is unfair to the participant, and extends the original Atomic Swap protocol to fair ones.
+% In particular, we formally model the Atomic Swap and the American Call Option in \MOD{f}inance,
+% and prove that the Atomic Swap is equivalent to a premium-free American Call Option.
+% Then we point out that the Atomic Swap is unfair to the participant, because the initiator is not required to pay for the premium.
+% \MOD{Without premium, the initiator can abort the swap without any loss.
+% In this way, the initiator can speculate without any risk - he can choose to proceed the swap when his asset price rises, and abort the swap when his asset price drops.}
+% Based on this observation, we evaluate the unfairness of the Atomic Swap by estimating how much the premium should be for mainstream cryptocurrency pairs.
+% Estimating the premium is based on the Cox-Ross-Rubinstein model~\cite{cox1979option} - the conventional model for pricing the American-style options in \MOD{f}inance.
+% After that, we propose two fair Atomic Swap protocols, which implement the premium mechanism upon the original Atomic Swap protocol.
+% One of our proposed protocols is for the currency exchange, and the other is for the American Call Options.
+% Both protocols can be implemented on existing blockchains: \HY{Will it be better not to capitalize? (While it is acceptable to capitalize the first letter after the colon in American English, it is not the case in British English, except where a proper noun immediately follows a colon. \url{https://en.wikipedia.org/wiki/Colon_(punctuation)})}
+% They can be directly implemented on blockchains supporting smart contracts (e.g. Ethereum),
+% and can be implemented on blockchains supporting scripts (e.g. Bitcoin) by adding a single opcode.
 
 Our contributions are as follows:
 
@@ -78,6 +94,15 @@ For blockchains supporting smart contracts such as Ethereum, our protocols can b
 For blockchains only supporting scripts such as Bitcoin, our protocols can be implemented by adding one more opcode.
 We call the opcode ``OP\_LOOKUP\_OUTPUT'', and it looks up the owner of a specific output.
 We use Solidity as an example of smart contracts, and the Bitcoin script code as an example of scripts.
+
+
+
+
+
+
+
+
+
 
 \subsection{Paper structure}
 
