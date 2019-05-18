@@ -14,8 +14,8 @@ In this paper, we prove that the Atomic Swap is unfair to the participant, and e
 In particular, we formally model the Atomic Swap and the American Call Option in Finance,
 and prove that the Atomic Swap is equivalent to a premium-free American Call Option.
 Then we point out that the Atomic Swap is unfair to the participant, because the initiator is not required to pay for the premium.
-\TODO{explain more how initiator can speculate without any risk}
-In this way, the initiator can speculate without any risk, by exploiting the exchange rate fluctuation.
+\MOD{Without premium, the initiator can abort the swap without any loss.
+In this way, the initiator can speculate without any risk - he can choose to proceed the swap when his asset price rises, and abort the swap when his asset price drops.}
 Based on this observation, we evaluate the unfairness of the Atomic Swap by estimating how much the premium should be for mainstream cryptocurrency pairs.
 Estimating the premium is based on the Cox-Ross-Rubinstein model~\cite{cox1979option} - the conventional model for pricing the American-style options in Finance.
 After that, we propose two fair Atomic Swap protocols, which implement the premium mechanism upon the original Atomic Swap protocol.
