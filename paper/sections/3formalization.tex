@@ -147,8 +147,7 @@ In detail,
 % misuse
 However, one may take both $Coin_1$ and $Coin_2$ if the other does not \textbf{redeem} or \textbf{refund} on time.
 For example, if Bob does not \textbf{redeem} $Coin_1$ after Alice \textbf{redeem} $Coin_2$ and $\delta_1$ expires, Alice can also \textbf{refund} $Coin_1$.
-But in this case it is Bob to blame, because he should have had enough time - at least $\delta_2 - \delta_1$ - to \textbf{redeem} $Coin_1$.
-\JS{How big this time period $\delta_2 - \delta_1$ is?}
+But in this case it is Bob to blame, because he should have had enough time - at least $\delta_2 - \delta_1$ \MOD{(24 hours by default)} - to \textbf{redeem} $Coin_1$.
 Another example is that Alice broadcasts the transaction of \textbf{redeem}ing $Coin_2$ after $\delta_2$, but Bob has already \textbf{refund} $Coin_2$.
 Therefore, Bob can also \textbf{redeem} $Coin_1$ by finding the preimage in Alice's \textbf{redeem} transaction before $\delta_1$.
 Similarly, it is Alice to blame, because she should have had enough time - before $\delta_2$ - to \textbf{redeem} $Coin_2$.
