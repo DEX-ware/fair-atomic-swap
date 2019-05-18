@@ -10,6 +10,14 @@ However, the fairness of the Atomic Swap is never studied formally.
 In particular, in Atomic Swaps, the initiator can control the settlement time, but the participant cannot.
 Whether this fact influences the fairness of the Atomic Swap remains unknown.
 
+\MOD{
+\textbf{Optionality of the Atomic Swap.}
+The Atomic Swap takes a long time - the default maximum time of an Atomic Swap is 24 hours~\cite{nolan2013alt}.
+More specifically, in an Atomic Swap, the swap initiator can decide whether to proceed the swap, and the default maximum time for him to decide is 24 hours.
+This makes the Atomic Swap to have Optionality.
+In Finance, an investment is said to have Optionality if settling it is optional rather than mandatory.
+However, the Atomic Swap is designed for currency exchange, and the Atomic Swap should not have optionality - it should be settled instantly without any chance of aborting.}
+
 In this paper, we prove that the Atomic Swap is unfair to the participant, and extends the original Atomic Swap protocol to fair ones.
 In particular, we formally model the Atomic Swap and the American Call Option in \MOD{f}inance,
 and prove that the Atomic Swap is equivalent to a premium-free American Call Option.
