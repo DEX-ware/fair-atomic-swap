@@ -69,13 +69,13 @@ We use S\&P500 and Dow Jones Index (DJI) as examples of stocks, and USD-EUR and 
 
 \begin{figure*}
     \includegraphics[width=\linewidth]{volatility_analysis.eps}
-    \caption{The daily percentage changes for all selected cryptocurrency pairs, stock indices and fiat currency pairs over one year (from 03/05/2018 to 03/05/2019). For each figure, $E_{\alpha}$, $E_{\beta}$, $max_\alpha$ and $max_\beta$ are the expected profit rate, the expected mitigated risk rate, the maximum daily profit and the maximum daily mitigated risk, respectively.}
+    \caption{The daily percentage changes for all selected cryptocurrency pairs, stock indices and fiat currency pairs over one year (from 03/05/2018 to 03/05/2019). For each figure, $E_{\alpha}$, $E_{\beta}$, $max_\alpha$ and $max_\beta$ are the expected profit rate, the expected mitigated risk rate, the maximum daily profit and the maximum daily mitigated risk, respectively. \JS{We cant actually see the different lines in the figure. This label also covers some of the data we want to present to the readers. (added by Runchao)}}
     \label{fig:volatility_analysis}
 \end{figure*}
 
 \begin{figure}
     \includegraphics[width=\linewidth]{vol_scatter.eps}
-    \caption{Visualizing the expected profit rate $E_\alpha$ and the expected mitigated risk rate $E_\beta$ for each cryptocurrency pair, stock index and fiat currency pair.}
+    \caption{Visualizing the expected profit rate $E_\alpha$ and the expected mitigated risk rate $E_\beta$ for each cryptocurrency pair, stock index and fiat currency pair. \JS{Enlarge the text. (added by Runchao)}}
     \label{fig:vol_scatter}
 \end{figure}
 
@@ -126,19 +126,18 @@ Therefore, we utilize the CRR Model to evaluate the unfairness of the Atomic Swa
 
 The Cox-Ross-Rubinstein (CRR) Model~\cite{cox1979option} - a.k.a. the Binomial Options Pricing Model (BOPM) - provides a generalizable numerical method for pricing the options.
 Intuitively, the CRR model enumerates all possible prices of the asset in the near future based on the price volatility,
-then reverse-engineers the option price based on the enumerated prices.
+then reverse-engineers the premium based on the enumerated prices.
 % binomial tree
-The model assume that for each step on the binomial tree, the price rises or falls by a fixed rate.
-Enumerating the possible prices constructs a binomial tree, where each node represents a possible price at a point of time.
+The model assume that for each step on the binomial tree, the asset price rises or falls by a fixed rate.
+Enumerating the possible asset prices constructs a binomial tree, where each node attaches an asset price and a premium price at a point of time.
 % reverse engineering
-By iteratively back propagating the option price from the leaves to the root of the binomial tree, the option price will be revealed.
+By iteratively back propagating the premium from the leaves to the root of the binomial tree, the premium will be revealed.
 
 Formally, using the CRR model to price the American Call Option $\Pi = (\pi_1, \pi_2, K, A, T, C)$ with the underlying price $S_t$ of $\pi_2$ follows the steps below:
-
 \begin{enumerate}
     \item Creating the binomial price tree
-    \item Calculating the option prices for leaf nodes
-    \item Iteratively reconstructing the option prices for earlier nodes 
+    \item Calculating the premiums for leaf nodes
+    \item Iteratively reconstructing the premiums for non-leaf nodes 
 \end{enumerate}
 
 
@@ -152,13 +151,15 @@ Formally, using the CRR model to price the American Call Option $\Pi = (\pi_1, \
 \paragraph{Creating the binomial price tree.}
 The binomial price tree $\mathcal{T}$ of the height $n$ represents the possible future prices within the time period $T$ discretely, as shown in Fig.~\ref{fig:binomial_tree}.
 $n$ can be picked arbitrarily. With larger $n$, the result will be more accurate, but the computing overhead will be heavier.
-Each node $\mathcal{T}_{t, i}$ is attached with the asset price $S_{t, i}$ and the option price $C_{t, i}$,
+Each node $\mathcal{T}_{t, i}$ is attached with the asset price $S_{t, i}$ and the premium $C_{t, i}$,
 where $t \in \{0, \frac{T}{n}, \frac{2T}{n}, \dots, T\}$ is the point of time and $i$ is the number of the node at its level.
 The CRR model assumes that the asset price will either move up or down by a specific factor per step in $\mathcal{T}$.
 The move-up factor is $u$, and the move-down factor is $d$.
 Accordingly, the price after one move-up is $S_{up} = u \cdot S$, and the price after one move-down is $S_{down} = d \cdot S$.
+\JS{S is not defined. Is it possible to stay with the existing notation, i.e. S_{t,i}? (added by Runchao)}
 
 $u$ and $d$ are calculated using the underlying annualized volatility $\sigma_a$ of the asset price:
+\JS{It’s quite interesting, this seems to suggest that the drop and gain are symmetric, as u\cdot d =1. For example, if there is a high risk, then there will be high gain. (added by Runchao)}
 
 \begin{align} 
 u &= e^{\sigma_a \sqrt{\frac{T}{n}}}\\
@@ -180,17 +181,17 @@ $\bar{S}$ is the average value of all $S_i$s within the $d$ days.
 
 The asset price $S_{t, i}$ can also be computed as $S_{t, i} = S_{0, 1} \cdot u^{N_u - N_d}$, where $S_{0, 1}$ is the spot price, and $N_u, N_d$ are the numbers of move-up and move-down, respectively.
 
-\paragraph{Calculating the option prices for leaf nodes.}
-In the first step, only the asset prices are determined rather than the option prices.
-This step further determines the option prices for leaf nodes.
-For each leaf node $\mathcal{T}_{n, i}$, the option price (for Call Options) is $C_{n, i} = max[(S_{n, i} - K), 0]$.
+\paragraph{Calculating the premiums for leaf nodes.}
+In the first step, only the asset prices are determined rather than the premiums.
+This step further determines the premiums for leaf nodes.
+For each leaf node $\mathcal{T}_{n, i}$, the premium (for Call Options) is $C_{n, i} = max[(S_{n, i} - K), 0]$.
 
-\paragraph{Iteratively reconstructing the option prices for earlier nodes.}
-We back-propagate the option prices for leaf nodes to earlier option prices.
-More specifically, the earlier option price is calculated from the option prices of the later two nodes weighted by their state transition possibilities.
+\paragraph{Iteratively reconstructing the premiums for earlier nodes.}
+We back-propagate the premiums for leaf nodes to earlier premiums.
+More specifically, the earlier premium is calculated from the premiums of the later two nodes weighted by their state transition possibilities.
 The move-up and move-down possibility are $p$ and $q$ where $p + q = 1$, and the risk-free rate is $r = q$.
 
-The earlier option price $C_{t - \Delta t, i}$ is calculated from later option prices as:
+The earlier premium $C_{t - \Delta t, i}$ is calculated from later premiums as:
 
 \begin{align}
 C_{t - \Delta t, i} = e^{-r \Delta t} (p C_{t, i} + q C_{t, i+1})
@@ -204,9 +205,11 @@ q &= 1 - p\\
 r &= q
 \end{align}
 
-such that the option price distribution simulates the geometric Brownian motion with parameters $r$ and $\sigma$.
+such that the premium distribution simulates the geometric Brownian motion with parameters $r$ and $\sigma$.
 
-The earliest option price $S_{0, 1}$ - the estimated option price - can be calculated by iteratively back-propagating the later option prices. 
+The earliest premium $S_{0, 1}$ - the estimated premium - can be calculated by iteratively back-propagating the later premiums. 
+
+\JS{A table summarizing the notations will be nice — there are too many different notations, and I cannot remember them all. (added by Runchao)}
 
 \subsubsection{Experiments}
 
