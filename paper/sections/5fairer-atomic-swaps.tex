@@ -84,11 +84,11 @@ The protocol follows the steps below:
 \begin{enumerate}
     \item \textbf{Setup}: Alice and Bob create addresses on both blockchains.
     In addition, Alice creates both contracts $\mathcal{C}_1$ and $\mathcal{C}_2$ and publishes them as transactions $tx_{\mathcal{C}, 1}$ and $tx_{\mathcal{C}, 2}$ on $BC_1$ and $BC_2$. 
-    \item \textbf{Initiate}: Alice locks her $x_1$ $Coin_1$ on $BC_1$, and lock her $pr$ on $BC_2$, both with the timelock $\Delta_1$.
-    \item \textbf{Participate}: Bob locks his $x_2$ $Coin_2$ on $BC_2$ with the timelock $\Delta_2 < \Delta_1$.
+    \item \textbf{Initiate}: Alice locks her $x_1$ $Coin_1$ on $BC_1$, and lock her $pr$ on $BC_2$, both with the timelock $\delta_1$.
+    \item \textbf{Participate}: Bob locks his $x_2$ $Coin_2$ on $BC_2$ with the timelock $\delta_2 < \delta_1$.
     \item \textbf{Redeem}: Alice redeems $x_2$ $Coin_2$ first, then Bob redeems $x_1$ $Coin_1$.
-    \item \textbf{Refund}: If Alice does not redeem $x_2$ $Coin_2$ before $\Delta_2$ expires, Bob can refund $x_2$ $Coin_2$ and redeem $pr$.
-    If Bob does not redeem $x_1$ $Coin_1$ before $\Delta_1$ expires, Alice can refund $x_1$ $Coin_1$ and $pr$.
+    \item \textbf{Refund}: If Alice does not redeem $x_2$ $Coin_2$ before $\delta_2$ expires, Bob can refund $x_2$ $Coin_2$ and redeem $pr$.
+    If Bob does not redeem $x_1$ $Coin_1$ before $\delta_1$ expires, Alice can refund $x_1$ $Coin_1$ and $pr$.
 \end{enumerate}
 
 \paragraph{\textbf{Setup}}
@@ -111,15 +111,15 @@ The content of $\mathcal{C}^{pr}_2$ for currency exchange-style $\mathcal{AS}'$ 
 
 \begin{description}
     \item[Currency Exchange] Alice pays $pr$ to Bob with the condition:
-    Bob refunds $x_2$ $Coin_2$ after $\Delta_2$ and before $\Delta_1$.
-    If $\Delta_1$ expires, Alice can refund $pr$ back.
+    Bob refunds $x_2$ $Coin_2$ after $\delta_2$ and before $\delta_1$.
+    If $\delta_1$ expires, Alice can refund $pr$ back.
     \item[American Call Options] Alice pays $pr$ to Bob with one of the two conditions:
-    1) Alice redeems $x_2$ $Coin_2$ before $\Delta_2$.
-    2) Bob refunds $x_2$ $Coin_2$ after $\Delta_2$ but before $Delta_1$ (note that $\Delta_2 < \Delta_1$).
-    If $\Delta_1$ expires, Alice can refund $pr$ back.
+    1) Alice redeems $x_2$ $Coin_2$ before $\delta_2$.
+    2) Bob refunds $x_2$ $Coin_2$ after $\delta_2$ but before $Delta_1$ (note that $\delta_2 < \delta_1$).
+    If $\delta_1$ expires, Alice can refund $pr$ back.
 \end{description}
 
-Note that $\Delta_1$ in $\mathcal{C}_1$ is the same as in $\mathcal{C}^{pr}_2$, and $\mathcal{C}^{asset}_2$ is with $\Delta_2$.
+Note that $\delta_1$ in $\mathcal{C}_1$ is the same as in $\mathcal{C}^{pr}_2$, and $\mathcal{C}^{asset}_2$ is with $\delta_2$.
 
 Also note that neither of them triggers contracts at this stage.
 Instead, Alice and Bob can enter the contracts in the future.
@@ -140,7 +140,7 @@ Note that once Bob redeems $x_1$ $Coin_1$, he cannot redeem $pr$ anymore accordi
 
 \paragraph{\textbf{Refund}}
 Refunding $x_2$ $Coin_2$ for Alice and $x_1$ $Coin_1$ for Bob are the same as in the original protocol.
-Alice can refund $pr$ after $\Delta_1$ if Bob has not refunded $x_1$ $Coin_1$.
-If Bob refunds $x_1$ $Coin_1$ before $\Delta_2$ (which is definitely before $\Delta_1$ as $\Delta_2 < \Delta_1$), Bob can also redeem $pr$.
+Alice can refund $pr$ after $\delta_1$ if Bob has not refunded $x_1$ $Coin_1$.
+If Bob refunds $x_1$ $Coin_1$ before $\delta_2$ (which is definitely before $\delta_1$ as $\delta_2 < \delta_1$), Bob can also redeem $pr$.
 
 \TODO{justify the fairness?}
