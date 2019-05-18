@@ -182,8 +182,8 @@ The CRR model assumes that the asset price will either move up or down by a spec
 The move-up factor is $u$, and the move-down factor is $d$.
 Accordingly, the asset price after one move-up $S_{\frac{T}{n}, 1}$ is $u \cdot S_{0, 1}$, and the asset price after one move-down $S_{\frac{T}{n}, 2}$ is $d \cdot S_{0, 1}$.
 
-$u$ and $d$ are calculated using the underlying annualized volatility $\sigma_a$ of the asset price:
-\JS{It’s quite interesting, this seems to suggest that the drop and gain are symmetric, as $u\cdot d =1$. For example, if there is a high risk, then there will be high gain. (added by Runchao)}
+$u$ and $d$ are calculated using the annualized volatility $\sigma_a$ of the underlying asset price.
+In the CRR model, the move-up and move-down are symmetric - $u \cdot d = 1$, and the rate of move-up and move-down is positive correlated with $\sigma_a$:
 
 \begin{align} 
 u &= e^{\sigma_a \sqrt{\frac{T}{n}}}\\
