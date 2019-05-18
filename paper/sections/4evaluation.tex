@@ -156,10 +156,10 @@ where $t \in \{0, \frac{T}{n}, \frac{2T}{n}, \dots, T\}$ is the point of time an
 The CRR model assumes that the asset price will either move up or down by a specific factor per step in $\mathcal{T}$.
 The move-up factor is $u$, and the move-down factor is $d$.
 Accordingly, the price after one move-up is $S_{up} = u \cdot S$, and the price after one move-down is $S_{down} = d \cdot S$.
-\JS{S is not defined. Is it possible to stay with the existing notation, i.e. S_{t,i}? (added by Runchao)}
+\JS{S is not defined. Is it possible to stay with the existing notation, i.e. $S_{t,i}$? (added by Runchao)}
 
 $u$ and $d$ are calculated using the underlying annualized volatility $\sigma_a$ of the asset price:
-\JS{It’s quite interesting, this seems to suggest that the drop and gain are symmetric, as u\cdot d =1. For example, if there is a high risk, then there will be high gain. (added by Runchao)}
+\JS{It’s quite interesting, this seems to suggest that the drop and gain are symmetric, as $u\cdot d =1$. For example, if there is a high risk, then there will be high gain. (added by Runchao)}
 
 \begin{align} 
 u &= e^{\sigma_a \sqrt{\frac{T}{n}}}\\
