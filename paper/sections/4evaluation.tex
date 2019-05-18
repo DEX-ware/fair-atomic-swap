@@ -31,16 +31,26 @@ All experiments run on a MacBook Pro with a 2.2 GHz Intel Core i7 Processor, a 1
     \label{fig:unfair_diagram}
 \end{figure}
 
-We start from identifying the unfairness of Atomic Swaps before evaluating it.
-The unfairness consists of two parts as shown in Figure~\ref{fig:unfair_diagram}, namely the profit when the initiator's asset price rises and the mitigated loss when the initiator's asset price drops.
 
-We then quantifying it by using the historical data.
+\MOD{
+\paragraph{Identifying the unfairness.}
+We start from identify the unfairness of Atomic Swaps before quantifying it.
 
-% scenario
+The unfairness consists of two parts, namely the profit when the initiator's asset price rises and the mitigated loss when the initiator's asset price drops.
+Figure~\ref{fig:unfair_diagram} visualises the unfairness.
+When the initiator's asset price rises, the initiator can profit directly from the rising price, and this scenario lays on the profit area in Figure~\ref{fig:unfair_diagram}.
+When the initiator's asset price drops, the initiator can abort the swap and transfer the loss to the participant. This scenario lays on the risk area in Figure~\ref{fig:unfair_diagram}.
+}
+
 \paragraph{Quantifying the unfairness.}
-Recall that 24 hours is the default timelock period of the participant, \JS{The “24 hours” was not mentioned before in the protocol. In fact, our discussion on this unfairness w.r.t. 24hour-48hour is not presented in the paper.}
-and the initiator has advantage over the participant within the timelock of 24 hours.
-We assume the initiator launches an atomic swap with the value of $x$ USD every day. \JS{This is not a realistic and convincing assumption, we should present it in a different way. In fact, we only need to say that we test the unfairness by using a value of x usd, then we show the degree of unfairness in dollars based on the historical data. (added by Runchao)}
+
+\MOD{
+Assume that the swap initiator \textbf{initiate}s the swap at the time $t$, then by default $\delta_1 = t + 48 (\text{hours})$.
+We also assume that the swap participant \textbf{participate}s the swap right after \textbf{initiate}, then by default $\delta_2 = t + 24 (\text{hours})$.
+In this way, the swap initiator can decide whether to proceed the swap within $ \delta_1 - \delta_2 = 24 (\text{hours})$.
+}
+
+\MOD{We test the unfairness by using a single Atomic Swap with the value of $x$ USD, then we show the degree of unfairness in dollars based on the historical data.}
 For each day, the initiator may either profit a percent $\alpha$ of $x$ directly if his asset price rises,
 or mitigate a percent $\beta$ of $x$ by aborting the swap if his asset price drops on average. \JS{The analysis here does not see correct. Let’s talk and check.}
 Assume the possibility for the initiator's asset price to rise is $P_{\alpha}$, and to drop is $P_{\beta}$.
