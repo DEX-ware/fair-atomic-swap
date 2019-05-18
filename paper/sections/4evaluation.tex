@@ -112,15 +112,16 @@ In addition to the unfairness results like the previous observation, we quantify
 
 
 \subsection{Estimating the premium}
-\JS{Mention that the premium is used to guarantee the good behaviors, and eliminate the unfairness coming from the fact that the initiator can abort the contract with no punishment. (added by Runchao)}
-To make the Atomic Swap fair, the initiator should pay for the premium.
-In other words, the unfair part of the Atomic Swap is the unpaid premium from the initiator.
-We evaluate the unfairness of the Atomic Swap by estimating the premium.
+
+\MOD{The unfairness of the Atomic Swap comes from the fact that the initiator can abort the contract without punishment.
+In Finance, the premium mechanism guarantees the good behaviours, which also works for Atomic Swaps.
+Therefore, we can evaluate the unfairness of the Atomic Swap by estimating the premium for American Call Options with cryptocurrencies.}
 
 As the premium is the only variable in an option contract, estimating the premium is also called the ``Option Pricing'' problem.
 In finance, the Black-Scholes (BS) Model is utilized to price the European Call Options,
 while the Cox-Ross-Rubinstein (CRR) Model is utilized to price the American Call Options.
-Therefore, we utilize the CRR Model to evaluate the unfairness of the Atomic Swap.
+
+Therefore, in order to evaluate the unfairness of the Atomic Swap, we utilize the CRR Model to estimate the premium for American Call Options with cryptocurrencies.
 
 \subsubsection{The Cox-Ross-Rubinstein Model Explained}
 
