@@ -180,8 +180,7 @@ Each node $\mathcal{T}_{t, i}$ is attached with the asset price $S_{t, i}$ and t
 where $t \in \{0, \frac{T}{n}, \frac{2T}{n}, \dots, T\}$ is the point of time and $i$ is the number of the node at its level.
 The CRR model assumes that the asset price will either move up or down by a specific factor per step in $\mathcal{T}$.
 The move-up factor is $u$, and the move-down factor is $d$.
-Accordingly, the price after one move-up is $S_{up} = u \cdot S$, and the price after one move-down is $S_{down} = d \cdot S$.
-\JS{S is not defined. Is it possible to stay with the existing notation, i.e. $S_{t,i}$? (added by Runchao)}
+Accordingly, the asset price after one move-up $S_{\frac{T}{n}, 1}$ is $u \cdot S_{0, 1}$, and the asset price after one move-down $S_{\frac{T}{n}, 2}$ is $d \cdot S_{0, 1}$.
 
 $u$ and $d$ are calculated using the underlying annualized volatility $\sigma_a$ of the asset price:
 \JS{It’s quite interesting, this seems to suggest that the drop and gain are symmetric, as $u\cdot d =1$. For example, if there is a high risk, then there will be high gain. (added by Runchao)}
