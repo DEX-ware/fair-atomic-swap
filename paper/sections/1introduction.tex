@@ -11,6 +11,7 @@ However, the Atomic Swap is atomic does not mean it is fair.
 In particular, in an Atomic Swap, the swap initiator can decide whether to proceed the swap, and the default maximum time for him to decide is 24 hours~\cite{nolan2013alt}.
 Whether this fact influences the fairness of the Atomic Swap remains unknown.
 
+\MOD{
 % optionality
 We further observe that, this fact makes the Atomic Swap to have Optionality.
 In Finance, an investment is said to have Optionality if 1) settling this investment happens in the future rather than instantly; 2) settling this investment is optional rather than mandatory.
@@ -30,7 +31,7 @@ Following this proof, we then evaluate how unfair the Atomic Swap is from two di
 After that, we propose two fair Atomic Swap protocols with the premium mechanism, in which one is for currency exchange while the other is for American Call Options.
 Both protocols can be implemented on existing blockchains, and we give reference implementations as well.
 Blockchains with smart contracts (e.g. Ethereum) directly support our protocols, and blockchains with scripts only (e.g. Bitcoin) can support out protocols by adding a simple opcode.
-
+}
 
 
 
