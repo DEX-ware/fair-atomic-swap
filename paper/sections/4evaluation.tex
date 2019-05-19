@@ -2,11 +2,11 @@
 \label{sec:evaluation}
 
 Recall that the premium is the price paid by the option buyer for signing the option contract with the option seller.
-In the Atomic Swap, the initiator is not required to pay for the premium.
-In this way, the initiator can decide whether to proceed the swap while investigating the cryptocurrency market.
-This enables the initiator to speculate without any risk:
-if the initiator's asset price rises right before the strike time, he will proceed the swap to profit, otherwise he will abort the swap to avoid the loss.
-Therefore, without the premium, the initiator is risk-free towards the market.
+In the Atomic Swap, Alice is not required to pay for the premium.
+In this way, Alice can decide whether to proceed the swap while investigating the cryptocurrency market.
+This enables Alice to speculate without any risk:
+if Alice's asset price rises right before the strike time, he will proceed the swap to profit, otherwise he will abort the swap to avoid the loss.
+Therefore, without the premium, Alice is risk-free towards the market.
 
 In this section, we evaluate the unfairness of the Atomic Swap based on our formalization in Section~\ref{sec:formalization}.
 In particular, we evaluate the unfairness from two perspectives: quantifying the unfairness and estimating the unpaid premium.
@@ -27,7 +27,7 @@ All experiments run on a MacBook Pro with a 2.2 GHz Intel Core i7 Processor, a 1
 
 \begin{figure}
     \includegraphics[width=\linewidth]{unfair_diagram.eps}
-    \caption{Visualizing the unfairness. The x-axis is time (in days), and the y-axis is the exchange rate change in percentage. For a point $(x, y)$, if $y > 0$, the point falls to the profit area (the red area on the figure), and the Atomic Swap initiator will profit $y$ today. If $y < 0$ the point falls to the risk area (the red area on the figure), and the Atomic Swap initiator will mitigate the loss of $y$ today.}
+    \caption{Visualizing the unfairness. The x-axis is time (in days), and the y-axis is the exchange rate change in percentage. For a point $(x, y)$, if $y > 0$, the point falls to the profit area (the red area on the figure), and Alice will profit $y$ today. If $y < 0$ the point falls to the risk area (the red area on the figure), and Alice will mitigate the loss of $y$ today.}
     \label{fig:unfair_diagram}
 \end{figure}
 
@@ -36,27 +36,27 @@ All experiments run on a MacBook Pro with a 2.2 GHz Intel Core i7 Processor, a 1
 \paragraph{Identifying the unfairness.}
 We start from identify the unfairness of Atomic Swaps before quantifying it.
 
-The unfairness consists of two parts, namely the profit when the initiator's asset price rises and the mitigated loss when the initiator's asset price drops.
+The unfairness consists of two parts, namely the profit when Alice's asset price rises and the mitigated loss when Alice's asset price drops.
 Figure~\ref{fig:unfair_diagram} visualises the unfairness.
-When the initiator's asset price rises, the initiator can profit directly from the rising price, and this scenario lays on the profit area in Figure~\ref{fig:unfair_diagram}.
-When the initiator's asset price drops, the initiator can abort the swap and transfer the loss to the participant. This scenario lays on the risk area in Figure~\ref{fig:unfair_diagram}.
+When Alice's asset price rises, Alice can profit directly from the rising price, and this scenario lays on the profit area in Figure~\ref{fig:unfair_diagram}.
+When Alice's asset price drops, Alice can abort the swap and transfer the loss to Bob. This scenario lays on the risk area in Figure~\ref{fig:unfair_diagram}.
 }
 
 \paragraph{Quantifying the unfairness.}
 
 \MOD{
-Assume that the swap initiator \textbf{initiate}s the swap at the time $t$, then by default $\delta_1 = t + 48 (\text{hours})$.
-We also assume that the swap participant \textbf{participate}s the swap right after \textbf{initiate}, then by default $\delta_2 = t + 24 (\text{hours})$.
-In this way, the swap initiator can decide whether to proceed the swap within $ \delta_1 - \delta_2 = 24 (\text{hours})$.
+Assume that Alice \textbf{initiate}s the swap at the time $t$, then by default $\delta_1 = t + 48 (\text{hours})$.
+We also assume that Bob \textbf{participate}s the swap right after \textbf{initiate}, then by default $\delta_2 = t + 24 (\text{hours})$.
+In this way, Alice can decide whether to proceed the swap within $ \delta_1 - \delta_2 = 24 (\text{hours})$.
 }
 
 \MOD{We test the unfairness by using a single Atomic Swap with the value of $x$ USD, then we show the degree of unfairness in dollars based on the historical data.}
-For each day, the initiator may either profit $\alpha$ percent of $x$ directly if his asset price rises,
+For each day, Alice may either profit $\alpha$ percent of $x$ directly if his asset price rises,
 or mitigate $\beta$ percent of $x$ by aborting the swap if his asset price drops on average. \JS{The analysis here does not see correct. Let’s talk and check.}
-Assume the possibility for the initiator's asset price to rise is $P_{\alpha}$, and to drop is $P_{\beta}$.
+Assume the possibility for Alice's asset price to rise is $P_{\alpha}$, and to drop is $P_{\beta}$.
 Then, the expected profit rate is $E_{\alpha} = \alpha P_{\alpha}$,
 and the expected mitigated risk rate is $E_{\beta} = \beta P_{\beta}$.
-Therefore, the expected unfairness is that the initiator profits $E_{\alpha} x$ unconditionally and mitigates the risk of losing $E_{\beta} x$.
+Therefore, the expected unfairness is that Alice profits $E_{\alpha} x$ unconditionally and mitigates the risk of losing $E_{\beta} x$.
 Also, as $E_\alpha$ and $E_\beta$ are equally calculated, they can be added together to derive the total unfairness as $E_\alpha + E_\beta$.
 
 \paragraph{Experimental methodology.}
@@ -113,7 +113,7 @@ In addition to the unfairness results like the previous observation, we quantify
 
 \subsection{Estimating the premium}
 
-\MOD{The unfairness of the Atomic Swap comes from the fact that the initiator can abort the contract without punishment.
+\MOD{The unfairness of the Atomic Swap comes from the fact that Alice can abort the contract without punishment.
 In Finance, the premium mechanism guarantees the good behaviours, which also works for Atomic Swaps.
 Therefore, we can evaluate the unfairness of the Atomic Swap by estimating the premium for American Call Options with cryptocurrencies.}
 

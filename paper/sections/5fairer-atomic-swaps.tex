@@ -16,7 +16,7 @@ Is the protocol aiming at currency exchange or the American Call Options?
 
 To our knowledge, the Atomic Swap protocol is originally designed for the fair exchange between different cryptocurrencies.
 However, according to our analysis, the protocol is equivalent to the premium-free American Call Options, and is unfair due to the free premium.
-\JS{This is not very clear. We should state the exact problem of the unfairness, i.e, initiator can abort the protocol for its profit with no punishment, but the participant cannot. (added by Runchao)}
+\JS{This is not very clear. We should state the exact problem of the unfairness, i.e, Alice can abort the protocol for its profit with no punishment, but Bob cannot. (added by Runchao)}
 
 The currency exchange and the American Call Option differ in Finance: The currency exchange is a type of Spots~\cite{hull1991introduction}, while the American Call Option is a type of Options.
 The Spot Contract and the Option Contract aim at different application scenarios: The Spot Contract aims at exchanging the ownership of assets, while the Option Contract aims at providing the option buyer an ``option'' to trade.
@@ -39,7 +39,6 @@ However, in Atomic Swaps, Alice can abort the swap by not releasing the hash pre
 Therefore, we should discourage Alice to abort the swap.
 To achieve this, we can use the premium mechanism as the collateral: Alice should deposit the premium besides her asset when \textbf{initiate}.
 The premium should follow that:
-\JS{We have too many names for the same role, i.e. Alice-initiator-seller, and Bob-participant-buyer. This sometimes can be confusing (added by Runchao)}
 
 \begin{itemize}
     \item If the swap is settled or Bob aborts the swap, the premium will go back to Alice.
@@ -49,7 +48,7 @@ The premium should follow that:
 \paragraph{Atomic Swaps for American Call Options}
 For the American Call Options, the option buyer should pay for the premium besides the bought asset, regardless whether the contract is settled or aborted.
 In reality, the option sellers are trustworthy - They never abort the contract.
-However, in Atomic Swaps, the participant Bob can abort the contracts like the initiator Alice.
+However, in Atomic Swaps, Bob can abort the contracts like Alice.
 To keep the Atomic Swap consistent with the American Call Options,
 the premium in American Call Option-style Atomic Swaps should follow that: 
 
