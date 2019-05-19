@@ -13,7 +13,8 @@ If the blockchains involved in the swaps are insecure, the Atomic Swaps will als
 Second, the Atomic Swap contracts are written in high-level languages, so the compiled contracts can be insecure if the contract compilers are flawed.
 
 % 2 blockchain async
-Third, the timelock is unreliable in the cross-chain scenario, because the times in different blockchains are never synchronized.
+Third, the timelock is unreliable in the cross-chain scenario, \MOD{\sout{because the times in different blockchains are never synchronized.}
+because there is no physically synchronous global clock in different blockchains, as same as in any other distributed system~\cite{coulouris2012distributed}.}
 % timestamp of blockchain
 Blockchains timestamp \HY{(is ``timestamp'' a verb here? sorry but I cannot find any example usage online)} events by either two approaches: \MOD{\sout{Using} using} the block height or using the UNIX timestamp.
 % relative time
