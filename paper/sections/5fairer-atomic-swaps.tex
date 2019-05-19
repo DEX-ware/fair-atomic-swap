@@ -129,8 +129,8 @@ In this stage, Bob can decide whether to participate in $\mathcal{AS}'$ by audit
 Alice initiates the swap by entering $\mathcal{C}_1$ and $\mathcal{C}^{pr}_2$.
 First, Alice deposits her $x_1$ $Coin_1$ in $\mathcal{C}_1$, and triggers the hash-locked payment to Bob.
 Second, Alice deposits her $pr$ in $\mathcal{C}^{pr}_2$, and triggers the conditional payment to Bob.
-\JS{If Bob does not participant, does it mean that Alice will have to have her money locked on both chains for sometime? (added by Runchao)}
 Note that Alice can specify an arbitrary amount for $pr$ when creating $\mathcal{C}_2$, and Alice should have enough $Coin_2$ to deposit $pr$.
+\MOD{Also not that if Bob keeps not participating, Alice's $x_1$ $Coin_1$ and $pr$ will be locked in $\mathcal{C}_1$ and $\mathcal{C}^{pr}_2$, and Alice can only refund them after the $\delta_1$.}
 
 \paragraph{\textbf{Participate}}
 If Bob thinks $\mathcal{AS}'$ is fair for him, he will participate in $\mathcal{AS}'$ by depositing $x_2$ $Coin_2$ in $\mathcal{C}^{asset}_2$, and triggers the the hash-locked payment to Alice.
