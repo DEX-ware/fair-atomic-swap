@@ -1,4 +1,3 @@
-title Atomic Swap
 participant Alice
 participant Blockchain1
 participant Blockchain2
