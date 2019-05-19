@@ -60,7 +60,38 @@ Note that the value can be negative\MOD{, which is at most $C$. This implies tha
 \subsection{Atomic Swap}
 
 \MOD{We formalise the original version of the Atomic Swap~\cite{nolan2013alt}.
-We denote the initiator in the Atomic Swap as Alice, and the participant as Bob.}
+
+\subsubsection{Security assumptions}
+
+\iffalse
+
+1. blockchain itself is secure
+2. speed of producing blocks is stable, and infeasible to manipulate
+3. time of confirming a transaction is negligible compared to timelocks 
+
+\fi
+
+Before the formalization, we give security assumptions on the Atomic Swap.
+
+First, we assume blockchains involved in the Atomic Swap are secure.
+The Atomic Swap is based on blockchains.
+If the blockchains are insecure, the Atomic Swap will also be insecure.
+
+Second, we assume the HTLC mechanism in blockchains is reliable.
+More specifically,
+1) blockchains produce new blocks with stable speeds;
+2) the hash algorithm used by HTLCs is secure;
+3) the runtime for executing HTLCs is reliable.
+
+
+Third, the time for confirming a transaction is negligible compared to timelocks.
+In practice, the swap initiator's timelock is 48 hours and the swap participant's timelock is 24 hours by default~\cite{nolan2013alt}, while confirming a transaction is less than 1 hour for most blockchains.
+
+}
+
+\subsubsection{Process}
+
+We denote the initiator in the Atomic Swap as Alice, and the participant as Bob.
 
 \begin{definition}
 We define an Atomic Swap $\mathcal{AS}$ as
