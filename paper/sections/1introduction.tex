@@ -3,7 +3,7 @@
 
 The Atomic Swap protocol allows two parties to exchange their assets ``atomically'' without trusted third parties.
 ``Atomic'' means the swap either succeeds or fails for both parties at any given time.
-In blockchains, Atomic Swap is usually implemented by using Hashed Timelocked Contracts (HTLCs).
+In blockchains, Atomic Swap is usually implemented by using Hashed Timelocked Contracts (HTLCs)~\cite{decker2015fast}.
 The HTLC is a type of transaction that, the payee should provide the preimage of a hash value before a specified deadline, otherwise the payment fails - the money goes back to the payer and the payee will not get any money.
 
 \TODO{Add a paragraph showing how important and widely used the Atomic Swap is. e.g. add 1) Atomic Swap is widely used at present. 2) Relevant info and data, as a table or sth to prove 1)}
