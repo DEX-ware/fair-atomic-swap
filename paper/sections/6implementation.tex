@@ -38,7 +38,7 @@ Our implementations are based on the original Atomic Swap Solidity implementatio
 but extend the premium mechanism.
 
 Extending the premium mechanism includes:
-
+\JS{Premimumstate is not explained nor mentioned before. (added by Runchao)}
 \begin{enumerate}
     \item The enumeration \textit{AssetState} for maintaining the premium payment state
     \item The modifiers \textit{isPremiumRedeemable()} and \textit{isPremiumRefundable()} for checking whether the premium can be redeemed or refunded
@@ -64,7 +64,7 @@ enum PremiumState { Empty, Filled, Redeemed, Refunded }
     language=Solidity, 
     basicstyle=\tiny,
     label={lst:premium_condition_currency},
-    caption={The condition to redeem and refund the premium for currency-exchange-style Atomic Swaps.}
+    caption={The condition to redeem and refund the premium for currency-exchange-style Atomic Swaps. \JS{What is our assumption on the latency $\epsilon$ of a tx being included in a block? Shall we consider this e.g. by assuming a negligible $\epsilon$ in comparison to the contract life time?  (added by Runchao)}}
 ]
 // Premium is refundable when
 // 1. Alice initiates but Bob does not participate
@@ -81,7 +81,7 @@ modifier isPremiumRefundable(bytes32 secretHash) {
     if block.timestamp <= swaps[secretHash].assetRefundTimestamp {
         // the asset2 should be redeemded by Alice
         require(swaps[secretHash].assetState == AssetState.Redeemed);
-    } else { // if the asset2 timelock is still valid
+    } else { // if the asset2 timelock is expired
         // the asset2 should not be refunded
         require(swaps[secretHash].assetState != AssetState.Refunded);
         // the premium timelock should be expired

@@ -16,6 +16,7 @@ Is the protocol aiming at currency exchange or the American Call Options?
 
 To our knowledge, the Atomic Swap protocol is originally designed for the fair exchange between different cryptocurrencies.
 However, according to our analysis, the protocol is equivalent to the premium-free American Call Options, and is unfair due to the free premium.
+\JS{This is not very clear. We should state the exact problem of the unfairness, i.e, initiator can abort the protocol for its profit with no punishment, but the participant cannot. (added by Runchao)}
 
 The currency exchange and the American Call Option differ in Finance: The currency exchange is a type of Spots~\cite{hull1991introduction}, while the American Call Option is a type of Options.
 The Spot Contract and the Option Contract aim at different application scenarios: The Spot Contract aims at exchanging the ownership of assets, while the Option Contract aims at providing the option buyer an ``option'' to trade.
@@ -38,6 +39,7 @@ However, in Atomic Swaps, Alice can abort the swap by not releasing the hash pre
 Therefore, we should discourage Alice to abort the swap.
 To achieve this, we can use the premium mechanism as the collateral: Alice should deposit the premium besides her asset when \textbf{initiate}.
 The premium should follow that:
+\JS{We have too many names for the same role, i.e. Alice-initiator-seller, and Bob-participant-buyer. This sometimes can be confusing (added by Runchao)}
 
 \begin{itemize}
     \item If the swap is settled or Bob aborts the swap, the premium will go back to Alice.
@@ -68,7 +70,7 @@ the premium in American Call Option-style Atomic Swaps should follow that:
 
 
 \subsection{Our protocols}
-
+\JS{I think in this paper we have to assume that blockchain itself is fair and secure, for example, no surprise on the dramatic change on the speed of producing blocks. (added by Runchao)}
 We propose two fair Atomic Swap protocols based on the original Atomic Swap protocol and our design objectives in Section~\ref{subsubsec:design_obj}.
 One of the two protocols is for currency exchange, and the other is for American Call Options.
 
@@ -80,7 +82,7 @@ where $pr$ is the amount of the premium measured in $Coin_2$.
 In our protocols, Alice should lock $pr$ on $BC_2$, which will be described later.
 
 The protocol follows the steps below:
-
+\JS{We should have a MSC/sudo-code algorithm for all protocols mentioned in this paper, and make them easy to compare. For example, one notable difference is that traditionally, buyer pays premium, but here, the seller pays. If using MSC, then we should highlight the parts of protocol that is not fair. If using sudo-code, then we need to explain each line in our text, and mention which lines make it (un)fair. So this could present a very clear view on the changes we made (added by Runchao)}
 \begin{enumerate}
     \item \textbf{Setup}: Alice and Bob create addresses on both blockchains.
     In addition, Alice creates both contracts $\mathcal{C}_1$ and $\mathcal{C}_2$ and publishes them as transactions $tx_{\mathcal{C}, 1}$ and $tx_{\mathcal{C}, 2}$ on $BC_1$ and $BC_2$. 
@@ -129,6 +131,7 @@ In this stage, Bob can decide whether to participate in $\mathcal{AS}'$ by audit
 Alice initiates the swap by entering $\mathcal{C}_1$ and $\mathcal{C}^{pr}_2$.
 First, Alice deposits her $x_1$ $Coin_1$ in $\mathcal{C}_1$, and triggers the hash-locked payment to Bob.
 Second, Alice deposits her $pr$ in $\mathcal{C}^{pr}_2$, and triggers the conditional payment to Bob.
+\JS{If Bob does not participant, does it mean that Alice will have to have her money locked on both chains for sometime? (added by Runchao)}
 Note that Alice can specify an arbitrary amount for $pr$ when creating $\mathcal{C}_2$, and Alice should have enough $Coin_2$ to deposit $pr$.
 
 \paragraph{\textbf{Participate}}
