@@ -190,7 +190,7 @@ function redeemPremium(bytes32 secretHash)
         swaps[secretHash].premiumValue
     );
 }
-    function refundPremium(bytes32 secretHash)
+function refundPremium(bytes32 secretHash)
     public
     isPremiumRefundable(secretHash)
 {
