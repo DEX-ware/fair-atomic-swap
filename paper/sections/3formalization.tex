@@ -6,20 +6,6 @@ then prove that the Atomic Swap is equivalent to an American Call Option without
 
 
 
-\begin{figure}
-    \includegraphics[width=.7\linewidth]{sequence_diagram_original.eps}
-    \caption{Sequence diagram of the Atomic Swap.}
-    \label{fig:sequence_diagram_original}
-\end{figure}
-
-\begin{figure}
-    \includegraphics[width=.7\linewidth]{sequence_diagram_option.eps}
-    \caption{Sequence diagram of the American Call Option.}
-    \label{fig:sequence_diagram_option}
-\end{figure}
-
-
-
 
 
 \subsection{Atomic Swap}
@@ -64,6 +50,7 @@ The Atomic Swap protocol consists of five algorithms:
 \textbf{Participate},
 \textbf{Redeem}, and
 \textbf{Refund}.
+
 
 \paragraph{\textbf{Setup}($\lambda, id, BC_i$)}
 \textbf{Setup}($\cdot$) takes a security parameter $\lambda$,
@@ -136,6 +123,21 @@ and the refund transaction $tx_{\mathcal{R}, i}$.
 It returns the $\mathcal{V} \in \{0, 1\}$ indicating if the refund is successful or not.
 In the beginning, \textbf{Refund}($\cdot$) will check if $\delta_i$ has expired or not. If $\delta_i$ is still valid, \textbf{Refund}($\cdot$) returns $0$ directly, otherwise it will proceed.
 Both Alice and Bob can perform the refund by publishing $tx_{\mathcal{R}, i}$ after the timelock $\delta_i$, respectively.
+
+
+
+\begin{figure}
+    \includegraphics[width=.7\linewidth]{sequence_diagram_original.eps}
+    \caption{Sequence diagram of the Atomic Swap.}
+    \label{fig:sequence_diagram_original}
+\end{figure}
+
+\begin{figure}
+    \includegraphics[width=.7\linewidth]{sequence_diagram_option.eps}
+    \caption{Sequence diagram of the American Call Option.}
+    \label{fig:sequence_diagram_option}
+\end{figure}
+
 
 % procedure
 \paragraph{Process.}
