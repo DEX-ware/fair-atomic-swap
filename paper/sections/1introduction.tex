@@ -31,8 +31,8 @@ Whether this fact influences the fairness of the Atomic Swap remains unknown.
 % why problematic
 Intuitively, in the Atomic Swap, the swap initiator can speculate without any penalties.
 More specifically, the swap initiator can keep waiting before the timelock expires.
-If the underlying asset price rises, he will proceed the swap so that he will profit.
-If the underlying asset price drops, he can abort the swap, so that he won't lose any money.
+If the price of the swap participant's asset rises, the swap initiator will proceed the swap so that he will profit.
+If the price of the swap participant's asset drops, the swap initiator can abort the swap, so that he won't lose any money.
 
 % optionality
 We observe that, this problem is equivalent to the Optionality in Finance, which has already been studied for decades.
@@ -62,20 +62,6 @@ Blockchains with smart contracts (e.g. Ethereum) directly support our protocols,
 
 \subsection{Our contributions}
 
-% In this paper, we prove that the Atomic Swap is unfair to the participant, and extends the original Atomic Swap protocol to fair ones.
-% In particular, we formally model the Atomic Swap and the American Call Option in Finance,
-% and prove that the Atomic Swap is equivalent to a premium-free American Call Option.
-% Then we point out that the Atomic Swap is unfair to the participant, because the initiator is not required to pay for the premium.
-% \MOD{Without premium, the initiator can abort the swap without any loss.
-% In this way, the initiator can speculate without any risk - he can choose to proceed the swap when his asset price rises, and abort the swap when his asset price drops.}
-% Based on this observation, we evaluate the unfairness of the Atomic Swap by estimating how much the premium should be for mainstream cryptocurrency pairs.
-% Estimating the premium is based on the Cox-Ross-Rubinstein model~\cite{cox1979option} - the conventional model for pricing the American-style options in Finance.
-% After that, we propose two fair Atomic Swap protocols, which implement the premium mechanism upon the original Atomic Swap protocol.
-% One of our proposed protocols is for the currency exchange, and the other is for the American Call Options.
-% Both protocols can be implemented on existing blockchains: \HY{Will it be better not to capitalize? (While it is acceptable to capitalize the first letter after the colon in American English, it is not the case in British English, except where a proper noun immediately follows a colon. \url{https://en.wikipedia.org/wiki/Colon_(punctuation)})}
-% They can be directly implemented on blockchains supporting smart contracts (e.g. Ethereum),
-% and can be implemented on blockchains supporting scripts (e.g. Bitcoin) by adding a single opcode.
-
 Our contributions are as follows:
 
 \paragraph{We formalize the Atomic Swap and the American Call Option, and prove that the Atomic Swap is equivalent to the premium-free American Call Option.}
@@ -91,7 +77,7 @@ redeeming cryptocurrencies in Atomic Swap is exercising the contract in the Amer
 We point out that, according to the option theory in Finance, the Atomic Swap - modelled as the premium-free American Call Option - is unfair to the participant, especially in the highly volatile cryptocurrency market.
 In practice, the initiator can decide whether to proceed the swap while investigating the cryptocurrency market.
 However, proceeding or aborting the swap does not require the initiator to pay for the premium.
-This leads to the scenario that, if the initiator's asset price rises right before the strike time, he will proceed the swap to profit, otherwise he will abort the swap to avoid losing money.
+This leads to the scenario that, if the participant's asset price rises before the strike time, he will proceed the swap to profit, otherwise he will abort the swap to avoid losing money.
 In this way, the initiator is risk-free towards the market.
 
 \paragraph{We evaluate the Atomic Swap unfairness of cryptocurrencies, and compare it with that of conventional finance assets.}

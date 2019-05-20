@@ -37,10 +37,10 @@ All experiments run on a MacBook Pro with a 2.2 GHz Intel Core i7 Processor, a 1
 \paragraph{Identifying the unfairness.}
 We start from identify the unfairness of Atomic Swaps before quantifying it.
 
-The unfairness consists of two parts, namely the profit when Alice's asset price rises and the mitigated loss when Alice's asset price drops.
+The unfairness consists of two parts, namely the profit when Bob's asset price rises and the mitigated loss when Bob's asset price drops.
 Figure~\ref{fig:unfair_diagram} visualises the unfairness.
-When Alice's asset price rises, Alice can profit directly from the rising price, and this scenario lays on the profit area in Figure~\ref{fig:unfair_diagram}.
-When Alice's asset price drops, Alice can abort the swap and transfer the loss to Bob. This scenario lays on the risk area in Figure~\ref{fig:unfair_diagram}.
+When Bob's asset price rises, Alice profits directly, and this scenario lays on the profit area in Figure~\ref{fig:unfair_diagram}.
+When Bob's asset price drops, Alice can abort the swap and transfer the loss to Bob. This scenario lays on the risk area in Figure~\ref{fig:unfair_diagram}.
 }
 
 \paragraph{Quantifying the unfairness.}
@@ -52,12 +52,12 @@ In this way, Alice can decide whether to proceed the swap within $ \delta_1 - \d
 }
 
 \MOD{We test the unfairness by using a single Atomic Swap with the value of $x$ USD, then we show the degree of unfairness in dollars based on the historical data.}
-For each day, Alice may either profit $\alpha$ percent of $x$ directly if his asset price rises,
-or mitigate $\beta$ percent of $x$ by aborting the swap if his asset price drops on average. \JS{The analysis here does not see correct. Let’s talk and check.}
-Assume the possibility for Alice's asset price to rise is $P_{\alpha}$, and to drop is $P_{\beta}$.
+For each day, Alice may either profit $\alpha$ percent of $x$ directly (when Bob's asset price rises),
+or mitigate $\beta$ percent of $x$ by aborting the swap (when Bob's asset price drops) on average.
+Assume the possibility for Bob's asset price to rise is $P_{\alpha}$, and to drop is $P_{\beta}$.
 Then, the expected profit rate is $E_{\alpha} = \alpha P_{\alpha}$,
 and the expected mitigated risk rate is $E_{\beta} = \beta P_{\beta}$.
-Therefore, the expected unfairness is that Alice profits $E_{\alpha} x$ unconditionally and mitigates the risk of losing $E_{\beta} x$.
+Therefore, the expected unfairness is that Alice profits $E_{\alpha} x$ and mitigates the risk of losing $E_{\beta} x$.
 Also, as $E_\alpha$ and $E_\beta$ are equally calculated, they can be added together to derive the total unfairness as $E_\alpha + E_\beta$.
 
 \paragraph{Experimental methodology.}
