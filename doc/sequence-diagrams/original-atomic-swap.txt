@@ -9,20 +9,23 @@ Bob->Alice: create address
 end
 
 group Initiate
-Alice->Blockchain1: create asset1_contract
+Alice->Blockchain1: create asset1_contract \n and deposit asset1
 activate Blockchain1 #blue
 end
 
 group Participate
-Bob->Blockchain2: create asset2_contract
+Bob->Blockchain2: create asset2_contract \n and deposit asset2
 activate Blockchain2 #red
 end
 
-group Redeem
-thread Alice
-Alice->Blockchain2: redeem asset2
+group Redeem or Refund
+alt Redeem
+Blockchain2->Alice: redeem asset2
 deactivate Blockchain2 #red
-thread Bob
-Bob->Blockchain1: redeem asset1
+Blockchain1->Bob: redeem asset1
 deactivate Blockchain1
+
+else Refund
+Blockchain2->Bob: refund asset2
+Blockchain1->Alice: refund asset1
 end

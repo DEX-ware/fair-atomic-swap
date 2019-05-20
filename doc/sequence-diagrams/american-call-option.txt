@@ -1,0 +1,22 @@
+participant Buyer
+participant Exchange
+participant Seller
+
+group Advertise
+Buyer->Exchange: create contract \n and deposit asset1
+Buyer->Exchange: deposit premium
+end
+
+group Contract
+Seller->Exchange: sign contract \n and deposit asset2
+Exchange->Seller: redeem premium
+end
+
+group Exercise or Abort
+alt Exercise
+Exchange->Buyer: redeem asset2
+Exchange->Seller: redeem asset1
+else Abort
+Exchange->Buyer: refund asset1
+Exchange->Seller: refund asset2
+end
