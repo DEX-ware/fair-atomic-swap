@@ -138,7 +138,7 @@ However, one may take both $Coin_1$ and $Coin_2$ if the other does not trigger \
 For example, if Bob does not trigger \textbf{Redeem}($\cdot$) after Alice triggers \textbf{Redeem}($\cdot$) and $\delta_1$ expires, Alice can also refund $x_1$ $Coin_1$ by triggering \textbf{Refund}($\cdot$).
 But in this case it is Bob to blame, because he should have had enough time - at least $\delta_2 - \delta_1$ \MOD{(48 - 24 = 24 hours by default)} - to redeem $x_1$ $Coin_1$.
 Another example is that Alice broadcasts the transaction of \textbf{Redeem}($\cdot$) after $\delta_2$, but Bob has already triggered \textbf{Refund}($\cdot$).
-Therefore, Bob can also trigger \textbf{Redeem} with the preimage in Alice's transaction of \textbf{Redeem}($\cdot$) before $\delta_1$.
+Therefore, Bob can also trigger \textbf{Redeem}($\cdot$) with the preimage in Alice's transaction of \textbf{Redeem}($\cdot$) before $\delta_1$.
 Similarly, it is Alice to blame, because she should have had enough time - before $\delta_2$ - to trigger \textbf{Redeem}($\cdot$).
 
 % def S_t
@@ -200,8 +200,6 @@ The underlying value of $\pi_2$ is fluctuating over time due to the market mecha
 Intuitively, if the price of $\pi_2$ rises when the option buyer exercises $\Pi$, the option buyer profits, because he buys $\pi_2$ with the price lower than the current market price.
 Formally, we denote the asset's underlying value (with the unit $\pi_2 / \pi_1$) at the time $t$ as $S_t$.
 Assume the option buyer exercises $\Pi$ at a time $T' \leq T$, he can profit $[(S_{T'} - K) A - C]$ $\pi_1$.
-
-
 
 
 
