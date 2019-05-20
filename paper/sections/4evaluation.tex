@@ -25,29 +25,13 @@ All experiments run on a MacBook Pro with a 2.2 GHz Intel Core i7 Processor, a 1
 \subsection{Quantifying the unfairness by market volatility}
 \label{subsec:volatility_analysis}
 
-\begin{figure}
-    \centering
-    \includegraphics[width=\linewidth]{unfair_diagram.eps}
-    \caption{Visualizing the unfairness. The x-axis is time (in days), and the y-axis is the exchange rate change in percentage. For a point $(x, y)$, if $y > 0$, the point falls to the profit area (the red area on the figure), and Alice will profit $y$ today. If $y < 0$ the point falls to the risk area (the red area on the figure), and Alice will mitigate the loss of $y$ today.}
-    \label{fig:unfair_diagram}
-\end{figure}
-
+The unfairness consists of two parts, namely the profit and the mitigated loss from Alice's perspective.
+When Bob's asset price rises, Alice profits directly.
+When Bob's asset price drops, Alice can abort the swap and transfer the loss to Bob.
 
 \MOD{
-\paragraph{Identifying the unfairness.}
-We start from identify the unfairness of Atomic Swaps before quantifying it.
-
-The unfairness consists of two parts, namely the profit when Bob's asset price rises and the mitigated loss when Bob's asset price drops.
-Figure~\ref{fig:unfair_diagram} visualises the unfairness.
-When Bob's asset price rises, Alice profits directly, and this scenario lays on the profit area in Figure~\ref{fig:unfair_diagram}.
-When Bob's asset price drops, Alice can abort the swap and transfer the loss to Bob. This scenario lays on the risk area in Figure~\ref{fig:unfair_diagram}.
-}
-
-\paragraph{Quantifying the unfairness.}
-
-\MOD{
-Assume that Alice \textbf{initiate}s the swap at the time $t$, then by default $\delta_1 = t + 48 (\text{hours})$.
-We also assume that Bob \textbf{participate}s the swap right after \textbf{initiate}, then by default $\delta_2 = t + 24 (\text{hours})$.
+Assume that Alice initiates the swap by triggering \textbf{Initiate}($\cdot$) at the time $t$, then by default $\delta_1 = t + 48 (\text{hours})$.
+We also assume that Bob participates in the swap by triggering \textbf{Participate}($\cdot$), then by default $\delta_2 = t + 24 (\text{hours})$.
 In this way, Alice can decide whether to proceed the swap within $ \delta_1 - \delta_2 = 24 (\text{hours})$.
 }
 
@@ -80,22 +64,34 @@ We use S\&P500 and Dow Jones Index (DJI) as examples of stocks, and USD-EUR and 
     \label{fig:vol_scatter}
 \end{figure}
 
-Figure~\ref{fig:volatility_analysis} shows the estimated $E_\alpha$, $E_\beta$, the maximum daily rises $max_\alpha$ and the maximum \TODO{use \url{https://marketplace.visualstudio.com/items?itemName=ban.spellright} or \url{https://marketplace.visualstudio.com/items?itemName=streetsidesoftware.code-spell-checker} to avoid introducing typos?} daily drops $max_\beta$ for chosen 8 cryptocurrency pairs, stock indices (S\&P500 and DJI) and fiat currency exchange rates (USD-EUR and USD-GBP).
-Figure~\ref{fig:vol_scatter} visualizes $E_\alpha$ and $E_\beta$ of all evaluated items in Figure~\ref{fig:volatility_analysis}.
+% line analysis
+Figure~\ref{fig:volatility_analysis} shows the estimated $E_\alpha$, $E_\beta$, the maximum daily rises $max_\alpha$ and the maximum daily drops $max_\beta$ for chosen 8 cryptocurrency pairs, stock indices (S\&P500 and DJI) and fiat currency exchange rates (USD-EUR and USD-GBP).
+For each plot, points in the red Profit Area indicate that Alice profits directly at those days, and points in the green Risk Area indicate that Alice will abort the swap to mitigate the risk.
 
-\TODO{analysis may be improved}
 We observe that for all chosen cryptocurrency pairs, $max_\alpha$ and $max_\beta$ are quite big - ranging from 8\% to 25\%.
 Meanwhile, $max_\alpha$ and $max_\beta$ of stock indices are much smaller than all cryptocurrency pairs,
 and $max_\alpha$ and $max_\beta$ of fiat currencies are even smaller than stock indices.
 This indicates that in the setting of an 24-hour Atomic Swap, the cryptocurrency is much more unfair than stocks, and the stocks are more unfair than fiat currencies.
 
-Also, for all chosen cryptocurrency pairs, $E_{\alpha}$ and $E_{\beta}$ are near and the value is approximately 1\%, ranging from 0.73\% to 1.69\%.
-For stock indices, the results of S\&P500 and DJI are the same - $E_\alpha = 0.33\%$ and $E_\beta = 0.29\%$, which are smaller than cryptocurrency pairs.
-For fiat currencies, $E_\alpha$ and $E_\beta$ are even smaller than stock indices: The value ranges from 0.13\% to 0.17\%.
-In addition to the unfairness results like the previous observation, we quantify the unfairness of Atomic Swaps for cryptocurrency pairs: It ranges from  1.65\% (BTC-XRP) to 2.97\% (BTC-BCH).
 
+% scatter results and analysis
+Figure~\ref{fig:vol_scatter} visualizes $E_\alpha$ and $E_\beta$ of all evaluated items in Figure~\ref{fig:volatility_analysis}.
+In particular, we classify scatters to 4 groups based on their $E_\alpha$ and $E_\beta$:
+The first group ($E_\alpha < 0.005 \wedge E_\beta < 0.005$) consists of all stocks and fiat currency pairs (S\&P500, DJI, USD-GBP and USD-EUR);
+the second group ($0.005 < E_\alpha < 0.015 \wedge 0.005 < E_\beta < 0.015$) consists of most cryptocurrency pairs;
+the third group ($0.005 < E_\alpha < 0.015 \wedge E_\beta > 0.015$) only contains one cryptocurrency pair BTC-BNB;
+the fourth group ($E_\alpha > 0.015 \wedge 0.005 < E_\beta < 0.015$) only contains the last cryptocurrency pair BTC-BCH.
+Moreover, we draw a line $E_\beta = E_\alpha$ to separate two areas: $E_\beta > E_\alpha$ and $E_\beta < E_\alpha$.
 
-
+Obviously, the Atomic Swap with first-group items is fairer than with second-group items, and the Atomic Swap with second-group items is fair than with third-group and fourth-group items.
+Therefore, we can get the following results.
+First, the Atomic Swap with cryptocurrency pairs is more unfair than with stocks and fiat currency pairs. This result is consistent with results in Figure~\ref{fig:volatility_analysis}.
+Second, $E_\beta$ and $E_\beta - E_\alpha$ of BTC-BNB are bigger than of others. This means the exchange rate of BTC-BNB drops generally over the last year.
+Meanwhile, $E_\alpha$ and $E_\alpha - E_\beta$ of BTC-BCH are bigger than of others. This means the exchange rate of BTC-BCH rises generally over the last year.
+Both observations indicate that BTC-BNB and BTC-BCH are highly volatile, so the Atomic Swap with those assets is more unfair than with other assets.
+Third, all dots are close to the line $E_\beta = E_\alpha$, while the dots of stocks and fiat currency pairs almost lay on this line.
+A dot lying on $E_\beta = E_\alpha$ means the exchange rate rises and drops at the same level.
+Therefore, although more volatile than stocks and fiat currency pairs, exchange rates of cryptocurrency pairs rise and drop at the same level.
 
 
 

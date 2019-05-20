@@ -1,7 +1,7 @@
 \section{Formalization}
 \label{sec:formalization}
 
-In this section, we formalise the American Call Option and the Atomic Swap protocol \MOD{(the original version on Bitcointalk~\cite{nolan2013alt})},
+In this section, we formalize the Atomic Swap protocol \MOD{(the original version on Bitcointalk~\cite{nolan2013alt})} and the American Call Option,
 then prove that the Atomic Swap is equivalent to an American Call Option without the premium.
 
 
@@ -65,14 +65,7 @@ The Atomic Swap protocol consists of five algorithms:
 \textbf{Redeem}, and
 \textbf{Refund}.
 
-% \TODO{add input and output of each algorithm}
-% \begin{enumerate}
-%     \item \textbf{Setup}: Alice and Bob create addresses on both blockchains.
-%     \item \textbf{Initiate}: Alice initiates the Atomic Swap by publishing a contract transaction on $BC_1$.
-%     \item \textbf{Participate}: Bob participates in the Atomic Swap by publishing a contract transaction on $BC_2$.
-%     \item \textbf{Redeem}: Alice redeems $x_2$ $Coin_2$ and Bob redeems $x_1$ $Coin_1$. Alice should redeem earlier than Bob.
-%     \item \textbf{Refund}: If Alice or Bob is unsatisfied with the Atomic Swap, he/she can get his/her money back after the timelock of the contract transaction.
-% \end{enumerate}
+\TODO{rewrite all formalization! lacks parameters!}
 
 \paragraph{\textbf{Setup}($k$)}
 \textbf{Setup}($\cdot$) takes a security parameter $k$,
