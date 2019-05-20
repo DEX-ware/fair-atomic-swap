@@ -6,34 +6,52 @@ The Atomic Swap protocol allows two parties to exchange their assets ``atomicall
 In blockchains, Atomic Swap is usually implemented by using Hashed Timelocked Contracts (HTLCs)\MOD{~\cite{decker2015fast}}.
 The HTLC is a type of transaction that, the payee should provide the preimage of a hash value before a specified deadline, otherwise the payment fails - the money goes back to the payer and the payee will not get any money.
 
-\TODO{Add a paragraph showing how important and widely used the Atomic Swap is. e.g. add 1) Atomic Swap is widely used at present. 2) Relevant info and data, as a table or sth to prove 1)}
+\MOD{
+% how important is Atomic Swap
+The Atomic Swap has already been widely adopted in the cryptocurrency industry.
+In particular, it realized the Decentralized Exchanges (DEXes), and started the era of Decentralized Finance (De-Fi).
+In a DEX, traders publish and participate in deals, and the dealing process is regulated by a smart contract embedding the Atomic Swap protocol.
+Different from centralized exchanges, DEXes are non-custodial - traders does not need to deposit their money in DEXes.
+The non-custody property avoids DEXes from money thefts, which commonly happened on centralized exchanges.
+To date, the DEX market volume has reached approximately 50,000 ETH~\footnote{\url{https://dex.watch/}.}.
+More specifically,
+there are more than 250 DEXes~\footnote{\url{https://github.com/distribuyed/index}.};
+there are more than 30 DEX protocols~\footnote{\url{https://github.com/evbots/dex-protocols}.};
+there are more than 4,000 active traders in all DEXes~\footnote{\url{https://dex.watch/}.}.
+}
 
-\TODO{Add a paragraph showing why using Atomic Swap is problematic}
-
-\TODO{Add a paragraph showing this problem has already been considered in other areas (Finance), and their similarity}
 
 % research problem
 However, \MOD{\sout{the Atomic Swap is atomic does not mean it is fair} being atomic does not indicate the Atomic Swap is fairness}.
 In particular, in an Atomic Swap, the swap initiator can decide whether to proceed the swap, and the default maximum time for him to decide is 24 hours~\cite{nolan2013alt}.
 Whether this fact influences the fairness of the Atomic Swap remains unknown.
 
+
 \MOD{
+% why problematic
+Intuitively, in the Atomic Swap, the swap initiator can speculate without any penalties.
+More specifically, the swap initiator can keep waiting before the timelock expires.
+If the underlying asset price rises, he will proceed the swap so that he will profit.
+If the underlying asset price drops, he can abort the swap, so that he won't lose any money.
+
 % optionality
-We further observe that, this fact \sout{makes the Atomic Swap to have Optionality} (make sb do sth? without ``to'') adds Optionality to the Atomic Swap.
+We observe that, this problem is equivalent to the Optionality in Finance, which has already been studied for decades.
 In Finance, an investment is said to have Optionality if 1) settling this investment happens in the future rather than instantly; 2) settling this investment is optional rather than mandatory.
-For an investment with Optionality, the option itself has value besides the underlying asset~\cite{higham2004introduction}, and the value is called the \textit{premium}. \TODO{(add refs.)}
+For an investment with Optionality, the option itself has value besides the underlying asset~\cite{higham2004introduction}, and the value is called the \textit{premium}.
+The option buyer should pay for the premium besides the underlying asset, so that he can no longer speculate without penalties.
+
+% initiator in atomic swap has optionality
+In the Atomic Swap, the swap initiator has the Optionality, as he can choose whether to proceed or abort the swap.
+Unfortunately, the Atomic Swap does not take the Optionality into account, and the swap initiator is not required to pay for the premium.
 
 % atomic swap should not have optionality
-However, the Atomic Swap is designed for currency exchange rather than options, and \MOD{\sout{the currency exchange should not have Optionality} there is no Optionality in currency exchange - once}
- agreed by both parties, the currency exchange is settled without any chance for both parties to regret.
-Moreover, the Atomic Swap does not have the premium mechanism.
-Although the swap initiator decides whether to proceed or abort the swap, he \MOD{\sout{does not need} is not required} to pay for the option.
+However, the Atomic Swap is designed for currency exchange rather than options, and the currency exchange should not have Optionality.
+Once agreed by both parties, the currency exchange is settled without any chance for both parties to regret.
 
 % what we do briefly
-In this paper, we prove that the Atomic Swap is unfair to the participant, and propose two fair Atomic Swap variants.
+In this paper, we investigate the unfairness of the Atomic Swap, and propose two fair Atomic Swap variants.
 We start from formally modeling the Atomic Swap and the American Call Option in Finance,
-then prove that 
-\sout{the} an Atomic Swap is equivalent to a premium-free American Call Option based on our model.
+then prove that an Atomic Swap is equivalent to a premium-free American Call Option based on our model.
 Following this proof, we then evaluate how unfair the Atomic Swap is from two different perspectives: quantifying the unfairness and estimating the premium.
 After that, we propose two fair Atomic Swap protocols with the premium mechanism, in which one is for currency exchange while the other is for American Call Options.
 Both protocols can be implemented on existing blockchains, and we give reference implementations as well.
