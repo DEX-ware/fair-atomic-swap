@@ -150,8 +150,8 @@ modifier isPremiumRedeemable(bytes32 secretHash) {
 
 Similar with the \textit{PremiumState}, \textit{AssetState} has 4 states: empty, filled, redeemded and refunded.
 The code is shown in Listing~\ref{lst:state}.
-\textit{Empty} means Alice has not \textbf{initiate}d, and has not deposited the premium yet.
-\textit{Filled} means Alice has deposited the premium, indicating that Alice has \textbf{initiate}d, but neither Alice nor Bob \textbf{refund}s or \textbf{redeem}s the premium.
+\textit{Empty} means Alice has not triggered \textbf{Initiate}($\cdot$), and has not deposited the premium yet.
+\textit{Filled} means Alice has deposited the premium, indicating that Alice has triggered \textbf{Initiate}($\cdot$), but neither Alice nor Bob refunds or redeems the premium.
 \textit{Redeemded} and \textit{refunded} means Bob redeems the premium and Alice refunds the premium, respectively.
 
 \paragraph{\textit{isPremiumRedeemable()} and \textit{isPremiumRefundable()}}
@@ -238,7 +238,7 @@ Creating the contract is by publishing a transaction which creates the smart con
 and invoking the contract is by publishing a transaction which invokes a method in the smart contract.
 However, Bitcoin has no smart contracts, and the ``contract'' is created and invoked in a single transaction.
 In this way, the timelock starts right after the contract creation rather than the contract invocation.
-This is problematic: The contract is invoked when Bob \textbf{participate}s in the contract.
+This is problematic: the premium contract should not be triggered until Bob participates in the swap.
 
 
 Thanks to the multi-signature transaction functionality in Bitcoin,
