@@ -266,7 +266,7 @@ First, Bob creates the $Coin_2$ transaction and sends it to Alice.
 Second, Alice creates the premium transaction which uses OP\_LOOKUP\_OUTPUT to check the ownership of $Coin_2$ transaction outputs.
 Third, Alice merges the $Coin_2$ transaction and the premium transaction to a single transaction, signs the transaction, and sends it to Bob.
 Finally, Bob signs the transaction and sends it to Alice.
-At this stage, both Alice and Bob have the mutually signed transaction containing both the premium transaction and the $Coin_2$ transaction.
+At this stage, both Alice and Bob \MOD{\sout{have} obtain} the mutually signed transaction containing both the premium transaction and the $Coin_2$ transaction.
 
 \paragraph{The premium transaction}
 Listing~\ref{lst:bitcoin_contract_currency_exchange} and Listing~\ref{lst:bitcoin_contract_option} show the premium transaction in the Bitcoin script
