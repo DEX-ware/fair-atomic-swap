@@ -121,22 +121,6 @@ Therefore, in order to evaluate the unfairness of the Atomic Swap, we utilize th
 
 \subsubsection{The Cox-Ross-Rubinstein Model Explained}
 
-The Cox-Ross-Rubinstein (CRR) Model~\cite{cox1979option} - a.k.a. the Binomial Options Pricing Model (BOPM) - provides a generalizable numerical method for pricing the options.
-Intuitively, the CRR model enumerates all possible prices of the asset in the near future based on the price volatility,
-then reverse-engineers the premium based on the enumerated prices.
-% binomial tree
-The model assume that for each step on the binomial tree, the asset price rises or falls by a fixed rate.
-Enumerating the possible asset prices constructs a binomial tree, where each node attaches an asset price and a premium price at a point of time.
-% reverse engineering
-By iteratively back propagating the premium from the leaves to the root of the binomial tree, the premium will be revealed.
-
-Formally, using the CRR model to price the American Call Option $\Pi = (\pi_1, \pi_2, K, A, T, C)$ with the underlying price $S_t$ of $\pi_2$ follows the steps below:
-\begin{enumerate}
-    \item Creating the binomial price tree
-    \item Calculating the premiums for leaf nodes
-    \item Iteratively reconstructing the premiums for non-leaf nodes 
-\end{enumerate}
-
 \begin{figure}
 \centering
 \begin{tikzpicture}[
@@ -170,6 +154,45 @@ Formally, using the CRR model to price the American Call Option $\Pi = (\pi_1, \
 \label{fig:binomial_tree}
 \end{figure}
 
+% Please add the following required packages to your document preamble:
+% \usepackage{graphicx}
+\begin{table}[]
+\caption{Summary of symbols in the Cox-Ross-Rubinstein Model.}
+\label{table:summary_symbols_crr}
+\footnotesize
+\begin{tabular}{|p{1cm}|p{4cm}|p{1.5cm}|}
+\hline
+Variable             & Description                                                                               & Comment                  \\\hline
+$u, d$               & The rising and dropping rate for prices in the binomial tree $\mathcal{T}$                & $u \cdot d = 1$          \\\hline
+$\sigma_d, \sigma_a$ & The daily and annualized percentage change rates of asset prices                          &                          \\\hline
+$T$                  & The strike time (measured in years)                                                       &                          \\\hline
+$n$                  & The depth of $\mathcal{T}$                                                                & we pick $n = 36$         \\\hline
+$\Delta t$           & The time period between two adjacent nodes on $\mathcal{T}$ (measured in years)           & $\Delta_t = \frac{T}{n}$ \\\hline
+$S_{t, i}$           & The asset price of the $i$-th node on the $\frac{t}{\Delta t}$-th level of $\mathcal{T}$  &                          \\\hline
+$C_{t, i}$           & The option price of the $i$-th node on the $\frac{t}{\Delta t}$-th level of $\mathcal{T}$ &                          \\\hline
+$p, q$               & The probabilities that the asset price rises and drops                                    &                          \\\hline
+\end{tabular}%
+
+\end{table}
+
+
+
+The Cox-Ross-Rubinstein (CRR) Model~\cite{cox1979option} - a.k.a. the Binomial Options Pricing Model (BOPM) - provides a generalizable numerical method for pricing the options.
+Intuitively, the CRR model enumerates all possible prices of the asset in the near future based on the price volatility,
+then reverse-engineers the premium based on the enumerated prices.
+% binomial tree
+The model assume that for each step on the binomial tree, the asset price rises or falls by a fixed rate.
+Enumerating the possible asset prices constructs a binomial tree, where each node attaches an asset price and a premium price at a point of time.
+% reverse engineering
+By iteratively back propagating the premium from the leaves to the root of the binomial tree, the premium will be revealed.
+
+More specifically, using the CRR model to price the American Call Option $\Pi = (\pi_1, \pi_2, K, A, T, C)$ with the underlying price $S_t$ of $\pi_2$ follows the steps below:
+
+\begin{enumerate}
+    \item Creating the binomial price tree
+    \item Calculating the premiums for leaf nodes
+    \item Iteratively reconstructing the premiums for non-leaf nodes 
+\end{enumerate}
 
 \paragraph{Creating the binomial price tree.}
 The binomial price tree $\mathcal{T}$ of the height $n$ represents the possible future prices within the time period $T$ discretely, as shown in Fig.~\ref{fig:binomial_tree}.
@@ -231,10 +254,9 @@ such that the premium distribution simulates the geometric Brownian motion with 
 
 The earliest premium $S_{0, 1}$ - the estimated premium - can be calculated by iteratively back-propagating the later premiums. 
 
-\JS{A table summarizing the notations will be nice — there are too many different notations, and I cannot remember them all. (added by Runchao)}
+Table~\ref{table:summary_symbols_crr} summarizes all symbols used in the Cox-Ross-Rubinstein model. 
 
 \subsubsection{Experiments}
-
 
 \begin{figure}
     \includegraphics[width=\linewidth]{premium_pricing_result.eps}
