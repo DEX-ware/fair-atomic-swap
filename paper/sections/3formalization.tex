@@ -68,7 +68,7 @@ Alice initiates $\mathcal{AS}$ at this stage.
 First, Alice picks a random secret $s$, and computes the hash $h = \mathcal{H}(s)$ of $s$, where $\mathcal{H}$ is a secure hash function.
 At this stage, $s$ is only known to Alice.
 % contract
-Then, Alice creates the contract script $\mathcal{C}_1$ that ``Alice pays $x_1$ $Coin_1$ from $\beta_{A, 1}$ to $\beta_{B, 1}$ if Bob can provide $s'$ which makes $\mathcal{H}(s') = h$ before or on a timelock $\delta_1$. After $\delta_1$, Alice can refund the money - get $x_1$ $Coin_1$ back.''
+Then, Alice creates the contract script $\mathcal{C}_1$ that ``Alice pays $x_1$ $Coin_1$ from $\beta_{A, 1}$ to $\beta_{B, 1}$ if Bob can provide $s$ which makes $\mathcal{H}(s) = h$ before or on a timelock $\delta_1$ (which is a timestamp). After $\delta_1$, Alice can refund the money - get $x_1$ $Coin_1$ back.''
 % tx
 After creating $\mathcal{C}_1$, Alice publishes $\mathcal{C}_1$ as a transaction $tx_{\mathcal{C}, 1}$ on $BC_1$.
 Note that $h$ is published when publishing $tx_{\mathcal{C}, 1}$.
