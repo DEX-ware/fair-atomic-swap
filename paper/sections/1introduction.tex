@@ -77,7 +77,7 @@ This leads to the scenario that, if the participant's asset price rises before t
 In this way, the swap initiator can speculate without any risk in Atomic Swaps.
 
 \paragraph{We evaluate \MOD{the} unfairness of the Atomic Swap, and compare it with that of conventional financial assets.}
-We evaluate how unfair the Atomic Swap with mainstream cryptocurrency pairs is, and also compare this unfairness with conventional financial assets (stocks and fiat currencies).
+We evaluate how unfair the Atomic Swap with mainstream cryptocurrency pairs is, and also compare this unfairness with \MOD{those of} conventional financial assets (stocks and fiat currencies).
 Our evaluation and comparison consist of two parts: 1) quantifying how much the unfairness is, 2) estimating how much the premium should be.
 % first
 First, we quantify the profit and the mitigated risk of the initiator based on historical exchange rate volatility.
@@ -85,7 +85,7 @@ We classify the unfairness to two parts, namely the profit when the price rises 
 Our results show that, in the default timelock setting, the profit and the mitigated loss of our selected cryptocurrency pairs are approximately 1\%, while for stocks and fiat currencies the values are approximately 0.3\% and 0.15\%, respectively.
 % second
 Second, we use the Cox-Ross-Rubinstein option pricing model to estimate how much the premium should be for Atomic Swaps.
-In Finance, the Cox-Ross-Rubinstein model is the conventional option pricing model for American-style options.
+In Finance, the Cox-Ross-Rubinstein model~\cite{cox1979option} is the conventional option pricing model for American-style options.
 Our results show that, in the default timelock setting, the premium should be approximately 2\% for Atomic Swaps with cryptocurrency pairs, while the premium is negligible for American Call Options with stocks and fiat currencies.
 Also, the premium values rise for all assets with the strike time increasing, then converge when the strike time reaches 300 days.
 
@@ -104,7 +104,7 @@ For blockchains supporting smart contracts such as Ethereum, our protocols can b
 For blockchains only supporting scripts such as Bitcoin, our protocols can be implemented by adding one more opcode.
 We call the opcode ``OP\_LOOKUP\_OUTPUT'', which looks up the owner of a specific UTXO output.
 We give the reference implementation in Solidity as an example of smart contracts.
-We also give the Bitcoin script (which assumes ``OP\_LOOKUP\_OUTPUT'' exists) as an example of scripts.
+We also give \MOD{\sout{the} that in} Bitcoin script (which assumes ``OP\_LOOKUP\_OUTPUT'' exists) as an example of scripts.
 
 
 
