@@ -3,17 +3,15 @@ participant Blockchain1
 participant Blockchain2
 participant Bob
 
-group Setup
-Alice->Blockchain1: create contract_asset1
-Alice->Blockchain2: create contract_asset2
-Alice->Blockchain2: create contract_premium
-end
-
 group Initiate
-Alice->Blockchain1: deposit asset1
+Alice->Blockchain1: create contract_asset1 \n and deposit asset1
 activate Blockchain1 #blue
-Alice->Blockchain2: deposit premium
+
+Alice->Blockchain2: create contract_premium \n and deposit premium
 activate Blockchain2 #grey
+
+Alice->Blockchain2: create contract_asset2
+
 end
 
 group Participate
@@ -22,13 +20,11 @@ activate Blockchain2 #red
 end
 
 group Redeem
-thread Alice
-Alice->Blockchain2: redeem asset2
+Blockchain2->Alice: redeem asset2
 deactivate Blockchain2 #red
-Bob->Blockchain2: redeem premium
+Blockchain2->Bob: redeem premium
 deactivate Blockchain2 #grey
-thread Bob
-Bob->Blockchain1: redeem asset1
+Blockchain1->Bob: redeem asset1
 deactivate Blockchain1
 end
 

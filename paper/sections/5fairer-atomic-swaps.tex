@@ -61,8 +61,23 @@ If Alice's timelock expires, Alice can refund her premium back.}
 
 
 \subsection{Our protocols}
+
+
+\begin{figure}
+    \includegraphics[width=.7\linewidth]{sequence_diagram_us_currency_exchange.eps}
+    \caption{Sequence diagram of the currency exchange-style Atomic Swap.}
+    \label{fig:sequence_diagram_us_currency_exchange}
+\end{figure}
+
+\begin{figure}
+    \includegraphics[width=.7\linewidth]{sequence_diagram_us_options.eps}
+    \caption{Sequence diagram of the American Call Option-style Atomic Swap.}
+    \label{fig:sequence_diagram_us_options}
+\end{figure}
+
+
 We propose two fair Atomic Swap protocols based on the original Atomic Swap protocol, but apply our design objectives in Section~\ref{subsubsec:design_obj}.
-One of the two protocols is for currency exchange, and the other is for American Call Options.
+One of the two protocols is for currency exchange (shown in Figure~\ref{fig:sequence_diagram_us_currency_exchange}), and the other is for American Call Options (shown in Figure~\ref{fig:sequence_diagram_us_options}).
 The two protocols are similar to each other, and only differ on the rule of premium. 
 
 We denote our Atomic Swap protocol $\mathcal{AS}'$ as

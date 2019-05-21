@@ -3,11 +3,6 @@ participant Blockchain1
 participant Blockchain2
 participant Bob
 
-group Setup
-Alice->Bob: create address
-Bob->Alice: create address
-end
-
 group Initiate
 Alice->Blockchain1: create asset1_contract \n and deposit asset1
 activate Blockchain1 #blue
