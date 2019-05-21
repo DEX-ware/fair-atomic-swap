@@ -38,14 +38,12 @@ Our implementations are based on the original Atomic Swap Solidity implementatio
 but extend the premium mechanism.
 
 Extending the premium mechanism includes:
-\JS{Premimumstate is not explained nor mentioned before. (added by Runchao)}
+
 \begin{enumerate}
     \item The enumeration \textit{AssetState} for maintaining the premium payment state
     \item The modifiers \textit{isPremiumRedeemable()} and \textit{isPremiumRefundable()} for checking whether the premium can be redeemed or refunded
     \item The methods \textit{redeemPremium()} and \textit{refundPremium()} for redeeming and refunding the premium
 \end{enumerate}
-
-\paragraph{The premium payment state \textit{AssetState}}
 
 \begin{figure}[htb]
 \begin{lstlisting}[
@@ -148,7 +146,16 @@ modifier isPremiumRedeemable(bytes32 secretHash) {
 \end{lstlisting}
 \end{figure}
 
-Similar with the \textit{PremiumState}, \textit{AssetState} has 4 states: empty, filled, redeemded and refunded.
+\paragraph{The premium payment state \textit{PremiumState}}
+
+In the original smart contract, an enumeration \textit{State} maintains the asset state:
+\textbf{empty} means the asset has not been deposited;
+\textbf{filled} means the asset has been deposited;
+\textbf{redeemed} means the asset has been redeemed;
+\textbf{refunded} means the asset has been refunded.
+
+In our contract, we decouple \textit{State} to the asset state \textit{AssetState} and the premium state \textit{PremiumState}.
+Both \textit{AssetState} and \textit{PremiumState} are the same as the original \textit{State}.
 The code is shown in Listing~\ref{lst:state}.
 \textit{Empty} means Alice has not triggered \textbf{Initiate}($\cdot$), and has not deposited the premium yet.
 \textit{Filled} means Alice has deposited the premium, indicating that Alice has triggered \textbf{Initiate}($\cdot$), but neither Alice nor Bob refunds or redeems the premium.
