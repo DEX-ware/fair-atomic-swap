@@ -29,13 +29,12 @@ The unfairness consists of two parts, namely the profit and the mitigated loss f
 When Bob's asset price rises, Alice profits directly.
 When Bob's asset price drops, Alice can abort the swap and transfer the loss to Bob.
 
-\MOD{
+
 Assume that Alice initiates the swap by triggering \textbf{Initiate}($\cdot$) at the time $t$, then by default $\delta_1 = t + 48 (\text{hours})$.
 We also assume that Bob participates in the swap by triggering \textbf{Participate}($\cdot$), then by default $\delta_2 = t + 24 (\text{hours})$.
 In this way, Alice can decide whether to proceed the swap within $ \delta_1 - \delta_2 = 24 (\text{hours})$.
-}
 
-\MOD{We test the unfairness by using a single Atomic Swap with the value of $x$ USD, then we show the degree of unfairness in dollars based on the historical data.}
+We test the unfairness by using a single Atomic Swap with the value of $x$ USD, then we show the degree of unfairness in dollars based on the historical data.
 For each day, Alice may either profit $\alpha$ percent of $x$ directly (when Bob's asset price rises),
 or mitigate $\beta$ percent of $x$ by aborting the swap (when Bob's asset price drops) on average.
 Assume the possibility for Bob's asset price to rise is $P_{\alpha}$, and to drop is $P_{\beta}$.
@@ -110,9 +109,9 @@ Therefore, although more volatile than stocks and fiat currency pairs, exchange 
 
 \subsection{Estimating the premium}
 
-\MOD{The unfairness of the Atomic Swap comes from the fact that Alice can abort the contract without punishment.
+The unfairness of the Atomic Swap comes from the fact that Alice can abort the contract without punishment.
 In Finance, the premium mechanism guarantees the good behaviours, which also works for Atomic Swaps.
-Therefore, we can evaluate the unfairness of the Atomic Swap by estimating the premium for American Call Options with cryptocurrencies.}
+Therefore, we can evaluate the unfairness of the Atomic Swap by estimating the premium for American Call Options with cryptocurrencies.
 
 As the premium is the only variable in an option contract, estimating the premium is also called the ``Option Pricing'' problem.
 In finance, the Black-Scholes (BS) Model is utilized to price the European Call Options,
@@ -179,12 +178,10 @@ Each node $\mathcal{T}_{t, i}$ is attached with the asset price $S_{t, i}$ and t
 where $t \in \{0, \frac{T}{n}, \frac{2T}{n}, \dots, T\}$ is the point of time and $i$ is the number of the node at its level.
 The CRR model assumes that the asset price will either move up or down by a specific factor per step in $\mathcal{T}$.
 The move-up factor is $u$, and the move-down factor is $d$.
-\MOD{
-For example, given the initial asset price $S_{0, 1}$, the asset price after one move-up $S_{\frac{T}{n}, 1}$ is $u \cdot S_{0, 1}$, and the asset price after one move-down $S_{\frac{T}{n}, 2}$ is $d \cdot S_{0, 1}$.}
+For example, given the initial asset price $S_{0, 1}$, the asset price after one move-up $S_{\frac{T}{n}, 1}$ is $u \cdot S_{0, 1}$, and the asset price after one move-down $S_{\frac{T}{n}, 2}$ is $d \cdot S_{0, 1}$.
 
 $u$ and $d$ are calculated using the annualized volatility $\sigma_a$ of the underlying asset price.
-\MOD{
-In the CRR model, the move-up and move-down are symmetric - $u \cdot d = 1$, and the rate of move-up and move-down is positive correlated with $\sigma_a$:}
+In the CRR model, the move-up and move-down are symmetric - $u \cdot d = 1$, and the rate of move-up and move-down is positive correlated with $\sigma_a$:
 
 \begin{align} 
 u &= e^{\sigma_a \sqrt{\frac{T}{n}}}\\

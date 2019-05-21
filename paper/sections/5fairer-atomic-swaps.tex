@@ -15,7 +15,7 @@ Before designing a fair Atomic Swap protocol, we should know its design objectiv
 Is the protocol aiming at currency exchange or the American Call Options?
 
 To our knowledge, the Atomic Swap protocol is originally designed for the fair exchange between different cryptocurrencies.
-\MOD{However, according to our analysis, the protocol is unfair because Alice can choose to proceed or abort the swap based on the asset price, and \sout{aborting the swap has no punishment} he will not receive any penalty if he abort the swap.}
+However, according to our analysis, the protocol is unfair because Alice can choose to proceed or abort the swap based on the asset price, and \sout{aborting the swap has no punishment} he will not receive any penalty if he abort the swap.
 
 The currency exchange and the American Call Option differ in Finance: The currency exchange is a type of Spots~\cite{hull1991introduction}, while the American Call Option is a type of Options.
 The Spot Contract and the Option Contract aim at different application scenarios: The Spot Contract aims at exchanging the ownership of assets, while the Option Contract aims at providing the option buyer an ``option'' to trade.
@@ -129,7 +129,7 @@ Alice initiates the swap by entering $\mathcal{C}_1$ and $\mathcal{C}^{pr}_2$.
 First, Alice deposits her $x_1$ $Coin_1$ in $\mathcal{C}_1$, and triggers the hash-locked payment to Bob.
 Second, Alice deposits her $pr$ in $\mathcal{C}^{pr}_2$, and triggers the conditional payment to Bob.
 Note that Alice can specify an arbitrary amount for $pr$ when creating $\mathcal{C}_2$, and Alice should have enough $Coin_2$ to deposit $pr$.
-\MOD{Also not that if Bob keeps not participating, Alice's $x_1$ $Coin_1$ and $pr$ will be locked in $\mathcal{C}_1$ and $\mathcal{C}^{pr}_2$, and Alice can only refund them after the $\delta_1$.}
+Also not that if Bob keeps not participating, Alice's $x_1$ $Coin_1$ and $pr$ will be locked in $\mathcal{C}_1$ and $\mathcal{C}^{pr}_2$, and Alice can only refund them after the $\delta_1$.
 
 \paragraph{\textbf{Participate}}
 If Bob thinks $\mathcal{AS}'$ is fair for him, he will participate in $\mathcal{AS}'$ by depositing $x_2$ $Coin_2$ in $\mathcal{C}^{asset}_2$, and triggers the the hash-locked payment to Alice.

@@ -1,7 +1,7 @@
 \section{Formalization}
 \label{sec:formalization}
 
-In this section, we formalize the Atomic Swap protocol \MOD{(the original version on Bitcointalk~\cite{nolan2013alt})} and the American Call Option,
+In this section, we formalize the Atomic Swap protocol (the original version on Bitcointalk~\cite{nolan2013alt}) and the American Call Option,
 then prove that the Atomic Swap is equivalent to an American Call Option without the premium.
 
 
@@ -10,7 +10,7 @@ then prove that the Atomic Swap is equivalent to an American Call Option without
 
 \subsection{Atomic Swap}
 
-\MOD{We formalise the original version of the Atomic Swap~\cite{nolan2013alt}.
+We formalise the original version of the Atomic Swap~\cite{nolan2013alt}.
 
 \subsubsection{Security assumptions}
 
@@ -30,7 +30,6 @@ More specifically,
 Third, the time for confirming a transaction is negligible compared to timelocks.
 In practice, the swap initiator's timelock is 48 hours and the swap participant's timelock is 24 hours by default~\cite{nolan2013alt}, while confirming a transaction is less than 1 hour for most blockchains.
 
-}
 
 \subsubsection{Process}
 
@@ -166,7 +165,7 @@ In detail,
 % misuse
 However, one may take both $Coin_1$ and $Coin_2$ if the other does not trigger \textbf{Redeem}($\cdot$) or \textbf{Refund}($\cdot$) on time.
 For example, if Bob does not trigger \textbf{Redeem}($\cdot$) after Alice triggers \textbf{Redeem}($\cdot$) and $\delta_1$ expires, Alice can also refund $x_1$ $Coin_1$ by triggering \textbf{Refund}($\cdot$).
-But in this case it is Bob to blame, because he should have had enough time - at least $\delta_2 - \delta_1$ \MOD{(48 - 24 = 24 hours by default)} - to redeem $x_1$ $Coin_1$.
+But in this case it is Bob to blame, because he should have had enough time - at least $\delta_2 - \delta_1$ (48 - 24 = 24 hours by default) - to redeem $x_1$ $Coin_1$.
 Another example is that Alice broadcasts the transaction of \textbf{Redeem}($\cdot$) after $\delta_2$, but Bob has already triggered \textbf{Refund}($\cdot$).
 Therefore, Bob can also trigger \textbf{Redeem}($\cdot$) with the preimage in Alice's transaction of \textbf{Redeem}($\cdot$) before $\delta_1$.
 Similarly, it is Alice to blame, because she should have had enough time - before $\delta_2$ - to trigger \textbf{Redeem}($\cdot$).

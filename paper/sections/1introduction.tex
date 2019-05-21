@@ -3,10 +3,9 @@
 
 The Atomic Swap protocol allows two parties to exchange their assets ``atomically'' without trusted third parties.
 ``Atomic'' means the swap either succeeds or fails for both parties at any given time.
-In blockchains, Atomic Swap is usually implemented by using Hashed Timelocked Contracts (HTLCs)\MOD{~\cite{decker2015fast}}.
+In blockchains, Atomic Swap is usually implemented by using Hashed Timelocked Contracts (HTLCs)~\cite{decker2015fast}.
 The HTLC is a type of transaction that, the payee should provide the preimage of a hash value before a specified deadline, otherwise the payment fails - the money goes back to the payer and the payee will not get any money.
 
-\MOD{
 % how important is Atomic Swap
 The Atomic Swap has already been widely adopted in the cryptocurrency industry.
 In particular, it realized the Decentralized Exchanges (DEXes), and started the era of Decentralized Finance (De-Fi).
@@ -18,16 +17,15 @@ More specifically,
 there are more than 250 DEXes~\footnote{\url{https://github.com/distribuyed/index}.};
 there are more than 30 DEX protocols~\footnote{\url{https://github.com/evbots/dex-protocols}.};
 there are more than 4,000 active traders in all DEXes~\footnote{\url{https://dex.watch/}.}.
-}
+
 
 
 % research problem
-However, \MOD{being atomic does not indicate the Atomic Swap is fair}.
+However, being atomic does not indicate the Atomic Swap is fair.
 In particular, in an Atomic Swap, the swap initiator can decide whether to proceed the swap, and the default maximum time for him to decide is 24 hours~\cite{nolan2013alt}.
 Whether this fact influences the fairness of the Atomic Swap remains unknown.
 
 
-\MOD{
 % why problematic
 Intuitively, in the Atomic Swap, the swap initiator can speculate without any penalties.
 More specifically, the swap initiator can keep waiting before the timelock expires.
@@ -56,7 +54,6 @@ Following this proof, we then evaluate how unfair the Atomic Swap is from two di
 After that, we propose two fair Atomic Swap protocols with the premium mechanism, in which one is for currency exchange while the other is for American Call Options.
 Both protocols can be implemented on existing blockchains, and we give reference implementations as well.
 Blockchains with smart contracts (e.g. Ethereum) directly support our protocols, and blockchains with scripts only (e.g. Bitcoin) can support out protocols by adding a simple opcode.
-}
 
 
 
@@ -96,10 +93,9 @@ Also, the premium values rise for all items with the strike time increasing, the
 Based on our observation that the unfairness is introduced by the unpaid premium,
 we then propose two fair Atomic Swap protocols, one is for currency exchange and the other is for American Call Options.
 The two protocols achieve the fairness by implementing the premium mechanism upon the original protocol - The initiator should deposit the premium on the participant's blockchain when initiating the swap.
-\MOD{
 In the currency exchange-style protocol, the premium will go to the participant if the initiator misbehaves, otherwise it will go back to the initiator.
 In the American Call Option-style protocol, the premium goes to the participant if the participant behaves well, otherwise it will go back to the initiator.
-}
+
 
 \paragraph{We describe how to implement our proposed protocols on existing blockchains.}
 We give solutions to implement our protocols on existing blockchains, including blockchains supporting smart contracts and blockchains supporting scripts only.

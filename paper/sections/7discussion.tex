@@ -13,16 +13,16 @@ If the blockchains involved in the swaps are insecure, the Atomic Swaps will als
 Second, the Atomic Swap contracts are written in high-level languages, so the compiled contracts can be insecure if the contract compilers are flawed.
 
 % 2 blockchain async
-Third, the timelock is unreliable in the cross-chain scenario, \MOD{\sout{because the times in different blockchains are never synchronized.}
-because there is no physically synchronous global clock in different blockchains, as same as in any other distributed system~\cite{coulouris2012distributed}.}
+Third, the timelock is unreliable in the cross-chain scenario.
+Similar to other distributed systems~\cite{coulouris2012distributed}, different blockchains are unsynchronized on the time.
 % timestamp of blockchain
-Blockchains timestamp \HY{(is ``timestamp'' a verb here? sorry but I cannot find any example usage online)} events by either two approaches: \MOD{\sout{Using} using} the block height or using the UNIX timestamp.
+Blockchains timestamp \HY{(is ``timestamp'' a verb here? sorry but I cannot find any example usage online)} events by either two approaches: using the block height or using the UNIX timestamp.
 % relative time
 The block height can serialize events on a blockchain by time, but cannot serialize events outside the blockchain.
 In addition, the new block generation is a random process, so the block height cannot indicate the precise time in reality.
 % abosolute time
-Using the UNIX timestamp doesn't work, \MOD{\sout{too} either}.
-This is because the consensus participants are responsible for timestamping events, and the consensus participants can be unreliable: They may use the wrong time, either \MOD{\sout{by} on} purpose or by accident.
+Using the UNIX timestamp doesn't work, either.
+This is because the consensus participants are responsible for timestamping events, and the consensus participants can be unreliable: They may use the wrong time, either on purpose or by accident.
 
 
 \subsection{Other countermeasures}
