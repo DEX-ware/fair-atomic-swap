@@ -43,7 +43,18 @@ $$\mathcal{AS} = (x_1, Coin_1, x_2, Coin_2)$$
 where Alice hopes to buy $x_2$ $Coin_2$ on blockchain $BC_2$ from Bob with $x_1$ $Coin_1$ on blockchain $BC_1$.
 \end{definition}
 
-The Atomic Swap protocol consists of five algorithms:
+
+Let an account with total amount $x$ of a blockchain $BC$ be
+$(x,BC,pk,sk)$, where $pk$ is the address of the account, and $sk$ is
+the private key to authorise the usage of money in this account.
+
+Given two blockchains $BC_1$ and $BC_2$, let Alice be a holder of
+account $(x_{A,1},BC_1,pk_{A,1},sk_{A,1})$ on $BC_1$ and account
+$(x_{A,2},BC_2,pk_{A,2},sk_{A,2})$ on $BC_2$. Similarly, let Bob be a
+holder of account $(x_{B,1},BC_1,pk_{B,1},sk_{B,1})$ on $BC_1$ and
+account $(x_{B,2},BC_2,pk_{B,2},sk_{B,2})$ on $BC_2$.
+
+The Atomic Swap protocol is represented by five algorithms:
 \textbf{Setup},
 \textbf{Initiate},
 \textbf{Participate},
