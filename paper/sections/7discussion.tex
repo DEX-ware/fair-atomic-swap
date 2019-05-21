@@ -34,7 +34,7 @@ The first countermeasure is to make Atomic Swap costly by charging setting up HT
 However, these two solutions do not only significantly reduce the usability of Atomic Swaps, but also affect HTLCs not aiming at setting up Atomic Swaps.
 
 The second solution is to use shorter timelock for Atomic Swaps.
-Unfortunately, short timelocks may cause unexpected situations.
+Unfortunately, short timelocks may cause unexpected \MOD{\sout{situations} consequences}.
 Confirming transactions for setting up Atomic Swaps takes time, and the needed time is highly random.
 With short timelocks, the transactions for setting up Atomic Swaps may be confirmed after the expiration of timelocks.
 
