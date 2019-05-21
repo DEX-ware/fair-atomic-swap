@@ -48,9 +48,9 @@ Once agreed by both parties, the currency exchange is settled without any chance
 
 % what we do briefly
 In this paper, we investigate the unfairness of the Atomic Swap, and propose two fair Atomic Swap variants.
-We start from formally modeling the Atomic Swap and the American Call Option in Finance,
-then prove that an Atomic Swap is equivalent to a premium-free American Call Option based on our model.
-Following this proof, we then evaluate how unfair the Atomic Swap is from two different perspectives: quantifying the unfairness and estimating the premium.
+We start from describing the Atomic Swap and the American Call Option in Finance,
+then we point out that an Atomic Swap is equivalent to a premium-free American Call Option based on our model.
+Following this observation, we then evaluate how unfair the Atomic Swap is from two different perspectives: quantifying the unfairness and estimating the premium.
 After that, we propose two fair Atomic Swap protocols with the premium mechanism, in which one is for currency exchange while the other is for American Call Options.
 Both protocols can be implemented on existing blockchains, and we give reference implementations as well.
 Blockchains with smart contracts (e.g. Ethereum) directly support our protocols, and blockchains with scripts only (e.g. Bitcoin) can support out protocols by adding a simple opcode.
@@ -61,16 +61,16 @@ Blockchains with smart contracts (e.g. Ethereum) directly support our protocols,
 
 Our contributions are as follows:
 
-\paragraph{We formalize the Atomic Swap and the American Call Option, and prove that the Atomic Swap is equivalent to the premium-free American Call Option.}
-We use formal languages to define the Atomic Swap and the American Call Option.
-In particular, we describe them as protocols, and prove that the Atomic Swap is equivalent to the premium-free American Call Option:
+\paragraph{We point out that the Atomic Swap is equivalent to the premium-free American Call Option.}
+We describe the Atomic Swap and the American Call Option,
+then point out that the Atomic Swap is equivalent to the premium-free American Call Option:
 The initiator and the participant in Atomic Swap are the option buyer and the option seller in American Call Options, respectively;
 the initiator asset and the participant asset in Atomic Swap are the used currency and the underlying asset in American Call Options, respectively;
 the participant asset's timelock in Atomic Swap is the strike time in American Call Options;
 the current price of the participant asset in Atomic Swap is the strike price in American Call Options;
 redeeming cryptocurrencies in Atomic Swap is exercising the contract in the American Call Options.
 
-\paragraph{Based on our formalization, we prove that the Atomic Swap is unfair to the participant.}
+\paragraph{Based on this observation, we prove that the Atomic Swap is unfair to the participant.}
 We point out that, according to the option theory in Finance, the Atomic Swap - modelled as the premium-free American Call Option - is unfair to the participant, especially in the highly volatile cryptocurrency market.
 In practice, the initiator can decide whether to proceed the swap while investigating the cryptocurrency market.
 However, proceeding or aborting the swap does not require the initiator to pay for the premium.
@@ -117,7 +117,7 @@ We use Solidity as an example of smart contracts, and the Bitcoin script code as
 
 The paper is structured as follows.
 Section~\ref{sec:background} describes the background of Atomic Swap and options in Finance.
-Section~\ref{sec:formalization} formalizes the Atomic Swap protocol and the American Call Option, then proves the Atomic Swap protocol is equivalent to the premium-free American Call Option.
+Section~\ref{sec:formalization} describes the Atomic Swap protocol and the American Call Option, then points out the Atomic Swap protocol is equivalent to the premium-free American Call Option.
 Section~\ref{sec:evaluation} evaluates the Atomic Swap unfairness by analyzing the volatility and pricing the premium of mainstream cryptocurrency pairs.
 Section~\ref{sec:fair_atomic_swap} describes our proposed fair Atomic Swap protocols.
 Section~\ref{sec:implementation} describes how to implement our proposed protocols on existing blockchains.
