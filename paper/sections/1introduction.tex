@@ -22,40 +22,38 @@ there are more than 4,000 active traders in all DEXes~\footnote{\url{https://dex
 
 % research problem
 However, being atomic does not indicate the Atomic Swap is fair.
-In particular, in an Atomic Swap, the swap initiator can decide whether to proceed the swap, and the default maximum time for him to decide is 24 hours~\cite{nolan2013alt}.
-Whether this fact influences the fairness of the Atomic Swap remains unknown.
-
-
-% why problematic
-Intuitively, in the Atomic Swap, the swap initiator can speculate without any penalties.
+In particular, in an Atomic Swap, the swap initiator can decide whether to proceed or abort the swap, and the default maximum time for him to decide is 24 hours~\cite{nolan2013alt}.
+This enables the the swap initiator to speculate without any penalties.
 More specifically, the swap initiator can keep waiting before the timelock expires.
 If the price of the swap participant's asset rises, the swap initiator will proceed the swap so that he will profit.
 If the price of the swap participant's asset drops, the swap initiator can abort the swap, so that he won't lose any money.
 
 % optionality
 We observe that, this problem is equivalent to the Optionality in Finance, which has already been studied for decades.
-In Finance, an investment is said to have Optionality if 1) settling this investment happens in the future rather than instantly; 2) settling this investment is optional rather than mandatory.
+In Finance, an investment is said to have Optionality if
+1) settling this investment happens in the future rather than instantly;
+2) settling this investment is optional rather than mandatory.
 For an investment with Optionality, the option itself has value besides the underlying asset~\cite{higham2004introduction}, and the value is called the \textit{premium}.
-The option buyer should pay for the premium besides the underlying asset, so that he can no longer speculate without penalties.
+The option buyer should pay for the premium besides the underlying asset, even if he aborts the contract.
+In this way, he can no longer speculate without penalties.
 
 % initiator in atomic swap has optionality
 In the Atomic Swap, the swap initiator has the Optionality, as he can choose whether to proceed or abort the swap.
-Unfortunately, the Atomic Swap does not take the Optionality into account, and the swap initiator is not required to pay for the premium.
-
+Unfortunately, the swap initiator is not required to pay for the premium - the Atomic Swap does not take the Optionality into account.
 % atomic swap should not have optionality
-However, the Atomic Swap is designed for currency exchange rather than options, and the currency exchange should not have Optionality.
-Once agreed by both parties, the currency exchange is settled without any chance for both parties to regret.
+Furthermore, the Atomic Swap should not have Optionality.
+The Atomic Swap is designed for currency exchange, and the currency exchange has no Optionality.
+Instead, once both parties agree on a currency exchange, it should be settled without any chance to regret.
 
 % what we do briefly
-In this paper, we investigate the unfairness of the Atomic Swap, and propose two fair Atomic Swap variants.
+In this paper, we investigate the unfairness of the Atomic Swap.
 We start from describing the Atomic Swap and the American Call Option in Finance,
-then we point out that an Atomic Swap is equivalent to a premium-free American Call Option based on our model.
-Following this observation, we then evaluate how unfair the Atomic Swap is from two different perspectives: quantifying the unfairness and estimating the premium.
+then we point out that an Atomic Swap is equivalent to a premium-free American Call Option.
+Following this observation, we then evaluate how unfair the Atomic Swap is from two different perspectives:
+quantifying the unfairness and estimating the premium.
 After that, we propose two fair Atomic Swap protocols with the premium mechanism, in which one is for currency exchange while the other is for American Call Options.
-Both protocols can be implemented on existing blockchains, and we give reference implementations as well.
-Blockchains with smart contracts (e.g. Ethereum) directly support our protocols, and blockchains with scripts only (e.g. Bitcoin) can support out protocols by adding a simple opcode.
-
-
+Both protocols support blockchains with smart contracts (e.g. Ethereum) directly, and can support blockchains with scripts only (e.g. Bitcoin) by adding a single opcode.
+We also implement our protocols in Solidity for Ethereum, and give detailed instructions on implementing our protocols in Bitcoin.
 
 \subsection{Our contributions}
 
@@ -63,46 +61,50 @@ Our contributions are as follows:
 
 \paragraph{We point out that the Atomic Swap is equivalent to the premium-free American Call Option.}
 We describe the Atomic Swap and the American Call Option,
-then point out that the Atomic Swap is equivalent to the premium-free American Call Option:
-The initiator and the participant in Atomic Swap are the option buyer and the option seller in American Call Options, respectively;
-the initiator asset and the participant asset in Atomic Swap are the used currency and the underlying asset in American Call Options, respectively;
-the participant asset's timelock in Atomic Swap is the strike time in American Call Options;
-the current price of the participant asset in Atomic Swap is the strike price in American Call Options;
-redeeming cryptocurrencies in Atomic Swap is exercising the contract in the American Call Options.
+then we point out that an Atomic Swap is equivalent to a premium-free American Call Option, which is a type of Options (in Finance).
+More specifically:
+the initiator and the participant in an Atomic Swap are the option buyer and the option seller in an American Call Option, respectively;
+the initiator asset and the participant asset in an Atomic Swap are the used currency and the underlying asset in an American Call Option, respectively;
+the participant asset's timelock in an Atomic Swap is the strike time in an American Call Option;
+the current price of the participant asset in an Atomic Swap is the strike price in an American Call Option;
+redeeming cryptocurrencies in an Atomic Swap is exercising the contract in an American Call Option.
 
-\paragraph{Based on this observation, we prove that the Atomic Swap is unfair to the participant.}
-We point out that, according to the option theory in Finance, the Atomic Swap - modelled as the premium-free American Call Option - is unfair to the participant, especially in the highly volatile cryptocurrency market.
+\paragraph{We show that the Atomic Swap is unfair to the participant.}
+We point out that, according to Finance, the Atomic Swap - represented as the premium-free American Call Option - is unfair to the participant, especially in the highly volatile cryptocurrency market.
 In practice, the initiator can decide whether to proceed the swap while investigating the cryptocurrency market.
 However, proceeding or aborting the swap does not require the initiator to pay for the premium.
 This leads to the scenario that, if the participant's asset price rises before the strike time, he will proceed the swap to profit, otherwise he will abort the swap to avoid losing money.
-In this way, the initiator is risk-free towards the market.
+In this way, the swap initiator can speculate without any risk in Atomic Swaps.
 
-\paragraph{We evaluate the Atomic Swap unfairness of cryptocurrencies, and compare it with that of conventional financial assets.}
-We evaluate the unfairness of the Atomic Swaps for mainstream cryptocurrency pairs, and also make comparisons between cryptocurrencies and conventional financial assets - stocks and fiat currencies.
-Our evaluation and comparison consist of two parts: 1) quantifying the profit and the mitigated risk of the initiator, 2) estimating how much the premium should be.
+\paragraph{We evaluate unfairness of the Atomic Swap, and compare it with that of conventional financial assets.}
+We evaluate how unfair the Atomic Swap with mainstream cryptocurrency pairs is, and also compare this unfairness with conventional financial assets (stocks and fiat currencies).
+Our evaluation and comparison consist of two parts: 1) quantifying how much the unfairness is, 2) estimating how much the premium should be.
 % first
 First, we quantify the profit and the mitigated risk of the initiator based on historical exchange rate volatility.
-Our results show that with the default strike time of 24 hours, the profit and the mitigated risks of our selected cryptocurrency pairs are approximately 1\%, while for stocks and fiat currencies the values are approximately 0.3\% and 0.15\%, respectively.
+We classify the unfairness to two parts, namely the profit when the price rises and the mitigated loss when the price drops.
+Our results show that, in the default timelock setting, the profit and the mitigated loss of our selected cryptocurrency pairs are approximately 1\%, while for stocks and fiat currencies the values are approximately 0.3\% and 0.15\%, respectively.
 % second
-Second, we use the Cox-Ross-Rubinstein option pricing model to estimate how much the premium should be for Atomic Swaps in cryptocurrencies.
+Second, we use the Cox-Ross-Rubinstein option pricing model to estimate how much the premium should be for Atomic Swaps.
 In Finance, the Cox-Ross-Rubinstein model is the conventional option pricing model for American-style options.
-Our results show that, with the default strike time of 24 hours, for cryptocurrency pairs the premium should be approximately 2\%, while for stocks and fiat currencies the premium is negligible.
-Also, the premium values rise for all items with the strike time increasing, then start to converge when the strike time reaches 300 days.
+Our results show that, in the default timelock setting, the premium should be approximately 2\% for Atomic Swaps with cryptocurrency pairs, while the premium is negligible for American Call Options with stocks and fiat currencies.
+Also, the premium values rise for all assets with the strike time increasing, then converge when the strike time reaches 300 days.
 
 \paragraph{We propose two fair Atomic Swap protocols, one is for currency exchange and the other is for American Call Options.}
-Based on our observation that the unfairness is introduced by the unpaid premium,
-we then propose two fair Atomic Swap protocols, one is for currency exchange and the other is for American Call Options.
-The two protocols achieve the fairness by implementing the premium mechanism upon the original protocol - The initiator should deposit the premium on the participant's blockchain when initiating the swap.
+With the observation that the unfairness is from the premium,
+we propose two fair Atomic Swap protocols with the premium mechanism.
+One of the two protocols is for currency exchange, and the other is for American Call Options.
 In the currency exchange-style protocol, the premium will go to the participant if the initiator misbehaves, otherwise it will go back to the initiator.
 In the American Call Option-style protocol, the premium goes to the participant if the participant behaves well, otherwise it will go back to the initiator.
 
 
 \paragraph{We describe how to implement our proposed protocols on existing blockchains.}
-We give solutions to implement our protocols on existing blockchains, including blockchains supporting smart contracts and blockchains supporting scripts only.
+We give instructions to implement our protocols on existing blockchains,
+including blockchains supporting smart contracts and blockchains supporting scripts only.
 For blockchains supporting smart contracts such as Ethereum, our protocols can be directly implemented.
 For blockchains only supporting scripts such as Bitcoin, our protocols can be implemented by adding one more opcode.
-We call the opcode ``OP\_LOOKUP\_OUTPUT'', and it looks up the owner of a specific output.
-We use Solidity as an example of smart contracts, and the Bitcoin script code as an example of scripts.
+We call the opcode ``OP\_LOOKUP\_OUTPUT'', which looks up the owner of a specific UTXO output.
+We give the reference implementation in Solidity as an example of smart contracts.
+We also give the Bitcoin script (which assumes ``OP\_LOOKUP\_OUTPUT'' exists) as an example of scripts.
 
 
 
@@ -117,7 +119,7 @@ We use Solidity as an example of smart contracts, and the Bitcoin script code as
 
 The paper is structured as follows.
 Section~\ref{sec:background} describes the background of Atomic Swap and options in Finance.
-Section~\ref{sec:formalization} describes the Atomic Swap protocol and the American Call Option, then points out the Atomic Swap protocol is equivalent to the premium-free American Call Option.
+Section~\ref{sec:formalization} describes the Atomic Swap and the American Call Option, then points out the Atomic Swap protocol is equivalent to the premium-free American Call Option.
 Section~\ref{sec:evaluation} evaluates the Atomic Swap unfairness by analyzing the volatility and pricing the premium of mainstream cryptocurrency pairs.
 Section~\ref{sec:fair_atomic_swap} describes our proposed fair Atomic Swap protocols.
 Section~\ref{sec:implementation} describes how to implement our proposed protocols on existing blockchains.
