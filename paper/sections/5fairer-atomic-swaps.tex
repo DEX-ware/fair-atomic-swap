@@ -31,7 +31,7 @@ More specifically, Spots and Options differ in the following aspects:
 According to Section~\ref{subsubsec:diff_spot_option}, the currency exchange-style Atomic Swaps and the American Call Option-style Atomic Swaps differ in design objectives.
 
 \paragraph{Atomic Swaps for Currency Exchange}
-For the currency exchange, both parties should not abort the contract once signed.
+For the currency exchange, both parties \MOD{\sout{should not} are not permitted to} abort the contract once signed.
 However, in Atomic Swaps, Alice can abort the swap by not releasing the random secret.
 Therefore, we should discourage Alice to abort the swap.
 To achieve this, we can use the premium mechanism as the collateral: Alice should deposit the premium besides her asset when \textbf{Initiate}.
