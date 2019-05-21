@@ -2,20 +2,16 @@
 \label{sec:conclusion}
 
 
-We model the Atomic Swap protocol as the American Call Option,
-and observe that the Atomic Swap protocol is unfair to the participant.
-In particular, we prove that the Atomic Swap protocol is equivalent to an American Call Option without premium,
-and the absence of the premium causes the protocol's significant unfairness.
-
+In this paper, we investigate the unfairness of the Atomic Swap.
+We point out that an Atomic Swap is essentially a premium-free American Call Option,
+and the Atomic Swap protocol is unfair to the participant.
 % evaluate
-We then evaluate the Atomic Swap unfairness, and compare the unfairness between cryptocurrency pairs and conventional financial assets.
-Our evaluation consists of quantifying the unfairness and estimating the unpaid premium,
-and shows that the Atomic Swap of cryptocurrencies is much more unfair than American Call Options with stocks and fiat currencies in the same setting.
+We then evaluate the Atomic Swap unfairness, and compare the unfairness between mainstream cryptocurrencies and conventional financial assets.
+Our evaluation consists of quantifying the unfairness and estimating the unpaid premium.
+The evaluation results show that the Atomic Swap with cryptocurrencies is much more unfair than with stocks and fiat currencies in the same setting, because the cryptocurrency market is highly volatile.
 
 % propose
-Furthermore, we propose two fair Atomic Swap protocols, both of which extend the original protocol by implementing the premium mechanism.
+Furthermore, we propose two fair Atomic Swap protocols, both implements the premium mechanism.
 One of our proposed protocols is for currency exchange, and the other is for American Call Options.
-For both protocols, the initiator creates all contracts when setting up the swap, and deposits the premium on the participant's blockchain when initiating.
-For the currency exchange-style protocol, the premium goes back to the initiator if the swap is successful, and otherwise goes to the participant.
-For the American Call Option-style protocol, the premium goes to the participant once the participant's asset is redeemed or refunded.
-We also justify and prove that our protocols are fair compared to the original protocol.
+We implement both protocols in Solidity as an example of blockchains with smart contracts such as Ethereum.
+We also give instructions on how to implement our protocols by adding a single opcode to blockchains with scripts such as Bitcoin.
