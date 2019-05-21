@@ -1,19 +1,18 @@
 \section{Background}
 \label{sec:background}
 
-In this section, we briefly explain the basic concept of Atomic Swaps and Option (in Finance), and their relationship.
+In this section, we briefly explain the basic concept of Atomic Swaps and Option (in Finance).
 
 \subsection{Atomic Swaps}
 
 An Atomic Swap~\cite{nolan2013alt} is that two parties exchange their assets ``atomically''.
 ``Atomic'' means the swap is indivisible: It either succeeds or fails for both parties.
 
-In Blockchain, utilizing the Hashed Timelocked Contract (HTLC)~\cite{poon2016bitcoin} can accomplish the Atomic Swap without trusted third parties. HTLC was originally introduced to secure routing across multiple payment channels~\cite{paychannel2018btcwiki}.
-In HTLC-style transactions, the payee redeems the payment prior to a deadline by providing the preimage of a specific hash value.
-Otherwise, the payment will expire and the money goes back to the payer.
-HTLC is based on the hashlock - to lock the payment by a hash value, and the timelock - to limit the deadline of redeeming. The timelock avoids locking money in a payment forever when the payee cannot provide the preimage.
-The Atomic Swap protocol can be implemented on all blockchains supporting the timelock and the hashlock.
-
+In Blockchain, the Hashed Timelocked Contract (HTLC)~\cite{poon2016bitcoin} is utilized for implementing the Atomic Swap without trusted third parties.
+HTLC was originally introduced to secure routing across multiple payment channels~\cite{paychannel2018btcwiki}.
+In a HTLC-style transaction, the payee can redeem the payment prior to a deadline only by providing the preimage of a specific hash value, otherwise the payment will expire and the money goes back to the payer.
+This is achieved by the hashlock - to lock the payment by a hash value, and the timelock - to give the deadline of redeeming.
+The timelock avoids locking money in a payment forever when the payee cannot provide the preimage.
 
 \subsection{Option}
 \label{subsec:background_option}
