@@ -210,3 +210,8 @@ $\frac{x_2}{x_1}$ is the price of the asset from Alice's perspective, so $\frac{
 $\delta_2$ is the timelock of the contract transaction on $BC_2$.
 It is equivalent to the strike time of $\Pi$, because after $\delta_2$ Bob can refund his asset back and invalidate $\mathcal{AS}$, but before $\delta_2$ Bob cannot abort $\mathcal{AS}$ if Alice triggers \textbf{Participate}.
 Establishing the Atomic Swap does not require Alice to pay anything other than the asset to Bob, so the premium here is zero.
+
+The ``premium-free'' property enables Alice to speculate without any risk:
+if Bob's asset price rises right before the strike time, she will proceed the swap to profit,
+otherwise she will abort the swap to avoid the loss.
+Therefore, without the premium, Alice is risk-free towards the market.
