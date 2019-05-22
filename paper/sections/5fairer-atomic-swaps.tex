@@ -9,8 +9,7 @@ In this section, we propose two fair variants of the original Atomic Swap protoc
 \subsubsection{Difference between Currency Exchange and Options}
 \label{subsubsec:diff_spot_option}
 
-Before designing a fair Atomic Swap protocol, we should \MOD{\sout{know} figure} its design objective \MOD{out}:
-Is the protocol aiming at currency exchange or the American Call Options?
+Before designing a fair Atomic Swap protocol, we summarize its design objectives.
 
 To our knowledge, the Atomic Swap protocol is originally designed for the fair exchange between different cryptocurrencies.
 However, according to our analysis, the protocol is unfair because Alice can choose to proceed or abort the swap based on the asset price, and he will not receive any penalty if he abort the swap.
@@ -31,7 +30,7 @@ More specifically, Spots and Options differ in the following aspects:
 According to Section~\ref{subsubsec:diff_spot_option}, the currency exchange-style Atomic Swaps and the American Call Option-style Atomic Swaps differ in design objectives.
 
 \paragraph{Atomic Swaps for Currency Exchange}
-For the currency exchange, both parties \MOD{\sout{should not} are not permitted to} abort the contract once signed.
+For the currency exchange, both parties are not permitted to abort the contract once signed.
 However, in Atomic Swaps, Alice can abort the swap by not releasing the random secret.
 Therefore, we should discourage Alice to abort the swap.
 To achieve this, we can use the premium mechanism as the collateral: Alice should deposit the premium besides her asset when \textbf{Initiate}.

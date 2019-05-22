@@ -9,7 +9,7 @@ The HTLC is a type of transaction that, the payee should provide the preimage of
 % how important is Atomic Swap
 The Atomic Swap has already been widely adopted in the cryptocurrency industry.
 In particular, it realized the Decentralized Exchanges (DEXes), and started the era of Decentralized Finance (De-Fi).
-In a DEX, traders publish and participate in deals, and the dealing process is regulated by a smart contract embedding the Atomic Swap protocol \MOD{in}.
+In a DEX, traders publish and participate in deals, and the dealing process is regulated by a smart contract embedding the Atomic Swap protocol.
 Different from centralized exchanges, DEXes are non-custodial - traders does not need to deposit their money in DEXes.
 The non-custody property avoids DEXes from money thefts, which commonly happened on centralized exchanges.
 To date, the DEX market volume has reached approximately 50,000 ETH~\footnote{\url{https://dex.watch/}.}.
@@ -23,7 +23,7 @@ there are more than 4,000 active traders in all DEXes~\footnote{\url{https://dex
 % research problem
 However, being atomic does not indicate the Atomic Swap is fair.
 In particular, in an Atomic Swap, the swap initiator can decide whether to proceed or abort the swap, and the default maximum time for him to decide is 24 hours~\cite{nolan2013alt}.
-This enables the the swap initiator to speculate without any \MOD{\sout{penalties} penalty}.
+This enables the the swap initiator to speculate without any penalty.
 More specifically, the swap initiator can keep waiting before the timelock expires.
 If the price of the swap participant's asset rises, the swap initiator will proceed the swap so that he will profit.
 If the price of the swap participant's asset drops, the swap initiator can abort the swap, so that he won't lose any money.
@@ -53,7 +53,7 @@ Following this observation, we then evaluate how unfair the Atomic Swap is from 
 quantifying the unfairness and estimating the premium.
 After that, we propose two fair Atomic Swap protocols with the premium mechanism, in which one is for currency exchange while the other is for American Call Options.
 Both protocols support blockchains with smart contracts (e.g. Ethereum) directly, and can support blockchains with scripts only (e.g. Bitcoin) by adding a single opcode.
-We also implement our protocols in Solidity \MOD{(one of the smart contract languages)} for Ethereum, and give detailed instructions on implementing our protocols in Bitcoin.
+We also implement our protocols in Solidity (a smart contract programming language for Ethereum), and give detailed instructions on implementing our protocols in Bitcoin.
 
 \subsection{Our contributions}
 
@@ -76,8 +76,8 @@ However, proceeding or aborting the swap does not require the initiator to pay f
 This leads to the scenario that, if the participant's asset price rises before the strike time, he will proceed the swap to profit, otherwise he will abort the swap to avoid losing money.
 In this way, the swap initiator can speculate without any risk in Atomic Swaps.
 
-\paragraph{We evaluate \MOD{the} unfairness of the Atomic Swap, and compare it with that of conventional financial assets.}
-We evaluate how unfair the Atomic Swap with mainstream cryptocurrency pairs is, and also compare this unfairness with \MOD{those of} conventional financial assets (stocks and fiat currencies).
+\paragraph{We evaluate the unfairness of the Atomic Swap, and compare it with that of conventional financial assets.}
+We evaluate how unfair the Atomic Swap with mainstream cryptocurrency pairs is, and also compare this unfairness with those of conventional financial assets (stocks and fiat currencies).
 Our evaluation and comparison consist of two parts: 1) quantifying how much the unfairness is, 2) estimating how much the premium should be.
 % first
 First, we quantify the profit and the mitigated risk of the initiator based on historical exchange rate volatility.
@@ -85,7 +85,7 @@ We classify the unfairness to two parts, namely the profit when the price rises 
 Our results show that, in the default timelock setting, the profit and the mitigated loss of our selected cryptocurrency pairs are approximately 1\%, while for stocks and fiat currencies the values are approximately 0.3\% and 0.15\%, respectively.
 % second
 Second, we use the Cox-Ross-Rubinstein option pricing model to estimate how much the premium should be for Atomic Swaps.
-In Finance, the Cox-Ross-Rubinstein model\MOD{~\cite{cox1979option}} is the conventional option pricing model for American-style options.
+In Finance, the Cox-Ross-Rubinstein model\cite{cox1979option} is the conventional option pricing model for American-style options.
 Our results show that, in the default timelock setting, the premium should be approximately 2\% for Atomic Swaps with cryptocurrency pairs, while the premium is negligible for American Call Options with stocks and fiat currencies.
 Also, the premium values rise for all assets with the strike time increasing, then converge when the strike time reaches 300 days.
 
@@ -104,7 +104,7 @@ For blockchains supporting smart contracts such as Ethereum, our protocols can b
 For blockchains only supporting scripts such as Bitcoin, our protocols can be implemented by adding one more opcode.
 We call the opcode ``OP\_LOOKUP\_OUTPUT'', which looks up the owner of a specific UTXO output.
 We give the reference implementation in Solidity as an example of smart contracts.
-We also give \MOD{\sout{the} that in} Bitcoin script (which assumes ``OP\_LOOKUP\_OUTPUT'' exists) as an example of scripts.
+We also give that in Bitcoin script (which assumes ``OP\_LOOKUP\_OUTPUT'' exists) as an example of scripts.
 
 
 

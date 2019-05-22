@@ -34,15 +34,15 @@ The first countermeasure is to make Atomic Swap costly by charging setting up HT
 However, these two solutions do not only significantly reduce the usability of Atomic Swaps, but also affect HTLCs not aiming at setting up Atomic Swaps.
 
 The second solution is to use shorter timelock for Atomic Swaps.
-Unfortunately, short timelocks may cause unexpected \MOD{\sout{situations} consequences}.
-Confirming transactions for setting up Atomic Swaps takes time, and the \MOD{\sout{needed time} time required} is highly \MOD{\sout{random} unpredictable}.
+Unfortunately, short timelocks may cause unexpected consequences.
+Confirming transactions for setting up Atomic Swaps takes time, and the time required is highly unpredictable.
 With short timelocks, the transactions for setting up Atomic Swaps may be confirmed after the expiration of timelocks.
 
 
 \subsection{Limitations of our solutions}
 
 Still, our solutions are not perfect.
-The initiators of Atomic Swaps \MOD{\sout{should have} need having} some participant's asset to initiate an Atomic Swap,
+The initiators of Atomic Swaps need to hold some participant's asset to initiate an Atomic Swap,
 for either collateralizing successful swaps or paying for the option itself.
 Unfortunately, the initiators do not always have participant's asset: They may just hope to get some participant's asset with only his asset.
 Before doing an Atomic Swap, the initiator should get some participant's asset by arbitrary means.

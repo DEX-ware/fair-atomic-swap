@@ -32,7 +32,7 @@ In our protocols, the transactions of $Coin_1$, $Coin_2$ and $pr$ are all timelo
 \subsection{Smart contracts}
 
 Smart contracts support all aforementioned functionalities, so can easily implement our protocols.
-We use the Solidity - \MOD{one of} the programming language\MOD{s} for Ethereum smart contracts~\cite{wood2014ethereum} - as an example.
+We use the Solidity - one of programming languages for Ethereum smart contracts~\cite{wood2014ethereum} - as an example.
 
 Our implementations are based on the original Atomic Swap Solidity implementation~\footnote{\url{https://github.com/AltCoinExchange/ethatomicswap}.},
 but extend the premium mechanism.
@@ -171,7 +171,7 @@ In the currency exchange-style Atomic Swap the premium belongs to Alice while in
 
 \paragraph{\textit{redeemPremium()} and \textit{refundPremium()}}
 
-\textit{redeemPremium()} and \textit{refundPremium()} are similar \MOD{\sout{with} to} \textit{redeemAsset()} and \textit{refundAsset()}, and their executions are secured by \textit{isPremiumRedeemable()} and \textit{isPremiumRefundable()}.
+\textit{redeemPremium()} and \textit{refundPremium()} are similar to \textit{redeemAsset()} and \textit{refundAsset()}, and their executions are secured by \textit{isPremiumRedeemable()} and \textit{isPremiumRefundable()}.
 The code is shown in Listing~\ref{lst:premium_redeem_refund_function}.
 
 \begin{figure}[htb]
@@ -266,7 +266,7 @@ First, Bob creates the $Coin_2$ transaction and sends it to Alice.
 Second, Alice creates the premium transaction which uses OP\_LOOKUP\_OUTPUT to check the ownership of $Coin_2$ transaction outputs.
 Third, Alice merges the $Coin_2$ transaction and the premium transaction to a single transaction, signs the transaction, and sends it to Bob.
 Finally, Bob signs the transaction and sends it to Alice.
-At this stage, both Alice and Bob \MOD{\sout{have} obtain} the mutually signed transaction containing both the premium transaction and the $Coin_2$ transaction.
+At this stage, both Alice and Bob have obtained the mutually signed transaction, which consists of both the premium transaction and the $Coin_2$ transaction.
 
 \paragraph{The premium transaction}
 Listing~\ref{lst:bitcoin_contract_currency_exchange} and Listing~\ref{lst:bitcoin_contract_option} show the premium transaction in the Bitcoin script

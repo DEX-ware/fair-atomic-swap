@@ -5,7 +5,7 @@ In this section, we evaluate the unfairness of the Atomic Swap based on our obse
 In particular, we evaluate the unfairness from two perspectives: quantifying the unfairness and estimating the unpaid premium.
 Quantifying the unfairness is based on analyzing the historical exchange rate volatility.
 Estimating the unpaid premium is based on the Cox-Ross-Rubinstein option pricing model - the conventional option pricing model for American-style options.
-Furthermore, we also evaluate conventional financial assets - the stocks and the currency exchanges - and compare their results with cryptocurrencies\MOD{'}.
+Furthermore, we also evaluate conventional financial assets - the stocks and the currency exchanges - and compare their results with cryptocurrencies.
 
 \subsection{Experimental setting}
 
@@ -14,7 +14,7 @@ In particular, the cryptocurrency exchange rate data was retrieved from from Coi
 the stock index data was retrieved from Yahoo Finance~\footnote{\url{https://finance.yahoo.com}. Data was fetched at May 4th, 2019.};
 the currency exchange rate data was retrieved from Investing.com~\footnote{\url{https://www.investing.com}. Data was fetched at May 4th, 2019.}.
 
-All experiments run on a MacBook Pro with a 2.2 GHz Intel Core i7 Processor, a 16 GB DDR4 RAM and 256 \MOD{GB} SSD storage disk.
+All experiments run on a MacBook Pro with a 2.2 GHz Intel Core i7 Processor, a 16 GB DDR4 RAM and 256 GB SSD storage disk.
 
 \subsection{Quantifying the unfairness by market volatility}
 \label{subsec:volatility_analysis}
@@ -35,7 +35,7 @@ Assume the possibility for Bob's asset price to rise is $P_{\alpha}$, and to dro
 Then, the expected profit rate is $E_{\alpha} = \alpha P_{\alpha}$,
 and the expected mitigated risk rate is $E_{\beta} = \beta P_{\beta}$.
 Therefore, the expected unfairness is that Alice profits $E_{\alpha} x$ and mitigates the risk of losing $E_{\beta} x$.
-Also, as $E_\alpha$ and $E_\beta$ are equally calculated, they can be added \MOD{up} together to derive the total unfairness as $E_\alpha + E_\beta$.
+Also, as $E_\alpha$ and $E_\beta$ are equally calculated, adding up them together ($E_\alpha + E_\beta$) can derive the total unfairness.
 
 \paragraph{Experimental methodology.}
 In our scenario, quantifying the unfairness is to estimate $E_{\alpha}$ and $E_{\beta}$.
@@ -63,7 +63,7 @@ We use S\&P500 and Dow Jones Index (DJI) as examples of stocks, and USD-EUR and 
 Figure~\ref{fig:volatility_analysis} shows the estimated $E_\alpha$, $E_\beta$, the maximum daily rises $max_\alpha$ and the maximum daily drops $max_\beta$ for chosen 8 cryptocurrency pairs, stock indices (S\&P500 and DJI) and fiat currency exchange rates (USD-EUR and USD-GBP).
 For each plot, points in the red Profit Area indicate that Alice profits directly at those days, and points in the green Risk Area indicate that Alice will abort the swap to mitigate the risk.
 
-We observe that for all chosen cryptocurrency pairs, $max_\alpha$ and $max_\beta$ are \MOD{\sout{quite big} of considerable significance} - ranging from 8\% to 25\%.
+We observe that for all chosen cryptocurrency pairs, $max_\alpha$ and $max_\beta$ are considerably big - ranging from 8\% to 25\%.
 Meanwhile, $max_\alpha$ and $max_\beta$ of stock indices are much smaller than all cryptocurrency pairs,
 and $max_\alpha$ and $max_\beta$ of fiat currencies are even smaller than stock indices.
 This indicates that in the setting of an 24-hour Atomic Swap, the cryptocurrency is much more unfair than stocks, and the stocks are more unfair than fiat currencies.
@@ -79,11 +79,15 @@ the fourth group ($E_\alpha > 0.015 \wedge 0.005 < E_\beta < 0.015$) only contai
 Moreover, we draw a line $E_\beta = E_\alpha$ to separate two areas: $E_\beta > E_\alpha$ and $E_\beta < E_\alpha$.
 
 Obviously, the Atomic Swap with first-group items is fairer than with second-group items, and the Atomic Swap with second-group items is fair than with third-group and fourth-group items.
-Therefore, we can \MOD{\sout{get} arrive at} the following results.
-First, the Atomic Swap with cryptocurrency pairs is more unfair than with stocks and fiat currency pairs. This result is consistent with results in Figure~\ref{fig:volatility_analysis}.
+More specifically, we can get the following results.
+% 1
+First, the Atomic Swap with cryptocurrency pairs is more unfair than with stocks and fiat currency pairs.
+This result is consistent with results in Figure~\ref{fig:volatility_analysis}.
+% 2
 Second, $E_\beta$ and $E_\beta - E_\alpha$ of BTC-BNB are bigger than of others. This means the exchange rate of BTC-BNB drops generally over the last year.
 Meanwhile, $E_\alpha$ and $E_\alpha - E_\beta$ of BTC-BCH are bigger than of others. This means the exchange rate of BTC-BCH rises generally over the last year.
 Both observations indicate that BTC-BNB and BTC-BCH are highly volatile, so the Atomic Swap with those assets is more unfair than with other assets.
+% 3
 Third, all dots are close to the line $E_\beta = E_\alpha$, while the dots of stocks and fiat currency pairs almost lay on this line.
 A dot lying on $E_\beta = E_\alpha$ means the exchange rate rises and drops at the same level.
 Therefore, although more volatile than stocks and fiat currency pairs, exchange rates of cryptocurrency pairs rise and drop at the same level.
@@ -245,7 +249,7 @@ q &= 1 - p\\
 r &= q
 \end{align}
 
-such that the premium distribution simulates the geometric Brownian motion \MOD{(citation/explanation needed)} with parameters $r$ and $\sigma$.
+such that the premium distribution simulates the geometric Brownian motion~\cite{karatzas1998brownian} with parameters $r$ and $\sigma$.
 
 The earliest premium $S_{0, 1}$, which is our targeted estimated premium - can be calculated by iteratively back-propagating the later premiums.
 
@@ -268,4 +272,4 @@ Recall the evaluated unfairness in Section~\ref{subsec:volatility_analysis}, its
 Second, with the default strike time $T = 1$ of the Atomic Swap, the premium of cryptocurrency pairs vary from approximately 1\% to 2.3\% of the underlying asset value.
 
 Third, for all evaluated items, the premium values rise monotonically.
-This is because the longer expiration time lets the option buyer to have more control on the option - He has more time to predict the price and \MOD{\sout{judges} determines} whether to exercise the option.
+This is because the longer expiration time lets the option buyer to have more control on the option - He has more time to predict the price and decide to exercise or abort the option.
