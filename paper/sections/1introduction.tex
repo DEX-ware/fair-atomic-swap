@@ -14,9 +14,9 @@ Different from centralized exchanges, DEXes are non-custodial - traders does not
 The non-custody property avoids DEXes from money thefts, which commonly happened on centralized exchanges.
 To date, the DEX market volume has reached approximately 50,000 ETH~\cite{dexwatch}.
 More specifically,
-there are more than 250 DEXes~\cite{distribuyed/index};
-there are more than 30 DEX protocols~\cite{evbots/dex-protocols};
-there are more than 4,000 active traders in all DEXes~\cite{dexwatch}.
+there are more than 250 DEXes~\cite{distribuyed/index},
+more than 30 DEX protocols~\cite{evbots/dex-protocols},
+and more than 4,000 active traders in all DEXes~\cite{dexwatch}.
 
 
 
@@ -53,7 +53,7 @@ Following this observation, we then evaluate how unfair the Atomic Swap is from 
 quantifying the unfairness and estimating the premium.
 After that, we propose an improvement on the Atomic Swap, which implements the premium mechanism, to make it fair.
 Our improvement supports blockchains with smart contracts (e.g. Ethereum) directly, and can support blockchains with scripts only (e.g. Bitcoin) by adding a single opcode.
-We also implement our protocol in Solidity (a smart contract programming language for Ethereum), and give detailed instructions on implementing our protocols in Bitcoin.
+We also implement our protocol in Solidity (a smart contract programming language for Ethereum), and give detailed instructions on implementing our protocols on Bitcoin.
 
 \subsection{Our contributions}
 
@@ -67,7 +67,7 @@ the initiator and the participant in an Atomic Swap are the option buyer and the
 the initiator asset and the participant asset in an Atomic Swap are the used currency and the underlying asset in an American Call Option, respectively;
 the participant asset's timelock in an Atomic Swap is the strike time in an American Call Option;
 the current price of the participant asset in an Atomic Swap is the strike price in an American Call Option;
-redeeming cryptocurrencies in an Atomic Swap is exercising the contract in an American Call Option.
+redeeming cryptocurrencies in an Atomic Swap is equivalent to exercising the contract in an American Call Option.
 
 \paragraph{We show that the Atomic Swap is unfair to the participant.}
 We point out that, according to Finance, the Atomic Swap - represented as the premium-free American Call Option - is unfair to the participant, especially in the highly volatile cryptocurrency market.
@@ -81,25 +81,25 @@ We quantify how unfair the Atomic Swap with mainstream cryptocurrency pairs is, 
 We first classify the unfairness to two parts, namely the profit when the price rises and the mitigated loss when the price drops, then quantify them based on historical exchange rate volatility.
 Our results show that, in the default timelock setting, the profit and the mitigated loss of our selected cryptocurrency pairs are approximately 1\%, while for stocks and fiat currencies the values are approximately 0.3\% and 0.15\%, respectively.
 
-\paragraph{We use the Cox-Ross-Rubinstein option pricing model in Finance to estimate the premium.}
+\paragraph{We use the Cox-Ross-Rubinstein option pricing model to estimate the premium.}
 We use the Cox-Ross-Rubinstein option pricing model to estimate how much the premium should be for Atomic Swaps.
-In Finance, the Cox-Ross-Rubinstein model\cite{cox1979option} is the conventional option pricing model for American-style options.
+In Finance, the Cox-Ross-Rubinstein model~\cite{cox1979option} is the conventional option pricing model for American-style options.
 Our results show that, in the default timelock setting, the premium should be approximately 2\% for Atomic Swaps with cryptocurrency pairs, while the premium is negligible ($\sim 0.3\%$) for American Call Options with stocks and fiat currencies.
-Also, the premium values rise for all assets with the strike time increasing, then converge when the strike time reaches 300 days.
+Also, the premium values rise for all assets with the strike time increasing, then start to converge when the strike time reaches 300 days.
 
 \paragraph{We propose an improvement on the Atomic Swap to make it fair.}
 With the observation that the unfairness is from the premium,
 we propose an improvement on the Atomic Swap, which implements the premium mechanism, to make it fair.
 It supports both the currency exchange-style Atomic Swap and the American Call Option-style Atomic Swap.
-In the currency exchange-style Atomic Swap, the premium will go to the participant if the initiator misbehaves, otherwise it will go back to the initiator.
-In the American Call Option-style Atomic Swap, the premium goes to the participant if the participant behaves well, otherwise it will go back to the initiator.
+In the currency exchange-style Atomic Swap, the premium will go back to the swap initiator if the swap is successful.
+In the American Call Option-style Atomic Swap, the premium will definitely go to the swap participant if the participant participates in the swap.
 
 
-\paragraph{We describe how to implement our proposed protocols on existing blockchains.}
+\paragraph{We describe how to implement our protocol on existing blockchains.}
 We give instructions to implement our protocols on existing blockchains,
 including blockchains supporting smart contracts and blockchains supporting scripts only.
-For blockchains supporting smart contracts such as Ethereum, our protocols can be directly implemented.
-For blockchains only supporting scripts such as Bitcoin, our protocols can be implemented by adding one more opcode.
+For blockchains supporting smart contracts (e.g. Ethereum), our protocol can be directly implemented.
+For blockchains supporting scripts only (e.g. Bitcoin), our protocol can be implemented by adding one more opcode.
 We call the opcode ``OP\_LOOKUP\_OUTPUT'', which looks up the owner of a specific UTXO output.
 We give the reference implementation in Solidity as an example of smart contracts.
 We also give that in Bitcoin script (which assumes ``OP\_LOOKUP\_OUTPUT'' exists) as an example of scripts.
@@ -117,7 +117,7 @@ We also give that in Bitcoin script (which assumes ``OP\_LOOKUP\_OUTPUT'' exists
 
 The paper is structured as follows.
 Section~\ref{sec:background} describes the background of Atomic Swap and options in Finance.
-Section~\ref{sec:formalization} describes the Atomic Swap and the American Call Option, then points out the Atomic Swap protocol is equivalent to the premium-free American Call Option.
+Section~\ref{sec:formalization} describes the Atomic Swap and the American Call Option, and points out the Atomic Swap protocol is equivalent to the premium-free American Call Option.
 Section~\ref{sec:evaluation} evaluates the Atomic Swap unfairness by analyzing the volatility and pricing the premium of mainstream cryptocurrency pairs.
 Section~\ref{sec:fair_atomic_swap} describes our proposed fair Atomic Swap protocols.
 Section~\ref{sec:implementation} describes how to implement our proposed protocols on existing blockchains.
