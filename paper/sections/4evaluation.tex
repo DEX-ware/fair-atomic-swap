@@ -2,9 +2,9 @@
 \label{sec:evaluation}
 
 In this section, we evaluate the unfairness of the Atomic Swap based on our observation in Section~\ref{sec:formalization}.
-In particular, we evaluate the unfairness from two perspectives: quantifying the unfairness and estimating the unpaid premium.
+In particular, our evaluations are from two perspectives: quantifying the unfairness and estimating the unpaid premium.
 Quantifying the unfairness is based on analyzing the historical exchange rate volatility.
-Estimating the unpaid premium is based on the Cox-Ross-Rubinstein option pricing model - the conventional option pricing model for American-style options.
+Estimating the unpaid premium is based on the Cox-Ross-Rubinstein model - the conventional option pricing model for pricing American-style options in Finance.
 Furthermore, we also evaluate conventional financial assets - the stocks and the currency exchanges - and compare their results with cryptocurrencies.
 
 \subsection{Experimental setting}
@@ -14,21 +14,20 @@ In particular, the cryptocurrency exchange rate data was retrieved from from Coi
 the stock index data was retrieved from Yahoo Finance~\footnote{\url{https://finance.yahoo.com}. Data was fetched at May 4th, 2019.};
 the currency exchange rate data was retrieved from Investing.com~\footnote{\url{https://www.investing.com}. Data was fetched at May 4th, 2019.}.
 
-All experiments run on a MacBook Pro with a 2.2 GHz Intel Core i7 Processor, a 16 GB DDR4 RAM and 256 GB SSD storage disk.
+All experiments run on a MacBook Pro with a 2.2 GHz Intel Core i7 Processor, a 16 GB DDR4 RAM and 256 GB SSD hard disk.
 
 \subsection{Quantifying the unfairness}
 \label{subsec:volatility_analysis}
 
-The unfairness consists of two parts, namely the profit and the mitigated loss from Alice's perspective.
-When Bob's asset price rises, Alice profits directly.
-When Bob's asset price drops, Alice can abort the swap and transfer the loss to Bob.
-
-
 Assume that Alice initiates the swap by triggering \textbf{Initiate}($\cdot$) at the time $t$, then by default $\delta_1 = t + 48 (\text{hours})$.
 We also assume that Bob participates in the swap by triggering \textbf{Participate}($\cdot$), then by default $\delta_2 = t + 24 (\text{hours})$.
-In this way, Alice can decide whether to proceed the swap within $ \delta_1 - \delta_2 = 24 (\text{hours})$.
 
-We test the unfairness by using a single Atomic Swap with the value of $x$ USD, then we show the degree of unfairness in dollars based on the historical data.
+In this way, Alice can decide whether to proceed the swap within $ \delta_1 - \delta_2 = 24 (\text{hours})$.
+When Bob's asset price rises, Alice profits directly.
+When Bob's asset price drops, Alice can abort the swap to avoid losing money.
+Based on this observation, we classify Alice's advantages to two parts, namely the profit when Bob's asset price rises and the mitigated loss when Bob's asset price drops.
+
+We then test the unfairness by using a single Atomic Swap with the value of $x$ USD, then we show the degree of unfairness in dollars based on the historical data.
 For each day, Alice may either profit $\alpha$ percent of $x$ directly (when Bob's asset price rises),
 or mitigate $\beta$ percent of $x$ by aborting the swap (when Bob's asset price drops) on average.
 Assume the possibility for Bob's asset price to rise is $P_{\alpha}$, and to drop is $P_{\beta}$.
@@ -38,9 +37,9 @@ Therefore, the expected unfairness is that Alice profits $E_{\alpha} x$ and miti
 Also, as $E_\alpha$ and $E_\beta$ are equally calculated, adding up them together ($E_\alpha + E_\beta$) can derive the total unfairness.
 
 \paragraph{Experimental methodology.}
-In our scenario, quantifying the unfairness is to estimate $E_{\alpha}$ and $E_{\beta}$.
-We estimate $E_{\alpha}$ and $E_{\beta}$ for each selected cryptocurrency pair.
-Furthermore,  we also evaluate the unfairness of stock indices and fiat currencies in the same setting, in order to make comparisons.
+In our scenario, quantifying the unfairness is to calculate $E_{\alpha}$ and $E_{\beta}$,
+so we calculate $E_{\alpha}$ and $E_{\beta}$ for each selected cryptocurrency pair.
+Furthermore,  we also quantify the unfairness of stock indices and fiat currencies in the same setting, in order to make comparisons.
 We use S\&P500 and Dow Jones Index (DJI) as examples of stock indices, and USD-EUR and USD-GBP as examples of fiat currencies.
 
 \paragraph{Results and analysis.}
@@ -49,7 +48,7 @@ We use S\&P500 and Dow Jones Index (DJI) as examples of stock indices, and USD-E
     \includegraphics[width=\linewidth]{volatility_analysis.eps}
     \caption{The daily percentage changes for all selected cryptocurrency pairs, stock indices and fiat currency pairs over one year (from 03/05/2018 to 03/05/2019).
     For each figure, $E_{\alpha}$, $E_{\beta}$, $max_\alpha$ and $max_\beta$ are the expected profit rate, the expected mitigated risk rate, the maximum daily profit and the maximum daily mitigated risk, respectively.
-    The red area is the Profit Area where Alice profit from the rising price, and the green area is the Risk Area where Alice mitigates the loss from the dropping price.}
+    The red area is the Profit Area where Alice profit from the rising asset price, and the green area is the Risk Area where Alice mitigates the loss from the dropping asset price.}
     \label{fig:volatility_analysis}
 \end{figure*}
 
@@ -60,8 +59,8 @@ We use S\&P500 and Dow Jones Index (DJI) as examples of stock indices, and USD-E
 \end{figure}
 
 % line analysis
-Figure~\ref{fig:volatility_analysis} shows the estimated $E_\alpha$, $E_\beta$, the maximum daily rises $max_\alpha$ and the maximum daily drops $max_\beta$ for chosen 8 cryptocurrency pairs, stock indices (S\&P500 and DJI) and fiat currency exchange rates (USD-EUR and USD-GBP).
-For each plot, points in the red Profit Area indicate that Alice profits directly at those days, and points in the green Risk Area indicate that Alice will abort the swap to mitigate the risk.
+Figure~\ref{fig:volatility_analysis} shows the calculated $E_\alpha$, $E_\beta$, the maximum daily rises $max_\alpha$ and the maximum daily drops $max_\beta$ for 8 mainstream cryptocurrency pairs, stock indices (S\&P500 and DJI) and fiat currency exchange rates (USD-EUR and USD-GBP).
+For each plot, points in the red Profit Area indicate that Alice profits directly at those days, and points in the green Risk Area indicate that Alice can abort the swap to mitigate the risk at those days.
 
 We observe that for all chosen cryptocurrency pairs, $max_\alpha$ and $max_\beta$ are considerably big - ranging from 8\% to 25\%.
 Meanwhile, $max_\alpha$ and $max_\beta$ of stock indices are much smaller than all cryptocurrency pairs,
@@ -72,10 +71,10 @@ This indicates that in the setting of an 24-hour Atomic Swap, the Atomic Swap wi
 % scatter results and analysis
 Figure~\ref{fig:vol_scatter} visualizes $E_\alpha$ and $E_\beta$ of all evaluated items in Figure~\ref{fig:volatility_analysis}.
 In particular, we classify scatters to 4 groups based on their $E_\alpha$ and $E_\beta$:
-The first group ($E_\alpha < 0.005 \wedge E_\beta < 0.005$) consists of all stock indices (S\&P500 and DJI) and all fiat currency pairs (USD-GBP and USD-EUR);
+The first group ($ 0 < E_\alpha < 0.005 \wedge 0 < E_\beta < 0.005$) consists of all stock indices (S\&P500 and DJI) and all fiat currency pairs (USD-GBP and USD-EUR);
 the second group ($0.005 < E_\alpha < 0.015 \wedge 0.005 < E_\beta < 0.015$) consists of most cryptocurrency pairs;
-the third group ($0.005 < E_\alpha < 0.015 \wedge E_\beta > 0.015$) only contains one cryptocurrency pair BTC-BNB;
-the fourth group ($E_\alpha > 0.015 \wedge 0.005 < E_\beta < 0.015$) only contains the last cryptocurrency pair BTC-BCH.
+the third group ($0.010 < E_\alpha < 0.015 \wedge E_\beta > 0.015$) only contains one cryptocurrency pair BTC-BNB;
+the fourth group ($E_\alpha > 0.015 \wedge 0.010 < E_\beta < 0.015$) only contains the last cryptocurrency pair BTC-BCH.
 Moreover, we draw a line $E_\beta = E_\alpha$ to separate two areas: $E_\beta > E_\alpha$ and $E_\beta < E_\alpha$.
 
 Obviously, the Atomic Swap with first-group items is fairer than with second-group items, and the Atomic Swap with second-group items is fair than with third-group and fourth-group items.
@@ -84,8 +83,8 @@ More specifically, we can get the following results.
 First, the Atomic Swap with cryptocurrency pairs is more unfair than with stocks and fiat currency pairs.
 This result is consistent with results in Figure~\ref{fig:volatility_analysis}.
 % 2
-Second, $E_\beta$ and $E_\beta - E_\alpha$ of BTC-BNB are bigger than of others. This means the exchange rate of BTC-BNB drops generally over the last year.
-Meanwhile, $E_\alpha$ and $E_\alpha - E_\beta$ of BTC-BCH are bigger than of others. This means the exchange rate of BTC-BCH rises generally over the last year.
+Second, $E_\beta$ and $E_\beta - E_\alpha$ of BTC-BNB are bigger than of others. This means the exchange rate of BTC-BNB, and drops generally over the last year.
+Meanwhile, $E_\alpha$ and $E_\alpha - E_\beta$ of BTC-BCH are bigger than of others. This means the exchange rate of BTC-BCH, and rises generally over the last year.
 Both observations indicate that BTC-BNB and BTC-BCH are highly volatile, so the Atomic Swap with those assets is more unfair than with other assets.
 % 3
 Third, all dots are close to the line $E_\beta = E_\alpha$, while the dots of stock indices and fiat currency pairs almost lay on this line.
@@ -110,14 +109,15 @@ Therefore, although more volatile than stocks and fiat currencies, exchange rate
 \subsection{Estimating the premium}
 
 The unfairness of the Atomic Swap comes from the fact that Alice can abort the contract without punishment.
-In Finance, the premium mechanism guarantees the good behaviours, which also works for Atomic Swaps.
+In Finance, the premium mechanism guarantees the good behaviours.
+As the Atomic Swap is equivalent to the premium-free American Call Option, the CRR model can be used for estimating the premium of Atomic Swaps.
 Therefore, we can evaluate the unfairness of the Atomic Swap by estimating the premium for American Call Options with cryptocurrencies.
 
 As the premium is the only variable in an option contract, estimating the premium is also called the ``Option Pricing'' problem.
 In Finance, the Black-Scholes (BS) Model is utilized to price the European Call Options,
 while the Cox-Ross-Rubinstein (CRR) Model is utilized to price the American Call Options.
 
-Therefore, in order to evaluate the unfairness of the Atomic Swap, we utilize the CRR Model to estimate the premium for American Call Options with cryptocurrencies.
+Therefore, in order to evaluate the unfairness of the Atomic Swap, we use the CRR Model to estimate how much the premium should be in Atomic Swaps.
 
 \subsubsection{The Cox-Ross-Rubinstein Model Explained}
 
@@ -165,13 +165,13 @@ Therefore, in order to evaluate the unfairness of the Atomic Swap, we utilize th
 \begin{tabular}{|p{1cm}|p{4cm}|p{1.5cm}|}
 \hline
 Variable             & Description                                                                               & Comment                  \\\hline
-$u, d$               & The rising and dropping rate for prices in the binomial tree $\mathcal{T}$                & $u \cdot d = 1$          \\\hline
+$u, d$               & The rising and dropping rates for prices in the binomial tree $\mathcal{T}$                & $u \cdot d = 1$          \\\hline
 $\sigma_d, \sigma_a$ & The daily and annualized percentage change rates of asset prices                          &                          \\\hline
 $T$                  & The strike time (measured in years)                                                       &                          \\\hline
 $n$                  & The depth of $\mathcal{T}$                                                                & we pick $n = 36$         \\\hline
 $\Delta t$           & The time period between two adjacent nodes on $\mathcal{T}$ (measured in years)           & $\Delta_t = \frac{T}{n}$ \\\hline
 $S_{t, i}$           & The asset price of the $i$-th node on the $\frac{t}{\Delta t}$-th level of $\mathcal{T}$  &                          \\\hline
-$C_{t, i}$           & The option price of the $i$-th node on the $\frac{t}{\Delta t}$-th level of $\mathcal{T}$ &                          \\\hline
+$C_{t, i}$           & The premium of the $i$-th node on the $\frac{t}{\Delta t}$-th level of $\mathcal{T}$ &                          \\\hline
 $p, q$               & The probabilities that the asset price rises and drops                                    &                          \\\hline
 \end{tabular}%
 
@@ -179,12 +179,10 @@ $p, q$               & The probabilities that the asset price rises and drops   
 
 
 
-The Cox-Ross-Rubinstein (CRR) Model~\cite{cox1979option} - a.k.a. the Binomial Options Pricing Model (BOPM) - provides a generalizable numerical method for pricing American-style Options.
-
+The Cox-Ross-Rubinstein (CRR) Model~\cite{cox1979option} - a.k.a. the Binomial Options Pricing Model (BOPM) - is a numerical method for pricing American-style Options.
 % binomial tree
 Intuitively, the CRR model enumerates all possible asset prices of the asset in the near future based on the price volatility,
 then reverse-engineers the premium based on the enumerated asset prices.
-
 More specifically, using the CRR model to price the American Call Option $\Pi = (\pi_1, \pi_2, K, A, T, C)$ follows the steps below:
 
 \begin{enumerate}
@@ -194,10 +192,10 @@ More specifically, using the CRR model to price the American Call Option $\Pi = 
 \end{enumerate}
 
 \paragraph{Creating the binomial price tree.}
-The binomial price tree $\mathcal{T}$ of the height $n$ represents the possible future prices within the time period $T$ discretely, as shown in Fig.~\ref{fig:binomial_tree}.
-$n$ can be picked arbitrarily. With larger $n$, the result will be more accurate, but the computing overhead will be heavier.
-Each node $\mathcal{T}_{t, i}$ is attached with the asset price $S_{t, i}$ and the premium $C_{t, i}$,
-where $t \in \{0, \frac{T}{n}, \frac{2T}{n}, \dots, T\}$ is the point of time and $i$ is the number of the node at its level.
+The binomial price tree $\mathcal{T}$ of the height $n$ (as shown in Fig.~\ref{fig:binomial_tree}) represents the possible future prices within the time period $T$ discretely.
+$n$ can be picked arbitrarily: with larger $n$, the result will be more accurate, but the computing overhead will be heavier.
+Each node $\mathcal{T}_{t, i}$ is attached with an asset price $S_{t, i}$ and a premium price $C_{t, i}$,
+where $t \in \{0, \frac{T}{n}, \frac{2T}{n}, \dots, T\}$ is the point of time, and $i$ is the id of this node at its level.
 The CRR model assumes that the asset price will either move up or down by a specific factor per step in $\mathcal{T}$.
 The move-up factor is $u$, and the move-down factor is $d$.
 For example, given the initial asset price $S_{0, 1}$, the asset price after one move-up $S_{\frac{T}{n}, 1}$ is $u \cdot S_{0, 1}$, and the asset price after one move-down $S_{\frac{T}{n}, 2}$ is $d \cdot S_{0, 1}$.
@@ -223,19 +221,18 @@ For cryptocurrencies, $d$ equals to the number of a days within a year.
 Note that $S'_i$ is the percentage change of the price on day $i$, rather than the price itself.
 $\bar{S'}$ is the average value of all $S'_i$s within the $d$ days. 
 
-The asset price $S_{t, i}$ can also be computed as $S_{t, i} = S_{0, 1} \cdot u^{N_u - N_d}$, where $S_{0, 1}$ is the initial asset price, and $N_u, N_d$ are the times of move-ups and move-downs, respectively.
+Each asset price $S_{t, i}$ can be calculated directly by $S_{t, i} = S_{0, 1} \cdot u^{N_u - N_d}$, where $S_{0, 1}$ is the initial asset price, and $N_u, N_d$ are the times of move-ups and move-downs, respectively.
 
 \paragraph{Calculating the premiums for leaf nodes.}
 In the first step, only the asset prices are determined rather than the premiums.
 This step further determines the premiums for leaf nodes.
-For each leaf node $\mathcal{T}_{n, i}$, the premium (for Call Options) is $C_{n, i} = max[(S_{n, i} - K), 0]$.
+For each leaf node $\mathcal{T}_{n, i}$, the premium is $C_{n, i} = max[(S_{n, i} - K), 0]$.
 
 \paragraph{Iteratively reconstructing the premiums for earlier nodes.}
 We back-propagate the premiums for leaf nodes to earlier premiums.
-More specifically, the earlier premium is calculated from the premiums of the later two nodes weighted by their possibilities.
+Each earlier premium is calculated from premiums of the later two nodes weighted by their possibilities.
 The move-up and move-down possibility are $p$ and $q$ where $p + q = 1$, and the risk-free rate is $r = q$.
-
-The earlier premium $C_{t - \Delta t, i}$ is calculated from later premiums as:
+More specifically, each earlier premium $C_{t - \Delta t, i}$ is calculated from later premiums as:
 
 \begin{align}
 C_{t - \Delta t, i} = e^{-r \Delta t} (p C_{t, i} + q C_{t, i+1})
@@ -251,7 +248,7 @@ r &= q
 
 such that the premium distribution simulates the geometric Brownian motion~\cite{karatzas1998brownian} with parameters $r$ and $\sigma$.
 
-The earliest premium $S_{0, 1}$, which is our targeted estimated premium - can be calculated by iteratively back-propagating the later premiums.
+In this way, the earliest premium $C_{0, 1}$, which is our targeted estimated premium $C$ - can be calculated by iteratively back-propagating the later premiums.
 
 Table~\ref{table:summary_symbols_crr} summarizes all symbols used in the Cox-Ross-Rubinstein model. 
 
@@ -263,14 +260,13 @@ Table~\ref{table:summary_symbols_crr} summarizes all symbols used in the Cox-Ros
     \label{fig:premium_pricing_result}
 \end{figure}
 
-We price the same data as Section~\ref{subsec:volatility_analysis} by using the CRR model with $n = 36$ with the strike time $T$ ranging from $1$ to $300$.
+We use the same data as Section~\ref{subsec:volatility_analysis}, and choose $n = 36$ for the CRR model.
+We estimate the premium for the same assets (8 cryptocurrency pairs + 2 stock indices + 2 fiat currency pairs in Section~\ref{subsec:volatility_analysis}) with the strike time $T$ ranging from $1$ to $300$.
 Figure~\ref{fig:premium_pricing_result} shows our pricing results.
 
 First, we observe that the premium of cryptocurrency pairs is much more expensive than of stocks, and the premium of stocks is more expensive than of fiat currencies at any given time.
 Recall the evaluated unfairness in Section~\ref{subsec:volatility_analysis}, its results are consistent with the premium pricing results: the more volatile the market is, the more unfair the Atomic Swap will be, and the higher the premium should be.
-
-Second, with the default strike time $T = 1$ of the Atomic Swap, the premium of cryptocurrency pairs vary from approximately 1\% to 2.3\% of the underlying asset value.
-
-Third, for all evaluated items, the premium values rise monotonically.
+Second, with the default strike time $T = 1$ of the Atomic Swap, the premium for cryptocurrency pairs vary from approximately 1\% to 2.3\% of the underlying asset value, but the values for stocks and fiat currency pairs are negligible ($\sim 0.3\%$).
+Third, for all evaluated items, the premium values rise monotonically with $T$ increasing.
 This is because the longer expiration time lets Alice to have more control on the option -
 he has more time to predict the price and decide to exercise or abort the option.
