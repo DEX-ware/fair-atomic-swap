@@ -219,10 +219,10 @@ function refundPremium(bytes32 secretHash)
 
 % bitcoin cannot implement
 % because stateless
-Unfortunately, Bitcoin does not support our protocols, because Bitcoin does not support the stateful transaction functionalities.
+Unfortunately, Bitcoin cannot support our protocols directly, because Bitcoin does not support the stateful transaction functionalities.
 First, the Bitcoin script is designed to be stateless~\cite{okupski2014bitcoin}.
 Second, there is no such things like the Ethereum's ``world state''~\cite{wood2014ethereum} in Bitcoin:
-The only state in Bitcoin is the Unspent Transaction Outputs (UTXOs)~\cite{nakamoto2008bitcoin}.
+the only state in Bitcoin is the Unspent Transaction Outputs (UTXOs)~\cite{nakamoto2008bitcoin}.
 
 
 % new opcode
@@ -235,7 +235,7 @@ With OP\_LOOKUP\_OUTPUT, the Bitcoin script can decide whether Alice or Bob shou
 
 % implement opcode is easy
 Implementing OP\_LOOKUP\_OUTPUT is easy in Bitcoin - It only queries the ownership of an output from the indexed blockchain database.
-This neither requires any computation, nor breaks the ``stateless'' design of the Bitcoin script.
+This neither introduces computation overhead, nor breaks the ``stateless'' design of the Bitcoin script.
 
 
 \paragraph{Decoupling the contract creation and the contract invocation}
