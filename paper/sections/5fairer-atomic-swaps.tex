@@ -1,7 +1,8 @@
 \section{Fair Atomic Swaps}
 \label{sec:fair_atomic_swap}
 
-In this section, we propose two fair variants of the original Atomic Swap protocol, of which one is for currency exchange and the other is for American Call Options.
+In this section, we propose an improvement on the original Atomic Swap to make it fair.
+It can be used for both the currency exchange and the American Call Options.
 
 
 \subsection{Design}
@@ -9,7 +10,10 @@ In this section, we propose two fair variants of the original Atomic Swap protoc
 \subsubsection{Difference between Currency Exchange and Options}
 \label{subsubsec:diff_spot_option}
 
-Before designing a fair Atomic Swap protocol, we summarize its design objectives.
+\TODO{merge two protocols to one. describe only one protocol, and add a single paragraph for another one.
+remember to keep consistent out of the whole paper (1 improvement on the atomic protocol to make it fair)}
+
+We first summarize the design objectives for the Atomic Swap.
 
 To our knowledge, the Atomic Swap protocol is originally designed for the fair exchange between different cryptocurrencies.
 However, according to our analysis, the protocol is unfair because Alice can choose to proceed or abort the swap based on the asset price, and he will not receive any penalty if he abort the swap.
@@ -59,25 +63,19 @@ If Alice's timelock expires, Alice can refund her premium back.}
 
 
 
-\subsection{Our protocols}
+\subsection{Our protocol}
 
 
 \begin{figure}
-    \includegraphics[width=.7\linewidth]{sequence_diagram_us_currency_exchange.eps}
-    \caption{Sequence diagram of the currency exchange-style Atomic Swap.}
-    \label{fig:sequence_diagram_us_currency_exchange}
+    \includegraphics[width=.9\linewidth]{sequence_diagram_us.eps}
+    \caption{Sequence diagram of our Atomic Swap.
+    For currency exchange-style Atomic Swaps, the premium will go back to Alice if the swap is successful (the left dotted line).
+    For American Call Option-style Atomic Swaps, the premium will go to Bob if the swap is successful (the right dotted line).}
+    \label{fig:sequence_diagram_us}
 \end{figure}
 
-\begin{figure}
-    \includegraphics[width=.7\linewidth]{sequence_diagram_us_options.eps}
-    \caption{Sequence diagram of the American Call Option-style Atomic Swap.}
-    \label{fig:sequence_diagram_us_options}
-\end{figure}
-
-
-We propose two fair Atomic Swap protocols based on the original Atomic Swap protocol, but apply our design objectives in Section~\ref{subsubsec:design_obj}.
-One of the two protocols is for currency exchange (shown in Figure~\ref{fig:sequence_diagram_us_currency_exchange}), and the other is for American Call Options (shown in Figure~\ref{fig:sequence_diagram_us_options}).
-The two protocols are similar to each other, and only differ on the rule of premium. 
+We propose an improvement on the Atomic Swap to make it fair, which can achieve design objectives of both the currency exchange and the American Call Option.
+Figure~\ref{fig:sequence_diagram_us}) shows the process of our Atomic Swap.
 
 We denote our Atomic Swap protocol $\mathcal{AS}'$ as
 
@@ -101,18 +99,6 @@ $\mathcal{C}_2$ contains two coherent sub-contracts $\mathcal{C}^{asset}_2$ and 
 $\mathcal{C}^{asset}_2$ is the contract for the asset $x_2$ $Coin_2$, which is the same as in $\mathcal{AS}$.
 $\mathcal{C}^{pr}_2$ is the contract for the premium $pr$, which differs in the currency exchange and the American Call Options.
 
-$\mathcal{C}^{pr}_2$ for currency exchange-style Atomic Swap $\mathcal{AS}'_{c}$ and American Call Option-style Atomic Swap $\mathcal{AS}'_{o}$ are shown below:
-
-\begin{description}
-    \item[$\mathcal{C}^{pr}_2$ in $\mathcal{AS}'_{c}$] Alice pays $pr$ to Bob with the condition:
-    Bob refunds $x_2$ $Coin_2$ after $\delta_2$ and before $\delta_1$.
-    If $\delta_1$ expires, Alice can refund $pr$ back.
-    \item[$\mathcal{C}^{pr}_2$ in $\mathcal{AS}'_{o}$] Alice pays $pr$ to Bob with one of the two conditions:
-    1) Alice redeems $x_2$ $Coin_2$ before $\delta_2$.
-    2) Bob refunds $x_2$ $Coin_2$ after $\delta_2$ but before $Delta_1$ (note that $\delta_2 < \delta_1$).
-    If $\delta_1$ expires, Alice can refund $pr$ back.
-\end{description}
-
 Alice published $tx_{\mathcal{C}, 1}$ on $BC_1$ and $tx_{\mathcal{C}, 2}$ on $BC_2$.
 Note that Alice only triggers $\mathcal{C}_1$ and $\mathcal{C}^{pr}_2$ to execute at this stage.
 Bob will trigger $\mathcal{C}^{asset}_2$ to execute by \textbf{Participate} later.
@@ -129,3 +115,20 @@ But in addition, $\mathcal{C}^{pr}_2$ will work once triggering \textbf{Redeem} 
 \paragraph{\textbf{Refund}}
 At this stage, refunding $x_2$ $Coin_2$ for Alice and $x_1$ $Coin_1$ for Bob are the same as in $\mathcal{AS}$.
 But in addition, $\mathcal{C}^{pr}_2$ will work once triggering \textbf{Refund} for $\mathcal{AS}'$.
+
+
+\paragraph{The premium contract $\mathcal{C}^{pr}_2$}
+
+$\mathcal{C}^{pr}_2$ implements the premium mechanism in the Atomic Swap, which is the core of our improvement.
+It can fit into design objectives of both the currency exchange and the American Call Options.
+In more detail, the rules of $\mathcal{C}^{pr}_2$ are shown below:
+
+\begin{description}
+    \item[$\mathcal{C}^{pr}_2$ for currency exchange] Alice pays $pr$ to Bob with the condition:
+    Bob refunds $x_2$ $Coin_2$ after $\delta_2$ and before $\delta_1$.
+    If $\delta_1$ expires, Alice can refund $pr$ back.
+    \item[$\mathcal{C}^{pr}_2$ for American Call Options] Alice pays $pr$ to Bob with one of the two conditions:
+    1) Alice redeems $x_2$ $Coin_2$ before $\delta_2$.
+    2) Bob refunds $x_2$ $Coin_2$ after $\delta_2$ but before $Delta_1$ (note that $\delta_2 < \delta_1$).
+    If $\delta_1$ expires, Alice can refund $pr$ back.
+\end{description}

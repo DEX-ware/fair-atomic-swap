@@ -23,8 +23,13 @@ end
 group Redeem
 Blockchain2->Alice: redeem asset2
 deactivate Blockchain2 #red
-Blockchain2->Alice: redeem premium
+
+parallel
+Blockchain2-->Alice: redeem premium \n (for currency exchange)
+Blockchain2-->Bob: redeem premium \n (for American Call Options)
 deactivate Blockchain2 #grey
+parallel off
+
 Blockchain1->Bob: redeem asset1
 deactivate Blockchain1
 end
