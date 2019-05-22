@@ -1,20 +1,20 @@
 \section{Background}
 \label{sec:background}
 
-In this section, we briefly explain the basic concept of Atomic Swaps and Option (in Finance).
+In this section, we explain basic concepts of the Atomic Swap and the Option (in Finance).
 
-\subsection{Atomic Swaps}
+\subsection{Atomic Swap}
 
 An Atomic Swap~\cite{nolan2013alt} is that two parties exchange their assets ``atomically''.
 ``Atomic'' means the swap is indivisible: it either succeeds or fails for both parties.
 
-In Blockchain, the Hashed Timelocked Contract (HTLC)~\cite{poon2016bitcoin} is utilized for implementing the Atomic Swap without trusted third parties.
+In Blockchain, the Hashed Time-locked Contract (HTLC)~\cite{poon2016bitcoin} enables the Atomic Swap without trusted third parties.
 HTLC was originally introduced to secure routing across multiple payment channels~\cite{paychannel2018btcwiki}.
-In a HTLC-style transaction, the payee can redeem the payment prior to a deadline only by providing the preimage of a specific hash value, otherwise the payment will expire and the money goes back to the payer.
+In a HTLC-style transaction, the payee can redeem the payment prior to a deadline only by providing the preimage of a specific hash value, otherwise the payment will expire and the money will go back to the payer.
 This is achieved by the hashlock - to lock the payment by a hash value, and the timelock - to give the deadline of redeeming.
 The timelock avoids locking money in a payment forever when the payee cannot provide the preimage.
 
-\subsection{Option}
+\subsection{Option in Finance}
 \label{subsec:background_option}
 
 % option
@@ -23,7 +23,7 @@ Here the option buyer can choose whether to fulfill the contract.
 The specified price is called the \textit{strike price};
 the specified date is called the \textit{strike time};
 the party proposing the option is called the \textit{option seller};
-the other party is called the \textit{option buyer};
+the other party choosing to fulfill or abort the contract is called the \textit{option buyer};
 the asset is called the \textit{underlying asset};
 and fulfilling the contract is called \textit{exercising}.
 
@@ -31,26 +31,26 @@ and fulfilling the contract is called \textit{exercising}.
 The option has two types: the American-style Option and the European-style Option.
 They differ from the \textit{strike time}:
 The European-style Option buyer can only exercise the contract on the strike time,
-and the American-style Option buyer can exercise the contract prior to or on the strike time.
+and the American-style Option buyer can exercise the contract no later than the strike time.
 
 % call option and put option
 Who holds the option is irrelevant with who is buying the underlying asset.
-More specifically, the option buyer is who can decide to settle or abort the contract.
+More specifically, the option buyer is who can decide to exercise or abort the contract.
 Whether the option buyer is buying or selling the underlying asset depends on the option contract.
-In Finance, if the option buyer is buying the underlying asset, the option is called the ``Call Option'',
-otherwise it is called the ``Put Option''~\cite{smith2004history-option}.
+In Finance, if the option buyer is the party buying the underlying asset, this option is a ``Call Option'',
+otherwise this option is a ``Put Option''~\cite{smith2004history-option}.
 
 % what is premium
 Besides the underlying asset, the option contract itself is considered to have value.
 The value of the contract is called the \textit{premium}.
-The option buyer should pay for the \textit{premium} to the option seller besides exchanging the underlying asset.
+The option buyer should pay for the \textit{premium} to the option seller once both parties agree on the option contract.
 
 % option pricing
 The \textit{premium} is priced prior to the contract agreement.
 As the \textit{premium} is the only variable within the option contract,
 pricing the \textit{premium} is also known as the \textit{option pricing} problem.
-\textit{Option Pricing} is rather a complex task - it is still a hot research topic in Finance and Applied Mathematics.
+\textit{Option Pricing} is rather a complex task, and is still a hot research topic in Finance and Applied Mathematics.
 
 The Black-Scholes (BS) Model is the first widely used model for option pricing~\cite{black1973pricing}.
-It can estimate the theoretical value of European-style Options using historical price data of the underlying asset.
+It can estimate the value of European-style Options using the historical price of the underlying asset.
 The Cox-Ross-Rubinstein (CRR) model~\cite{cox1979option}, also known as the Binomial Option Pricing model, extends the BS model for pricing American-style Options.
