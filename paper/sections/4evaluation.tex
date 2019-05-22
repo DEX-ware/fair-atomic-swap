@@ -40,8 +40,8 @@ Also, as $E_\alpha$ and $E_\beta$ are equally calculated, adding up them togethe
 \paragraph{Experimental methodology.}
 In our scenario, quantifying the unfairness is to estimate $E_{\alpha}$ and $E_{\beta}$.
 We estimate $E_{\alpha}$ and $E_{\beta}$ for each selected cryptocurrency pair.
-Furthermore,  we also evaluate the unfairness of stocks and fiat currencies in the same setting, in order to make comparisons.
-We use S\&P500 and Dow Jones Index (DJI) as examples of stocks, and USD-EUR and USD-GBP as examples of fiat currencies.
+Furthermore,  we also evaluate the unfairness of stock indices and fiat currencies in the same setting, in order to make comparisons.
+We use S\&P500 and Dow Jones Index (DJI) as examples of stock indices, and USD-EUR and USD-GBP as examples of fiat currencies.
 
 \paragraph{Results and analysis.}
 
@@ -66,13 +66,13 @@ For each plot, points in the red Profit Area indicate that Alice profits directl
 We observe that for all chosen cryptocurrency pairs, $max_\alpha$ and $max_\beta$ are considerably big - ranging from 8\% to 25\%.
 Meanwhile, $max_\alpha$ and $max_\beta$ of stock indices are much smaller than all cryptocurrency pairs,
 and $max_\alpha$ and $max_\beta$ of fiat currencies are even smaller than stock indices.
-This indicates that in the setting of an 24-hour Atomic Swap, the cryptocurrency is much more unfair than stocks, and the stocks are more unfair than fiat currencies.
+This indicates that in the setting of an 24-hour Atomic Swap, the Atomic Swap with cryptocurrencies is much more unfair than with stocks, and the Atomic Swap with stocks are more unfair than with fiat currencies.
 
 
 % scatter results and analysis
 Figure~\ref{fig:vol_scatter} visualizes $E_\alpha$ and $E_\beta$ of all evaluated items in Figure~\ref{fig:volatility_analysis}.
 In particular, we classify scatters to 4 groups based on their $E_\alpha$ and $E_\beta$:
-The first group ($E_\alpha < 0.005 \wedge E_\beta < 0.005$) consists of all stocks and fiat currency pairs (S\&P500, DJI, USD-GBP and USD-EUR);
+The first group ($E_\alpha < 0.005 \wedge E_\beta < 0.005$) consists of all stock indices (S\&P500 and DJI) and all fiat currency pairs (USD-GBP and USD-EUR);
 the second group ($0.005 < E_\alpha < 0.015 \wedge 0.005 < E_\beta < 0.015$) consists of most cryptocurrency pairs;
 the third group ($0.005 < E_\alpha < 0.015 \wedge E_\beta > 0.015$) only contains one cryptocurrency pair BTC-BNB;
 the fourth group ($E_\alpha > 0.015 \wedge 0.005 < E_\beta < 0.015$) only contains the last cryptocurrency pair BTC-BCH.
@@ -88,9 +88,9 @@ Second, $E_\beta$ and $E_\beta - E_\alpha$ of BTC-BNB are bigger than of others.
 Meanwhile, $E_\alpha$ and $E_\alpha - E_\beta$ of BTC-BCH are bigger than of others. This means the exchange rate of BTC-BCH rises generally over the last year.
 Both observations indicate that BTC-BNB and BTC-BCH are highly volatile, so the Atomic Swap with those assets is more unfair than with other assets.
 % 3
-Third, all dots are close to the line $E_\beta = E_\alpha$, while the dots of stocks and fiat currency pairs almost lay on this line.
+Third, all dots are close to the line $E_\beta = E_\alpha$, while the dots of stock indices and fiat currency pairs almost lay on this line.
 A dot lying on $E_\beta = E_\alpha$ means the exchange rate rises and drops at the same level.
-Therefore, although more volatile than stocks and fiat currency pairs, exchange rates of cryptocurrency pairs rise and drop at the same level.
+Therefore, although more volatile than stocks and fiat currencies, exchange rates of cryptocurrency pairs rise and drop at the same level.
 
 
 
@@ -259,14 +259,14 @@ Table~\ref{table:summary_symbols_crr} summarizes all symbols used in the Cox-Ros
 
 \begin{figure}
     \includegraphics[width=\linewidth]{premium_pricing_result.eps}
-    \caption{Estimated premium with different strike times for each cryptocurrency pair, stock index and fiat currency pair. Lines with the marker ``x'' are for stocks; lines with the marker ``o'' are for fiat currencies; and lines without marker are for cryptocurrency pairs.}
+    \caption{Estimated premium with different strike times for each cryptocurrency pair, stock index and fiat currency pair. Lines with the marker ``x'' are for stock indices; lines with the marker ``o'' are for fiat currencies; and lines without marker are for cryptocurrency pairs.}
     \label{fig:premium_pricing_result}
 \end{figure}
 
 We price the same data as Section~\ref{subsec:volatility_analysis} by using the CRR model with $n = 36$ with the strike time $T$ ranging from $1$ to $300$.
 Figure~\ref{fig:premium_pricing_result} shows our pricing results.
 
-First, we observe that the premium of cryptocurrency pairs is much more expensive than stocks, and the premium of stocks is more expensive than fiat currencies at any given time.
+First, we observe that the premium of cryptocurrency pairs is much more expensive than of stocks, and the premium of stocks is more expensive than of fiat currencies at any given time.
 Recall the evaluated unfairness in Section~\ref{subsec:volatility_analysis}, its results are consistent with the premium pricing results: the more volatile the market is, the more unfair the Atomic Swap will be, and the higher the premium should be.
 
 Second, with the default strike time $T = 1$ of the Atomic Swap, the premium of cryptocurrency pairs vary from approximately 1\% to 2.3\% of the underlying asset value.
