@@ -6,13 +6,7 @@ In particular, we describe our design rationale, and provide reference implement
 
 \subsection{Requirements}
 
-To implement our protocols, the blockchain should support the following functionalities:
-
-\begin{enumerate}
-    \item Stateful transactions
-    \item Timelock
-    \item Hashlock
-\end{enumerate}
+To implement our protocols, the blockchain should support 1) stateful transactions, 2) the timelock and 3) the hashlock.
 
 \paragraph{Stateful transactions}
 Transactions should be stateful: executing a transaction can depend on prior transactions.
@@ -45,8 +39,8 @@ Extending the premium mechanism includes:
     \item The methods \textit{redeemPremium()} and \textit{refundPremium()} for redeeming and refunding the premium
 \end{enumerate}
 
+\begin{figure}[htp]
 \begin{lstlisting}[
-    float,
     language=Solidity, 
     basicstyle=\tiny,
     label={lst:state},
@@ -55,9 +49,10 @@ Extending the premium mechanism includes:
 enum AssetState { Empty, Filled, Redeemed, Refunded }
 enum PremiumState { Empty, Filled, Redeemed, Refunded }
 \end{lstlisting}
+\end{figure}
 
+\begin{figure}[htp]
 \begin{lstlisting}[
-    float,
     language=Solidity, 
     basicstyle=\tiny,
     label={lst:premium_condition_currency},
@@ -103,9 +98,10 @@ modifier isPremiumRedeemable(bytes32 secretHash) {
     _;
 }
 \end{lstlisting}
+\end{figure}
 
+\begin{figure}[htp]
 \begin{lstlisting}[
-    float,
     language=Solidity, 
     basicstyle=\tiny,
     label={lst:premium_condition_options},
@@ -142,7 +138,7 @@ modifier isPremiumRedeemable(bytes32 secretHash) {
     _;
 }
 \end{lstlisting}
-
+\end{figure}
 
 \paragraph{The premium payment state \textit{PremiumState}}
 
@@ -172,9 +168,8 @@ In the currency exchange-style Atomic Swap the premium belongs to Alice while in
 \textit{redeemPremium()} and \textit{refundPremium()} are similar to \textit{redeemAsset()} and \textit{refundAsset()}, and their executions are secured by \textit{isPremiumRedeemable()} and \textit{isPremiumRefundable()}.
 The code is shown in Listing~\ref{lst:premium_redeem_refund_function}.
 
-
+\begin{figure}[htp]
 \begin{lstlisting}[
-    float,
     language=Solidity, 
     basicstyle=\tiny,
     label={lst:premium_redeem_refund_function},
@@ -213,7 +208,7 @@ function refundPremium(bytes32 secretHash)
     );
 }
 \end{lstlisting}
-
+\end{figure}
 
 \subsection{Bitcoin script}
 
@@ -271,8 +266,8 @@ At this stage, both Alice and Bob have obtained the mutually signed transaction,
 Listing~\ref{lst:bitcoin_contract_currency_exchange} and Listing~\ref{lst:bitcoin_contract_option} show the premium transaction in the Bitcoin script
 , for both the currency-style and the American Call Option-style Atomic Swaps, respectively.
 
+\begin{figure}[htp]
 \begin{lstlisting}[
-    float,
     language=Solidity, 
     basicstyle=\tiny,
     label={lst:bitcoin_contract_currency_exchange},
@@ -295,10 +290,10 @@ ScriptPubKey:
     OP_EQUALVERIFY
     OP_CHECKSIG
 \end{lstlisting}  
+\end{figure}
 
-
+\begin{figure}
 \begin{lstlisting}[
-    float,
     language=Solidity, 
     basicstyle=\tiny,
     label={lst:bitcoin_contract_option},
@@ -324,6 +319,6 @@ ScriptPubKey:
     OP_EQUALVERIFY
     OP_CHECKSIG
 \end{lstlisting}
-
+\end{figure}
 
 % OP_LOOKUP_OUTPUT is from https://bitcoin.stackexchange.com/questions/36229/bitcoin-script-for-a-competitive-crowdfunding-like-contract

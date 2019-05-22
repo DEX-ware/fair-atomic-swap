@@ -12,8 +12,6 @@ then point out that an Atomic Swap is equivalent to an American Call Option with
 
 \subsubsection{Security assumptions}
 
-We first give security assumptions on the Atomic Swap.
-
 First, we assume blockchains involved in the Atomic Swap are secure, and execute all transactions correctly.
 The Atomic Swap is based on blockchains.
 If the blockchains are insecure, the Atomic Swap will also be insecure.
@@ -24,10 +22,8 @@ More specifically,
 2) the hash algorithm used by HTLCs is secure;
 3) the runtime for executing HTLCs is reliable.
 
-
 Third, the time for confirming a transaction is negligible compared to timelocks.
 In practice, the swap initiator's timelock is 48 hours and the swap participant's timelock is 24 hours by default~\cite{nolan2013alt}, while confirming a transaction is less than 1 hour for most blockchains.
-
 
 \subsubsection{Process}
 
@@ -46,7 +42,6 @@ In practice, the swap initiator's timelock is 48 hours and the swap participant'
 
 Assuming the swap initiator Alice hopes to get $x_2$ $Coin_2$ from the swap participant Bob in exchange of $x_1$ $Coin_1$. 
 $Coin_1$ is the cryptocurrency on the blockchain $BC_1$, and $Coin_2$ is the cryptocurrency on the blockchain $BC_2$.
-
 We denote the Atomic Swap as 
 
 $$\mathcal{AS} = (x_1, Coin_1, x_2, Coin_2)$$
@@ -157,7 +152,7 @@ As mentioned in Section~\ref{subsec:background_option}, the option contract itse
 The option buyer should pay for the premium when the contract is agreed, and should pay for the asset when the contract is exercised.
 Note that the option buyer can exercise in advanced of the agreed exercise time in an American Call Option.
 
-More specifically, we denote an American Call Option contract $\Pi$ as
+We denote an American Call Option contract $\Pi$ as
 
 $$\Pi = (\pi_1, \pi_2, K, A, T, C)$$
 

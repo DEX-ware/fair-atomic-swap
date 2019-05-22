@@ -26,14 +26,14 @@ In particular, in an Atomic Swap, the swap initiator can decide whether to proce
 This enables the the swap initiator to speculate without any penalty.
 More specifically, the swap initiator can keep waiting before the timelock expires.
 If the price of the swap participant's asset rises, the swap initiator will proceed the swap so that he will profit.
-If the price of the swap participant's asset drops, the swap initiator can abort the swap, so that he won't lose any money.
+If the price of the swap participant's asset drops, the swap initiator can abort the swap, so that he won't lose money.
 
 % optionality
 We observe that, this problem is equivalent to the Optionality in Finance, which has already been studied for decades.
 In Finance, an investment is said to have Optionality if
 1) settling this investment happens in the future rather than instantly;
 2) settling this investment is optional rather than mandatory.
-For an investment with Optionality, the option itself has value besides the underlying asset~\cite{higham2004introduction}, and the value is called the \textit{premium}.
+For an investment with Optionality, the option itself has value besides the underlying asset~\cite{higham2004introduction}, which is called the \textit{premium}.
 The option buyer should pay for the premium besides the underlying asset, even if he aborts the contract.
 In this way, he can no longer speculate without penalties.
 
