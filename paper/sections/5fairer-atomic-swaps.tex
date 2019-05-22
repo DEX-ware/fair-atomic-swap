@@ -94,11 +94,24 @@ $\mathcal{C}_2$ contains two coherent sub-contracts $\mathcal{C}^{asset}_2$ and 
 
 $\mathcal{C}^{asset}_2$ is the contract for the asset $x_2$ $Coin_2$, which is the same as in $\mathcal{AS}$.
 $\mathcal{C}^{pr}_2$ is the contract for the premium $pr$.
-$\mathcal{C}^{pr}_2$ differs in the currency exchange-style Atomic Swap and the American Call Option-style Atomic Swap, which will be described later.
+
+$\mathcal{C}^{pr}_2$ implements the premium mechanism in the Atomic Swap, which is the core of our improvement.
+It supports both the currency exchange-style Atomic Swap and the American Call Option-style Atomic Swap.
+In more detail, the rules of $\mathcal{C}^{pr}_2$ are shown below:
+
+\begin{description}
+    \item[$\mathcal{C}^{pr}_2$ for currency exchange] Alice pays $pr$ to Bob with the condition:
+    Bob refunds $x_2$ $Coin_2$ after $\delta_2$ and before $\delta_1$.
+    If $\delta_1$ expires, Alice can refund $pr$ back.
+    \item[$\mathcal{C}^{pr}_2$ for American Call Options] Alice pays $pr$ to Bob with one of the two conditions:
+    1) Alice redeems $x_2$ $Coin_2$ before $\delta_2$.
+    2) Bob refunds $x_2$ $Coin_2$ after $\delta_2$ but before $Delta_1$ (note that $\delta_2 < \delta_1$).
+    If $\delta_1$ expires, Alice can refund $pr$ back.
+\end{description}
 
 Alice published $tx_{\mathcal{C}, 1}$ on $BC_1$ and $tx_{\mathcal{C}, 2}$ on $BC_2$.
 Note that Alice only triggers $\mathcal{C}_1$ and $\mathcal{C}^{pr}_2$ to execute at this stage.
-Bob will trigger $\mathcal{C}^{asset}_2$ to execute by \textbf{Participate} later.
+Bob will deposit $x_2$ $Coin_2$ trigger $\mathcal{C}^{asset}_2$ to execute when \textbf{Participate}.
 
 \paragraph{\textbf{Participate}}
 At this stage, Bob decides whether to participate in $\mathcal{AS}'$ by auditing $tx_{\mathcal{C}, 1}$ and $tx_{\mathcal{C}, 2}$.
@@ -112,20 +125,3 @@ But in addition, $\mathcal{C}^{pr}_2$ will work once triggering \textbf{Redeem} 
 \paragraph{\textbf{Refund}}
 At this stage, refunding $x_2$ $Coin_2$ for Alice and $x_1$ $Coin_1$ for Bob are the same as in $\mathcal{AS}$.
 But in addition, $\mathcal{C}^{pr}_2$ will work once triggering \textbf{Refund} for $\mathcal{AS}'$.
-
-
-\paragraph{The premium contract $\mathcal{C}^{pr}_2$}
-
-$\mathcal{C}^{pr}_2$ implements the premium mechanism in the Atomic Swap, which is the core of our improvement.
-It can fit into design objectives of both the currency exchange and the American Call Options.
-In more detail, the rules of $\mathcal{C}^{pr}_2$ are shown below:
-
-\begin{description}
-    \item[$\mathcal{C}^{pr}_2$ for currency exchange] Alice pays $pr$ to Bob with the condition:
-    Bob refunds $x_2$ $Coin_2$ after $\delta_2$ and before $\delta_1$.
-    If $\delta_1$ expires, Alice can refund $pr$ back.
-    \item[$\mathcal{C}^{pr}_2$ for American Call Options] Alice pays $pr$ to Bob with one of the two conditions:
-    1) Alice redeems $x_2$ $Coin_2$ before $\delta_2$.
-    2) Bob refunds $x_2$ $Coin_2$ after $\delta_2$ but before $Delta_1$ (note that $\delta_2 < \delta_1$).
-    If $\delta_1$ expires, Alice can refund $pr$ back.
-\end{description}
