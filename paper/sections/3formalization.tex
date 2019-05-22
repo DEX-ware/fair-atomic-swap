@@ -19,10 +19,10 @@ If the blockchains are insecure, the Atomic Swap will also be insecure.
 Second, we assume the HTLC mechanism in blockchains is reliable.
 More specifically,
 1) blockchains produce new blocks with stable speeds;
-2) the hash algorithm used by HTLCs is secure;
-3) the runtime for executing HTLCs is reliable.
+2) the hash algorithms used by HTLCs are secure;
+3) blockchains execute HTLCs correctly.
 
-Third, the time for confirming a transaction is negligible compared to timelocks.
+Third, the time for confirming a transaction is negligible compared to timelocks in HTLCs.
 In practice, the swap initiator's timelock is 48 hours and the swap participant's timelock is 24 hours by default~\cite{nolan2013alt}, while confirming a transaction is less than 1 hour for most blockchains.
 
 \subsubsection{Process}
@@ -51,7 +51,7 @@ Let Bob be the holder of the address $\beta_{B, 1}$ on $BC_1$ and the address $\
 $\beta_{A, 1}$ holds $Coin_1$ with the amount no smaller than $x_1$, and $\beta_{B, 2}$ holds $Coin_2$ with the amount no smaller than $x_2$.
 
 Figure~\ref{fig:sequence_diagram_original} shows the process of $\mathcal{AS}$.
-More specifically, $\mathcal{AS}$ consists of five steps:
+In detail, $\mathcal{AS}$ consists of four stages:
 \textbf{Initiate},
 \textbf{Participate},
 \textbf{Redeem}, and
@@ -61,28 +61,29 @@ More specifically, $\mathcal{AS}$ consists of five steps:
 \paragraph{\textbf{Initiate}}
 Alice initiates $\mathcal{AS}$ at this stage.
 % s and h
-First, Alice picks a random secret $s$, and computes the hash $h = \mathcal{H}(s)$ of $s$, where $\mathcal{H}$ is a secure hash function.
-At this stage, $s$ is only known to Alice.
+First, Alice picks a random secret $s$ only known to herself, and computes the hash $h = \mathcal{H}(s)$ of $s$, where $\mathcal{H}$ is a secure hash function.
 % contract
-Then, Alice creates the contract script $\mathcal{C}_1$ that ``Alice pays $x_1$ $Coin_1$ from $\beta_{A, 1}$ to $\beta_{B, 1}$ if Bob can provide $s$ which makes $\mathcal{H}(s) = h$ before or on a timelock $\delta_1$ (which is a timestamp). After $\delta_1$, Alice can refund the money - get $x_1$ $Coin_1$ back.''
+Then, Alice creates an HTLC script $\mathcal{C}_1$ that ``Alice pays $x_1$ $Coin_1$ from $\beta_{A, 1}$ to $\beta_{B, 1}$ if Bob can provide $s$ which makes $\mathcal{H}(s) = h$ before or on a timelock $\delta_1$ (which is a timestamp). After $\delta_1$, Alice can refund the money - get $x_1$ $Coin_1$ back.''
 % tx
 After creating $\mathcal{C}_1$, Alice publishes $\mathcal{C}_1$ as a transaction $tx_{\mathcal{C}, 1}$ on $BC_1$.
 Note that $h$ is published when publishing $tx_{\mathcal{C}, 1}$.
 % refund
-Besides $\mathcal{C}_1$, Alice also creates a refund script $\mathcal{R}_1$ that ``Alice pays $x_1$ $Coin_1$ from $\beta_{A, 1}$ to her another address.'' This is to ensure $x_1$ $Coin_1$ can no longer be redeemed by others. Alice can do this only after $\delta_1$.
+Besides $\mathcal{C}_1$, Alice also creates a refund script $\mathcal{R}_1$ that ``Alice pays $x_1$ $Coin_1$ from $\beta_{A, 1}$ to her another address.''
+This is to ensure $x_1$ $Coin_1$ can no longer be redeemed by others. Alice can publish $\mathcal{R}_1$ only after $\delta_1$.
 If Bob does not redeem $x_1$ $Coin_1$ and $\delta_1$ expires, Alice can refund $x_1$ $Coin_1$ by publishing $\mathcal{R}_1$ as a transaction $tx_{\mathcal{R}, 1}$ on $BC_1$.
 
 \paragraph{\textbf{Participate}}
-Bob participates in $\mathcal{AS}$ at this stage after \textbf{Initiate}.
+Bob participates in $\mathcal{AS}$ after \textbf{Initiate}.
 % contract
-With the published $h$, Bob creates the contract script $\mathcal{C}_2$ that ``Bob pays $x_2$ $Coin_2$ from $\beta_{B, 2}$ to $\beta_{A, 2}$ if Alice can provide $s$ before or on a timelock $\delta_2$ (which is a timestamp). After the time of $\delta_2$, Bob can refund the money - get $x_2$ $Coin_2$ back.''
+With the published $h$ in $tx_{\mathcal{C}, 1}$, Bob creates another HTLC script $\mathcal{C}_2$ that ``Bob pays $x_2$ $Coin_2$ from $\beta_{B, 2}$ to $\beta_{A, 2}$ if Alice can provide $s$ before or on a timelock $\delta_2$ (which is a timestamp). After the time of $\delta_2$, Bob can refund the money - get $x_2$ $Coin_2$ back.''
 Here $\delta_2$ should expire before $\delta_1$.
 % tx
 After creating $\mathcal{C}_2$, Bob publishes $\mathcal{C}_2$ as a transaction $tx_{\mathcal{C}, 2}$ on $BC_2$.
-Note that Alice knows $s$ so she can redeem $x_2$ $Coin_2$ in $tx_{\mathcal{C}, 2}$ anytime before $\delta_2$.
+Note that Alice knows $s$ so she can redeem $x_2$ $Coin_2$ in $tx_{\mathcal{C}, 2}$ anytime before $\delta_2$,
+but Bob cannot redeem $x_1$ $Coin_1$ in $tx_{\mathcal{C}, 1}$ because he does not know $s$.
 % refund 
 Besides $\mathcal{C}_2$, Bob also creates a refund script $\mathcal{R}_2$ that ``Bob pays $x_2$ $Coin_2$ from $\beta_{B, 2}$ to his another address.''
-This is to ensure $x_2$ $Coin_2$ can no longer be redeemed by others. Bob can do this only after $\delta_2$.
+This is to ensure $x_2$ $Coin_2$ can no longer be redeemed by Alice. Bob can do this only after $\delta_2$.
 If Alice does not redeem $x_2$ $Coin_2$ before $\delta_2$ expires, Bob can refund $x_2$ $Coin_2$ by publishing $\mathcal{R}_2$ as a transaction $tx_{\mathcal{R}, 2}$ on $BC_2$.
 
 \paragraph{\textbf{Redeem} or \textbf{Refund}}
@@ -99,7 +100,7 @@ After that, Bob provides $s$ to $tx_{\mathcal{C}, 1}$ in order to redeem $x_1$ $
 In this way, Alice and Bob successfully exchanges $x_1$ $Coin_1$ and $x_2$ $Coin_2$.
 
 \textbf{Refund.}
-However, if Alice does not redeem $x_2$ $Coin_2$ after $\delta_2$ expires, Bob can refund his $x_2$ $Coin_2$ by publishing $tx_{\mathcal{R}, 2}$.
+If Alice does not redeem $x_2$ $Coin_2$ after $\delta_2$ expires, Bob can refund his $x_2$ $Coin_2$ by publishing $tx_{\mathcal{R}, 2}$.
 As a result, Alice cannot redeem $x_2$ $Coin_2$, and will not publish $s$.
 After $\delta_1$, Alice can also refund her $x_1$ $Coin_1$ by publishing $tx_{\mathcal{R}, 1}$.
 
@@ -118,12 +119,12 @@ In detail,
 \end{itemize}
 
 % misuse
-However, one may take both $Coin_1$ and $Coin_2$ if the other does not trigger \textbf{Redeem} or \textbf{Refund} on time.
+However, one may take both $x_1$ $Coin_1$ and $x_2$ $Coin_2$ if the other does not trigger \textbf{Redeem} or \textbf{Refund} on time.
 For example, if Bob does not trigger \textbf{Redeem} after Alice triggers \textbf{Redeem} and $\delta_1$ expires, Alice can also refund $x_1$ $Coin_1$ by triggering \textbf{Refund}.
-But in this case it is Bob to blame, because he should have had enough time - at least $\delta_2 - \delta_1$ (48 - 24 = 24 hours by default) - to redeem $x_1$ $Coin_1$.
+It is Bob to blame in this case, because he should have had enough time - at least $\delta_2 - \delta_1$ (48 - 24 = 24 hours by default) - to redeem $x_1$ $Coin_1$.
 Another example is that Alice broadcasts $tx_{\mathcal{C}, 1}$ after $\delta_2$, but Bob has already triggered \textbf{Refund}.
-Therefore, Bob can also trigger \textbf{Redeem} with $s$ in Alice's transaction of \textbf{Redeem} before $\delta_1$.
-Similarly, it is Alice to blame, because she should have had enough time - before $\delta_2$ - to trigger \textbf{Redeem}.
+Therefore, Bob can also redeem $x_1$ $Coin_1$ with $s$ in $tx_{\mathcal{C}, 1}$ before $\delta_1$.
+Similarly, it is Alice to blame in this case, because she should have had enough time - before $\delta_2$ (24 hours by default) - to trigger \textbf{Redeem}.
 
 
 
@@ -142,15 +143,14 @@ Similarly, it is Alice to blame, because she should have had enough time - befor
 \subsection{American Call Option}
 
 The American Call Option is a contract that ``one can buy an amount of an asset with an agreed price prior to or on an agreed time in the future''. 
-In an American Call Option, 
+Here,
 the agreed price is usually called the \textit{strike price};
 and the contract settlement is called \textit{exercising};
 the one who proposes the contract and buys the asset is called the \textit{option buyer};
 the one who sells the asset is called the \textit{option seller}.
 
-As mentioned in Section~\ref{subsec:background_option}, the option contract itself has value, and its value is called the \textit{premium}.
-The option buyer should pay for the premium when the contract is agreed, and should pay for the asset when the contract is exercised.
-Note that the option buyer can exercise in advanced of the agreed exercise time in an American Call Option.
+As mentioned in Section~\ref{subsec:background_option}, the option contract itself has value, called the \textit{premium}.
+In an American Call Option, the option buyer should pay for the premium when the contract is agreed by both parties, and should pay for the asset when the contract is exercised.
 
 We denote an American Call Option contract $\Pi$ as
 
@@ -173,12 +173,9 @@ The process of an American Call Option is as follows:
     Note that Alice does not pay for $A$ $\pi_2$ at this stage.
     Also note that Bob cannot abort $\Pi$ after participating in $\Pi$.
     \item \textbf{Exercise} or \textbf{Abort}: Alice exercises $\Pi$ - pays $AK$ $\pi_1$ to Bob - no later than $T$, and Bob gives $A$ $\pi_2$ to Alice.
-    If Alice does not exercise $\Pi$ before or on $T$, $\Pi$ will abort - Alice gets $\pi_1$ back and Bob gets $\pi_2$. In other words, both of them get their underlying asset back, but Alice loses the premium $C$ to Bob.
+    If Alice does not exercise $\Pi$ no later than $T$, $\Pi$ will abort - Alice gets $\pi_1$ back and Bob gets $\pi_2$ back.
+    In other words, both of them get their underlying asset back, but Alice loses the premium $C$ to Bob when \textbf{Contract}.
 \end{enumerate}
-
-
-Note that the exchange rate of $\pi_2 / \pi_1$ is also fluctuating overtime due to the market mechanism.
-We denote $\pi_2$'s underlying value (with the unit $\pi_2 / \pi_1$) at the time $t$ as $S_t$.
 
 
 
@@ -216,7 +213,9 @@ In $\mathcal{AS}$ Bob can refund his asset back after $\delta_2$ to abort $\math
 % premium
 Establishing $\mathcal{AS}$ does not require Alice to pay anything other than $x_1$ $Coin_1$ to Bob, which is equivalent to $\Pi$ with $C = 0$.
 
-The ``premium-free'' property enables Alice to speculate without any risk:
+Note that both the Atomic Swap and the American Call Option are ``speculative'':
+both the cryptocurrency exchange rates in Atomic Swaps and asset prices in the American Call Options are fluctuating overtime.
+Therefore, the ``premium-free'' property enables Alice to speculate without any risk:
 if Bob's asset price rises right before the strike time, she will proceed the swap to profit,
 otherwise she will abort the swap to avoid the loss.
 Therefore, without the premium, Alice is risk-free towards the market.
