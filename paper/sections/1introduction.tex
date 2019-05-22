@@ -3,7 +3,7 @@
 
 The Atomic Swap protocol allows two parties to exchange their assets ``atomically'' without trusted third parties.
 ``Atomic'' means the swap either succeeds or fails for both parties at any given time.
-In blockchains, Atomic Swap is usually implemented by using Hashed Timelocked Contracts (HTLCs)~\cite{decker2015fast}.
+In blockchains, Atomic Swap is usually implemented by using Hashed Timelocked Contracts (HTLCs)~\cite{poon2016bitcoin}.
 The HTLC is a type of transaction that, the payee should provide the preimage of a hash value before a specified deadline, otherwise the payment fails - the money goes back to the payer and the payee will not get any money.
 
 % how important is Atomic Swap
@@ -12,11 +12,11 @@ In particular, it realized the Decentralized Exchanges (DEXes), and started the 
 In a DEX, traders publish and participate in deals, and the dealing process is regulated by a smart contract embedding the Atomic Swap protocol.
 Different from centralized exchanges, DEXes are non-custodial - traders does not need to deposit their money in DEXes.
 The non-custody property avoids DEXes from money thefts, which commonly happened on centralized exchanges.
-To date, the DEX market volume has reached approximately 50,000 ETH~\footnote{\url{https://dex.watch/}.}.
+To date, the DEX market volume has reached approximately 50,000 ETH~\cite{dexwatch}.
 More specifically,
-there are more than 250 DEXes~\footnote{\url{https://github.com/distribuyed/index}.};
-there are more than 30 DEX protocols~\footnote{\url{https://github.com/evbots/dex-protocols}.};
-there are more than 4,000 active traders in all DEXes~\footnote{\url{https://dex.watch/}.}.
+there are more than 250 DEXes~\cite{distribuyed/index};
+there are more than 30 DEX protocols~\cite{evbots/dex-protocols};
+there are more than 4,000 active traders in all DEXes~\cite{dexwatch}.
 
 
 
