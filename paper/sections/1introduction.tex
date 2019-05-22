@@ -1,13 +1,13 @@
 \section{Introduction}
 \label{sec:intro}
 
-The Atomic Swap protocol allows two parties to exchange their assets ``atomically'' without trusted third parties.
+The Atomic Swap protocols allow two parties to exchange their assets ``atomically'' without trusted third parties.
 ``Atomic'' means the swap either succeeds or fails for both parties at any given time.
-In blockchains, Atomic Swap is usually implemented by using Hashed Timelocked Contracts (HTLCs)~\cite{poon2016bitcoin}.
+In blockchains, Atomic Swap is usually implemented by using Hashed Time-locked Contracts (HTLCs)~\cite{poon2016bitcoin}.
 The HTLC is a type of transaction that, the payee should provide the preimage of a hash value before a specified deadline, otherwise the payment fails - the money goes back to the payer and the payee will not get any money.
 
 % how important is Atomic Swap
-The Atomic Swap has already been widely adopted in the cryptocurrency industry.
+The Atomic Swaps have already been widely adopted in the cryptocurrency industry.
 In particular, it realized the Decentralized Exchanges (DEXes), and started the era of Decentralized Finance (De-Fi).
 In a DEX, traders publish and participate in deals, and the dealing process is regulated by a smart contract embedding the Atomic Swap protocol.
 Different from centralized exchanges, DEXes are non-custodial - traders does not need to deposit their money in DEXes.
@@ -86,7 +86,7 @@ Our results show that, in the default timelock setting, the profit and the mitig
 % second
 Second, we use the Cox-Ross-Rubinstein option pricing model to estimate how much the premium should be for Atomic Swaps.
 In Finance, the Cox-Ross-Rubinstein model\cite{cox1979option} is the conventional option pricing model for American-style options.
-Our results show that, in the default timelock setting, the premium should be approximately 2\% for Atomic Swaps with cryptocurrency pairs, while the premium is negligible for American Call Options with stocks and fiat currencies.
+Our results show that, in the default timelock setting, the premium should be approximately 2\% for Atomic Swaps with cryptocurrency pairs, while the premium is negligible ($\sim 0.3\%$) for American Call Options with stocks and fiat currencies.
 Also, the premium values rise for all assets with the strike time increasing, then converge when the strike time reaches 300 days.
 
 \paragraph{We propose two fair Atomic Swap protocols, one is for currency exchange and the other is for American Call Options.}

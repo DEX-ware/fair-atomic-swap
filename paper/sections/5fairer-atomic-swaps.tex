@@ -15,12 +15,12 @@ To our knowledge, the Atomic Swap protocol is originally designed for the fair e
 However, according to our analysis, the protocol is unfair because Alice can choose to proceed or abort the swap based on the asset price, and he will not receive any penalty if he abort the swap.
 
 The currency exchange and the American Call Option differ in Finance: the currency exchange is a type of Spots~\cite{hull1991introduction}, while the American Call Option is a type of Options.
-The Spot Contract and the Option Contract aim at different application scenarios: the Spot Contract aims at exchanging the ownership of assets, while the Option Contract aims at providing the option buyer an ``option'' to trade.
+The Spot Contract and the Option Contract aim at different application scenarios: the Spot Contract aims at exchanging the ownership of assets, while the Option Contract aims at providing Alice an ``option'' to trade.
 More specifically, Spots and Options differ in the following aspects:
 
 \begin{itemize}
     \item The Spot Contract is exercised immediately, while the Option Contract is exercised on or prior to a specified date in the future.
-    \item The Spot Contract cannot be aborted once signed by both parties, while in the Option Contract the option buyer can abort the contract with the loss of the premium.
+    \item The Spot Contract cannot be aborted once signed by both parties, while in the Option Contract Alice can abort the contract with the loss of the premium.
     \item The Spot Contract itself has no value, while the Option Contract itself has value - the premium.
 \end{itemize}
 
@@ -39,7 +39,7 @@ The premium should follow that:
 If Alice's timelock expires, Alice can refund her premium back.}
 
 \paragraph{Atomic Swaps for American Call Options}
-For the American Call Options, the option buyer should pay for the premium besides the bought asset, regardless whether the contract is settled or aborted.
+For the American Call Options, Alice should pay for the premium besides the bought asset, regardless whether the contract is settled or aborted.
 In reality, the option sellers are trustworthy - they never abort the contract.
 However, in Atomic Swaps, Bob can abort the contracts like Alice.
 To keep the Atomic Swap consistent with the American Call Options,

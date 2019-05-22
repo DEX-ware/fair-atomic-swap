@@ -44,7 +44,7 @@ In practice, the swap initiator's timelock is 48 hours and the swap participant'
     \label{fig:sequence_diagram_option}
 \end{figure}
 
-Assume the swap initiator Alice hopes to get $x_2$ $Coin_2$ from the swap participant Bob in exchange of $x_1$ $Coin_1$. 
+Assuming the swap initiator Alice hopes to get $x_2$ $Coin_2$ from the swap participant Bob in exchange of $x_1$ $Coin_1$. 
 $Coin_1$ is the cryptocurrency on the blockchain $BC_1$, and $Coin_2$ is the cryptocurrency on the blockchain $BC_2$.
 
 We denote the Atomic Swap as 
@@ -53,7 +53,7 @@ $$\mathcal{AS} = (x_1, Coin_1, x_2, Coin_2)$$
 
 Let Alice be the holder of the address $\beta_{A, 1}$ on $BC_1$ and the address $\beta_{A, 2}$ on $BC_2$.
 Let Bob be the holder of the address $\beta_{B, 1}$ on $BC_1$ and the address $\beta_{B, 2}$ on $BC_2$.
-$\beta_{A, 1}$ holds $Coin_1$ with the amount more than $x_1$, and $\beta_{B, 2}$ holds $Coin_2$ with the amount more than $x_2$.
+$\beta_{A, 1}$ holds $Coin_1$ with the amount no smaller than $x_1$, and $\beta_{B, 2}$ holds $Coin_2$ with the amount no smaller than $x_2$.
 
 Figure~\ref{fig:sequence_diagram_original} shows the process of $\mathcal{AS}$.
 More specifically, $\mathcal{AS}$ consists of five steps:
@@ -81,14 +81,14 @@ If Bob does not redeem $x_1$ $Coin_1$ and $\delta_1$ expires, Alice can refund $
 Bob participates in $\mathcal{AS}$ at this stage after \textbf{Initiate}.
 % contract
 With the published $h$, Bob creates the contract script $\mathcal{C}_2$ that ``Bob pays $x_2$ $Coin_2$ from $\beta_{B, 2}$ to $\beta_{A, 2}$ if Alice can provide $s$ before or on a timelock $\delta_2$ (which is a timestamp). After the time of $\delta_2$, Bob can refund the money - get $x_2$ $Coin_2$ back.''
-Here $\delta_2$ should expire earlier than $\delta_1$.
+Here $\delta_2$ should expire before $\delta_1$.
 % tx
 After creating $\mathcal{C}_2$, Bob publishes $\mathcal{C}_2$ as a transaction $tx_{\mathcal{C}, 2}$ on $BC_2$.
 Note that Alice knows $s$ so she can redeem $x_2$ $Coin_2$ in $tx_{\mathcal{C}, 2}$ anytime before $\delta_2$.
 % refund 
 Besides $\mathcal{C}_2$, Bob also creates a refund script $\mathcal{R}_2$ that ``Bob pays $x_2$ $Coin_2$ from $\beta_{B, 2}$ to his another address.''
 This is to ensure $x_2$ $Coin_2$ can no longer be redeemed by others. Bob can do this only after $\delta_2$.
-If Alice does not redeem $x_2$ $Coin_2$ and $\delta_2$ expires, Bob can refund $x_2$ $Coin_2$ by publishing $\mathcal{R}_2$ as a transaction $tx_{\mathcal{R}, 2}$ on $BC_2$.
+If Alice does not redeem $x_2$ $Coin_2$ before $\delta_2$ expires, Bob can refund $x_2$ $Coin_2$ by publishing $\mathcal{R}_2$ as a transaction $tx_{\mathcal{R}, 2}$ on $BC_2$.
 
 \paragraph{\textbf{Redeem} or \textbf{Refund}}
 At this stage, Alice can choose either to redeem $x_2$ $Coin_2$ or refund $x_1$ $Coin_1$.
@@ -147,33 +147,38 @@ Similarly, it is Alice to blame, because she should have had enough time - befor
 \subsection{American Call Option}
 
 The American Call Option is a contract that ``one can buy an amount of an asset with an agreed price prior to or on an agreed time in the future''. 
-The agreed price is usually called the \textit{spot price}, and the buying is called \textit{exercising}.
-For American Call Option, the option buyer can exercise in advanced of the agreed exercise time.
-The price of the asset when exercising is called the \textit{strike price}.
+In an American Call Option, 
+the agreed price is usually called the \textit{strike price};
+and the contract settlement is called \textit{exercising};
+the one who proposes the contract and buys the asset is called the \textit{option buyer};
+the one who sells the asset is called the \textit{option seller}.
+
 As mentioned in Section~\ref{subsec:background_option}, the option contract itself has value, and its value is called the \textit{premium}.
-The option buyer should pay for both the asset and the premium when participating in the contract.
+The option buyer should pay for the premium when the contract is agreed, and should pay for the asset when the contract is exercised.
+Note that the option buyer can exercise in advanced of the agreed exercise time in an American Call Option.
 
 More specifically, we denote an American Call Option contract $\Pi$ as
 
 $$\Pi = (\pi_1, \pi_2, K, A, T, C)$$
 
 where
-$\pi_1$ and $\pi_2$ are the currency of the option buyer and the asset of the option seller, respectively; 
+the option buyer Alice with $\pi_1$ hopes to buy $\pi_2$ from the option seller Bob;
+$\pi_1$ and $\pi_2$ are Alice's currency and Bob's asset, respectively; 
 $K$ is the strike price with the unit $\pi_2 / \pi_1$ - the price of $\pi_2$ measured in $\pi_1$;
-$A$ is the amount of the asset $\pi_2$ that the option seller wants to sell;
+$A$ is the amount of the asset $\pi_2$ that Bob wants to sell;
 $T$ is the agreed strike time;
 $C$ is the \textit{premium} with the unit $\pi_1$.
 
 The process of an American Call Option is as follows:
 
 \begin{enumerate}
-    \item \textbf{Advertise}: the option seller creates and advertises an American Call Option contract $\Pi = (\pi_1, \pi_2, K, A, T, C)$.
-    \item \textbf{Contract}: the option buyer finds $\Pi$ is profitable, so he participates in $\Pi$.
-    To participate, the option buyer should pay $C$ to the option seller first.
-    Note that the option buyer does not pay for $A$ $\pi_2$ at this stage.
-    Also note that the option seller cannot abort $\Pi$ after the option buyer participates in $\Pi$.
-    \item \textbf{Exercise} or \textbf{Abort}: the option buyer exercises $\Pi$ - pays $AK$ $\pi_1$ to the option seller - before or on $T$, and the option seller gives $A$ $\pi_2$ to the option buyer.
-    If the option buyer does not exercise $\Pi$ before or on $T$, $\Pi$ will abort - the option buyer gets $\pi_1$ back and the option seller gets $\pi_2$ back and $C$. In other words, both of them get their underlying asset back, but the option buyer loses the premium $C$.
+    \item \textbf{Advertise}: Alice creates and advertises an American Call Option contract $\Pi = (\pi_1, \pi_2, K, A, T, C)$.
+    \item \textbf{Contract}: Bob finds $\Pi$ is profitable, so he participates in $\Pi$.
+    When Bob participates, Alice should pay $C$ to Bob first.
+    Note that Alice does not pay for $A$ $\pi_2$ at this stage.
+    Also note that Bob cannot abort $\Pi$ after participating in $\Pi$.
+    \item \textbf{Exercise} or \textbf{Abort}: Alice exercises $\Pi$ - pays $AK$ $\pi_1$ to Bob - no later than $T$, and Bob gives $A$ $\pi_2$ to Alice.
+    If Alice does not exercise $\Pi$ before or on $T$, $\Pi$ will abort - Alice gets $\pi_1$ back and Bob gets $\pi_2$. In other words, both of them get their underlying asset back, but Alice loses the premium $C$ to Bob.
 \end{enumerate}
 
 
@@ -206,13 +211,15 @@ where:
 \textbf{Exercise} in the American Call Option is equivalent to \textbf{Redeem} in the Atomic Swap;
 \textbf{Abort} in the American Call Option is equivalent to \textbf{Refund} in the Atomic Swap.
 
-
-In the American Call Option context, the option buyer Alice wants to buy $x_2$ $Coin_2$ from the participant Bob by using $x_1$ $Coin_1$.
+% coin and asset
+In the American Call Option context, Alice wants to buy $x_2$ $Coin_2$ from the participant Bob by using $x_1$ $Coin_1$.
 $Coin_1$ is the currency Alice uses, $Coin_2$ is the asset Bob has.
-$\frac{x_2}{x_1}$ is the price of the asset from Alice's perspective, so $\frac{x_2}{x_1}$.
-$\delta_2$ is the timelock of the contract transaction on $BC_2$.
-It is equivalent to the strike time of $\Pi$, because after $\delta_2$ Bob can refund his asset back and invalidate $\mathcal{AS}$, but before $\delta_2$ Bob cannot abort $\mathcal{AS}$ if Alice triggers \textbf{Participate}.
-Establishing the Atomic Swap does not require Alice to pay anything other than the asset to Bob, so the premium here is zero.
+This is equivalent to that Alice with $\pi_1$ wants to buy $\pi_2$ from Bob.
+% timelock
+$\delta_2$ is the timelock of the contract transaction on $BC_2$, which is equivalent to the strike time $T$ in $\Pi$. 
+In $\mathcal{AS}$ Bob can refund his asset back after $\delta_2$ to abort $\mathcal{AS}$, while $\Pi$ will be automatically aborted after the strike time $T$.
+% premium
+Establishing $\mathcal{AS}$ does not require Alice to pay anything other than $x_1$ $Coin_1$ to Bob, which is equivalent to $\Pi$ with $C = 0$.
 
 The ``premium-free'' property enables Alice to speculate without any risk:
 if Bob's asset price rises right before the strike time, she will proceed the swap to profit,
