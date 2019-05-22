@@ -1,9 +1,9 @@
 \section{Discussion}
 \label{sec:discussion}
 
-\subsection{Security of Atomic Swaps}
+\subsection{Security of the Atomic Swap}
 
-Although already widely adopted, Atomic Swap has some security issues.
+Although already widely adopted, the Atomic Swap has security issues.
 
 % rely on blockchain security
 First, the security of Atomic Swaps relies on the security of blockchains:
@@ -22,7 +22,8 @@ The block height can serialize events on a blockchain by time, but cannot serial
 In addition, the new block generation is a random process, so the block height cannot indicate the precise time in reality.
 % abosolute time
 Using the UNIX timestamp doesn't work, either.
-This is because the consensus participants are responsible for timestamping events, and the consensus participants can be unreliable: They may use the wrong time, either on purpose or by accident.
+This is because the consensus participants are responsible for timestamping events, but the consensus participants can be unreliable:
+they may use the wrong time, either on purpose or by accident.
 
 
 \subsection{Other countermeasures}
