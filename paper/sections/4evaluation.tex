@@ -45,7 +45,7 @@ We use S\&P500 and Dow Jones Index (DJI) as examples of stock indices, and USD-E
 
 \paragraph{Results and analysis.}
 
-\begin{figure*}
+\begin{figure*}[htp]
     \includegraphics[width=\linewidth]{volatility_analysis.eps}
     \caption{The daily percentage changes for all selected cryptocurrency pairs, stock indices and fiat currency pairs over one year (from 03/05/2018 to 03/05/2019).
     For each figure, $E_{\alpha}$, $E_{\beta}$, $max_\alpha$ and $max_\beta$ are the expected profit rate, the expected mitigated risk rate, the maximum daily profit and the maximum daily mitigated risk, respectively.
@@ -53,7 +53,7 @@ We use S\&P500 and Dow Jones Index (DJI) as examples of stock indices, and USD-E
     \label{fig:volatility_analysis}
 \end{figure*}
 
-\begin{figure}
+\begin{figure}[htp]
     \includegraphics[width=\linewidth]{vol_scatter.eps}
     \caption{Visualizing the expected profit rate $E_\alpha$ and the expected mitigated risk rate $E_\beta$ for each cryptocurrency pair, stock index and fiat currency pair.}
     \label{fig:vol_scatter}
@@ -121,7 +121,7 @@ Therefore, in order to evaluate the unfairness of the Atomic Swap, we utilize th
 
 \subsubsection{The Cox-Ross-Rubinstein Model Explained}
 
-\begin{figure}
+\begin{figure}[htp]
 \centering
 \begin{tikzpicture}[
     >=stealth,
@@ -257,7 +257,7 @@ Table~\ref{table:summary_symbols_crr} summarizes all symbols used in the Cox-Ros
 
 \subsubsection{Experiments}
 
-\begin{figure}
+\begin{figure}[htp]
     \includegraphics[width=\linewidth]{premium_pricing_result.eps}
     \caption{Estimated premium with different strike times for each cryptocurrency pair, stock index and fiat currency pair. Lines with the marker ``x'' are for stock indices; lines with the marker ``o'' are for fiat currencies; and lines without marker are for cryptocurrency pairs.}
     \label{fig:premium_pricing_result}
