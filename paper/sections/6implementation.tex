@@ -161,7 +161,7 @@ Because the premium payment relies on the $Coin_2$ payment, checking the premium
 
 \textit{isPremiumRedeemable()} and \textit{isPremiumRefundable()} for the currency exchange-style Atomic Swap are shown in Figure~\ref{lst:premium_condition_currency}, and for the American Call Option-style Atomic Swap are shown in Figure~\ref{lst:premium_condition_options}.
 The currency exchange-style Atomic Swap and the American Call Option-style Atomic Swap differ when $AssetState = Redeemed$:
-In the currency exchange-style Atomic Swap the premium belongs to Alice while in the American Call Option-style Atomic Swap the premium belongs to Bob.
+in the currency exchange-style Atomic Swap the premium belongs to Alice while in the American Call Option-style Atomic Swap the premium belongs to Bob.
 
 \paragraph{\textit{redeemPremium()} and \textit{refundPremium()}}
 
@@ -235,7 +235,7 @@ This neither introduces computation overhead, nor breaks the ``stateless'' desig
 
 \paragraph{Decoupling the contract creation and the contract invocation}
 For smart contracts, the contract is created and invoked in separate transactions:
-Creating the contract is by publishing a transaction which creates the smart contract,
+creating the contract is by publishing a transaction which creates the smart contract,
 and invoking the contract is by publishing a transaction which invokes a method in the smart contract.
 However, Bitcoin has no smart contracts, and the ``contract'' is created and invoked in a single transaction.
 In this way, the timelock starts right after the contract creation rather than the contract invocation.
@@ -251,15 +251,15 @@ If less than $M$ accounts sign the transaction, the transaction cannot be verifi
 In Bitcoin, constructing a multi-signature transaction requires accounts to create a multi-signature address first~\cite{okupski2014bitcoin}.
 
 With multi-signature transactions, we can decouple the contract creation and invocation as follows:
-First, Alice and Bob create a 2-of-2 multi-signature address. 
-Second, Alice and Bob mutually construct and sign a transaction which includes the premium payment and the $Coin_2$ payment.
-Finally, both Alice and Bob sign and publish the transaction with the 2-2 multi-signature address.
+first, Alice and Bob create a 2-of-2 multi-signature address;
+second, Alice and Bob mutually construct and sign a transaction which includes the premium payment and the $Coin_2$ payment;
+finally, both Alice and Bob sign and publish the transaction with the 2-2 multi-signature address.
 
 Note that the second step above is done off-chain:
-First, Bob creates the $Coin_2$ transaction and sends it to Alice.
-Second, Alice creates the premium transaction which uses OP\_LOOKUP\_OUTPUT to check the ownership of $Coin_2$ transaction outputs.
-Third, Alice merges the $Coin_2$ transaction and the premium transaction to a single transaction, signs the transaction, and sends it to Bob.
-Finally, Bob signs the transaction and sends it to Alice.
+first, Bob creates the $Coin_2$ transaction and sends it to Alice;
+second, Alice creates the premium transaction which uses OP\_LOOKUP\_OUTPUT to check the ownership of $Coin_2$ transaction outputs;
+third, Alice merges the $Coin_2$ transaction and the premium transaction to a single transaction, signs the transaction, and sends it to Bob;
+finally, Bob signs the transaction and sends it to Alice.
 At this stage, both Alice and Bob have obtained the mutually signed transaction, which consists of both the premium transaction and the $Coin_2$ transaction.
 
 \paragraph{The premium transaction}
