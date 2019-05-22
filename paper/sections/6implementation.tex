@@ -15,17 +15,17 @@ To implement our protocols, the blockchain should support the following function
 \end{enumerate}
 
 \paragraph{Stateful transactions}
-Transactions should be stateful: Executing a transaction can depend on prior transactions.
+Transactions should be stateful: executing a transaction can depend on prior transactions.
 In our protocols, whether $pr$ goes to Alice or Bob depends on the status of $Coin_2$.
 Therefore, the transaction of $pr$ relies on the status of $Coin_2$ payment transaction.
 
 \paragraph{Hashlock}
-The transactions should support the hashlock: A payment is proceeded only when the payee provides the preimage of a hash.
+The transactions should support the hashlock: a payment is proceeded only when the payee provides the preimage of a hash.
 In our protocols, exchanging $Coin_1$ and $Coin_2$ atomically is based on the hashlock -
 Alice redeems $Coin_2$ first by releasing the preimage, then Bob can redeem $Coin_1$ by using the released preimage.
 
 \paragraph{Timelock}
-The transactions should support the timelock: A payment will expire after a specified time if the payee cannot redeem the payment.
+The transactions should support the timelock: a payment will expire after a specified time if the payee cannot redeem the payment.
 Note that the payment can be conditional, e.g. by hashlock.
 In our protocols, the transactions of $Coin_1$, $Coin_2$ and $pr$ are all timelocked, in order to avoid locking money in transactions forever.
 
@@ -234,7 +234,7 @@ With OP\_LOOKUP\_OUTPUT, the Bitcoin script can decide whether Alice or Bob shou
 ``<asset2\_output> OP\_LOOKUP\_OUTPUT <Alice\_pubkeyhash> OP\_EQUALVERIFY''.
 
 % implement opcode is easy
-Implementing OP\_LOOKUP\_OUTPUT is easy in Bitcoin - It only queries the ownership of an output from the indexed blockchain database.
+Implementing OP\_LOOKUP\_OUTPUT is easy in Bitcoin - it only queries the ownership of an output from the indexed blockchain database.
 This neither introduces computation overhead, nor breaks the ``stateless'' design of the Bitcoin script.
 
 
