@@ -43,19 +43,18 @@
 
 \begin{abstract}
 Atomic Swap enables two parties to atomically exchange their own cryptocurrencies without trusted third parties.
-However, no evidence shows that the Atomic Swap protocol is fair for both the swap initiator and the swap participant.
-
+% work
 In this paper, we investigate the fairness of the Atomic Swap protocol.
-
+% 1
 First, we model the Atomic Swap as the American Call Option,
 and prove that an Atomic Swap is equivalent to an American Call Option without the premium.
 Thus, the Atomic Swap is unfair to the swap participant.
-
+% 2
 Second, we quantify the unfairness of the Atomic Swap and compare it with that of conventional financial assets (stocks and fiat currencies).
 The quantification results show that the Atomic Swaps are much more unfair on cryptocurrencies than on stocks and fiat currencies in the same setting.
-
-Third, we use the conventional Cox-Ross-Rubinstein option pricing model in Finance to estimate the premium, and show that the estimated premium for cryptocurrencies is 2\% $\sim$ 3\% of the asset value, while the premium for stocks and fiat currencies is negligible.
-
+% 3
+Third, we use the conventional Cox-Ross-Rubinstein option pricing model in Finance to estimate the premium, and show that the estimated premium for cryptocurrencies is 2\% $\sim$ 3\% of the asset value, while the premium for stocks and fiat currencies is negligible ($\sim 0.3\%$).
+% 4
 Finally, we propose two fair Atomic Swap protocols,
 one is for currency exchange and the other is for American Call Options.
 Our protocols are based on the original Atomic Swap protocol, but implement the premium mechanism.
