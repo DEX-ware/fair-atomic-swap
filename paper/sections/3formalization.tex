@@ -49,7 +49,10 @@ In practice, the swap initiator's timelock is 48 hours and the swap participant'
 Assume the swap initiator Alice hopes to get $x_2$ $Coin_2$ from the swap participant Bob in exchange of $x_1$ $Coin_1$. 
 $Coin_1$ is the cryptocurrency on the blockchain $BC_1$, and $Coin_2$ is the cryptocurrency on the blockchain $BC_2$.
 
-We denote the swap as $\mathcal{AS} = (x_1, Coin_1, x_2, Coin_2)$.
+We denote the Atomic Swap as 
+
+$$\mathcal{AS} = (x_1, Coin_1, x_2, Coin_2)$$
+
 Let Alice be the holder of the address $\beta_{A, 1}$ on $BC_1$ and the address $\beta_{A, 2}$ on $BC_2$.
 Let Bob be the holder of the address $\beta_{B, 1}$ on $BC_1$ and the address $\beta_{B, 2}$ on $BC_2$.
 $\beta_{A, 1}$ holds $Coin_1$ with the amount more than $x_1$, and $\beta_{B, 2}$ holds $Coin_2$ with the amount more than $x_2$.
@@ -90,9 +93,13 @@ This is to ensure $x_2$ $Coin_2$ can no longer be redeemed by others. Bob can do
 If Alice does not redeem $x_2$ $Coin_2$ and $\delta_2$ expires, Bob can refund $x_2$ $Coin_2$ by publishing $\mathcal{R}_2$ as a transaction $tx_{\mathcal{R}, 2}$ on $BC_2$.
 
 \paragraph{\textbf{Redeem} or \textbf{Refund}}
+At this stage, Alice can choose either to redeem $x_2$ $Coin_2$ or refund $x_1$ $Coin_1$.
+Note that both \textbf{Redeem} and \textbf{Refund} are atomic:
+if Alice chooses to redeem $x_2$ $Coin_2$, Bob can also redeem $x_1$ $Coin_1$;
+if Alice chooses to refund $x_1$ $Coin_1$, Bob can also refund $x_2$ $Coin_2$.
 
 \textbf{Redeem.}
-At this stage, Alice redeems $x_2$ $Coin_2$ by publishing $s$, then Bob can also redeem $x_1$ $Coin_1$ with the published $s$.
+Alice redeems $x_2$ $Coin_2$ by publishing $s$, then Bob can also redeem $x_1$ $Coin_1$ with the published $s$.
 First, Alice provides $s$ to $tx_{\mathcal{C}, 2}$ in order to redeem $x_2$ $Coin_2$ in $tx_{\mathcal{C}, 2}$.
 As a result, Alice redeems $x_2$ $Coin_2$, but exposes $s$ to Bob.
 After that, Bob provides $s$ to $tx_{\mathcal{C}, 1}$ in order to redeem $x_1$ $Coin_1$ in $tx_{\mathcal{C}, 1}$.
@@ -104,6 +111,7 @@ As a result, Alice cannot redeem $x_2$ $Coin_2$, and will not publish $s$.
 After $\delta_1$, Alice can also refund her $x_1$ $Coin_1$ by publishing $tx_{\mathcal{R}, 1}$.
 
 
+\paragraph{Atomicity analysis}
 % why atomic
 We can see that $\mathcal{AS}$ either succeeds or fails for both Alice and Bob.
 In detail,
@@ -121,11 +129,8 @@ However, one may take both $Coin_1$ and $Coin_2$ if the other does not trigger \
 For example, if Bob does not trigger \textbf{Redeem} after Alice triggers \textbf{Redeem} and $\delta_1$ expires, Alice can also refund $x_1$ $Coin_1$ by triggering \textbf{Refund}.
 But in this case it is Bob to blame, because he should have had enough time - at least $\delta_2 - \delta_1$ (48 - 24 = 24 hours by default) - to redeem $x_1$ $Coin_1$.
 Another example is that Alice broadcasts $tx_{\mathcal{C}, 1}$ after $\delta_2$, but Bob has already triggered \textbf{Refund}.
-Therefore, Bob can also trigger \textbf{Redeem} with the preimage in Alice's transaction of \textbf{Redeem} before $\delta_1$.
+Therefore, Bob can also trigger \textbf{Redeem} with $s$ in Alice's transaction of \textbf{Redeem} before $\delta_1$.
 Similarly, it is Alice to blame, because she should have had enough time - before $\delta_2$ - to trigger \textbf{Redeem}.
-
-Note that the exchange rate $Coin_2 / Coin_1$ is fluctuating overtime due to the market mechanism.
-We denote the asset's underlying value (with the unit $\frac{Coin_2}{Coin_1}$) at the time $t$ as $S_t$.
 
 
 
@@ -173,8 +178,8 @@ The process of an American Call Option is as follows:
     If the option buyer does not exercise $\Pi$ before or on $T$, $\Pi$ will abort - the option buyer gets $\pi_1$ back and the option seller gets $\pi_2$ back and $C$. In other words, both of them get their underlying asset back, but the option buyer loses the premium $C$.
 \end{enumerate}
 
-% asset underlying value
-Similar to the Atomic Swap, the exchange rate of $\pi_2 / \pi_1$ is also fluctuating overtime.
+
+Note that the exchange rate of $\pi_2 / \pi_1$ is also fluctuating overtime due to the market mechanism.
 We denote the asset's underlying value (with the unit $\pi_2 / \pi_1$) at the time $t$ as $S_t$.
 
 
