@@ -80,7 +80,7 @@ We denote our Atomic Swap protocol $\mathcal{AS}'$ as
 $$\mathcal{AS}' = (x_1, Coin_1, x_2, Coin_2, pr)$$
 
 where $pr$ is the amount of the premium measured in $Coin_2$.
-In our protocols, besides $x_1$ $Coin_1$, Alice should also lock $pr$ $Coin_2$ on $BC_2$, which will be described later.
+In our protocol, besides $x_1$ $Coin_1$, Alice should also lock $pr$ $Coin_2$ on $BC_2$, which will be described later.
 
 Similar to the original Atomic Swap $\mathcal{AS}$, our protocol consists of four stages:
 \textbf{Initiate}, \textbf{Participate}, \textbf{Redeem} and \textbf{Refund}.
@@ -92,10 +92,8 @@ $\mathcal{C}_1$ and $tx_{\mathcal{C}, 1}$ is the same as in $\mathcal{AS}$,
 while $\mathcal{C}_2$ and $tx_{\mathcal{C}, 2}$ are more sophisticated.
 $\mathcal{C}_2$ contains two coherent sub-contracts $\mathcal{C}^{asset}_2$ and $\mathcal{C}^{pr}_2$.
 
-$\mathcal{C}^{asset}_2$ is the contract for the asset $x_2$ $Coin_2$, which is the same as in $\mathcal{AS}$.
-$\mathcal{C}^{pr}_2$ is the contract for the premium $pr$.
-
-$\mathcal{C}^{pr}_2$ implements the premium mechanism in the Atomic Swap, which is the core of our improvement.
+In $\mathcal{C}_2$, $\mathcal{C}^{asset}_2$ is the contract for the asset $x_2$ $Coin_2$, which is the same as in $\mathcal{AS}$.
+$\mathcal{C}^{pr}_2$ is the contract for the premium $pr$, which implements the premium mechanism in the Atomic Swap.
 It supports both the currency exchange-style Atomic Swap and the American Call Option-style Atomic Swap.
 In more detail, the rules of $\mathcal{C}^{pr}_2$ are shown below:
 
@@ -114,14 +112,14 @@ Note that Alice only triggers $\mathcal{C}_1$ and $\mathcal{C}^{pr}_2$ to execut
 Bob will deposit $x_2$ $Coin_2$ trigger $\mathcal{C}^{asset}_2$ to execute when \textbf{Participate}.
 
 \paragraph{\textbf{Participate}}
-At this stage, Bob decides whether to participate in $\mathcal{AS}'$ by auditing $tx_{\mathcal{C}, 1}$ and $tx_{\mathcal{C}, 2}$.
+Bob decides whether to participate in $\mathcal{AS}'$ by auditing $tx_{\mathcal{C}, 1}$ and $tx_{\mathcal{C}, 2}$.
 If Bob thinks contracts are fair, he will participate in $\mathcal{AS}'$, otherwise Bob will not participate and look for more profitable contracts from others.
 To participate in $\mathcal{AS}'$, Bob deposits $x_2$ $Coin_2$ in $\mathcal{C}^{asset}_2$, and triggers $\mathcal{C}^{asset}_2$ to execute.
 
 \paragraph{\textbf{Redeem}}
-At this stage, Alice redeeming $x_1$ $Coin_1$ and Bob redeeming $x_2$ $Coin_2$ are the same in $\mathcal{AS}'$ and $\mathcal{AS}$.
-But in addition, $\mathcal{C}^{pr}_2$ will work once triggering \textbf{Redeem} for $\mathcal{AS}'$.
+Alice redeeming $x_1$ $Coin_1$ and Bob redeeming $x_2$ $Coin_2$ are the same in $\mathcal{AS}'$ and $\mathcal{AS}$.
+But in addition, riles in $\mathcal{C}^{pr}_2$ will work once triggering \textbf{Redeem} for $\mathcal{AS}'$.
 
 \paragraph{\textbf{Refund}}
-At this stage, refunding $x_2$ $Coin_2$ for Alice and $x_1$ $Coin_1$ for Bob are the same as in $\mathcal{AS}$.
-But in addition, $\mathcal{C}^{pr}_2$ will work once triggering \textbf{Refund} for $\mathcal{AS}'$.
+Refunding $x_2$ $Coin_2$ for Alice and $x_1$ $Coin_1$ for Bob are the same as in $\mathcal{AS}$.
+But in addition, rules in $\mathcal{C}^{pr}_2$ will work once triggering \textbf{Refund} for $\mathcal{AS}'$.

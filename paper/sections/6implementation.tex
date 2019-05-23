@@ -1,40 +1,37 @@
 \section{Implementation}
 \label{sec:implementation}
 
-In this section, we describe how to implement our proposed protocols in Section~\ref{sec:fair_atomic_swap} on different blockchains, including blockchains only supporting scripts (such as Bitcoin) and blockchains supporting smart contracts (such as Ethereum).
+In this section, we describe how to implement our proposed protocol in Section~\ref{sec:fair_atomic_swap} on different blockchains, including blockchains only supporting scripts (such as Bitcoin) and blockchains supporting smart contracts (such as Ethereum).
 In particular, we describe our design rationale, and provide reference implementations in Bitcoin scripts and Solidity smart contracts.
 
 \subsection{Requirements}
 
-To implement our protocols, the blockchain should support 1) stateful transactions, 2) the timelock and 3) the hashlock.
+To implement our protocol, the blockchain should support 1) stateful transactions, 2) the timelock and 3) the hashlock.
 
 \paragraph{Stateful transactions}
 Transactions should be stateful: executing a transaction can depend on prior transactions.
-In our protocols, whether $pr$ goes to Alice or Bob depends on the status of $Coin_2$.
+In our protocol, whether $pr$ goes to Alice or Bob depends on the status of $Coin_2$.
 Therefore, the transaction of $pr$ relies on the status of $Coin_2$ payment transaction.
 
 \paragraph{Hashlock}
 The transactions should support the hashlock: a payment is proceeded only when the payee provides the preimage of a hash.
-In our protocols, exchanging $Coin_1$ and $Coin_2$ atomically is based on the hashlock -
+In our protocol, exchanging $Coin_1$ and $Coin_2$ atomically is based on the hashlock -
 Alice redeems $Coin_2$ first by releasing the preimage, then Bob can redeem $Coin_1$ by using the released preimage.
 
 \paragraph{Timelock}
 The transactions should support the timelock: a payment will expire after a specified time if the payee cannot redeem the payment.
-Note that the payment can be conditional, e.g. by hashlock.
-In our protocols, the transactions of $Coin_1$, $Coin_2$ and $pr$ are all timelocked, in order to avoid locking money in transactions forever.
+In our protocol, the transactions of $Coin_1$, $Coin_2$ and $pr$ are all timelocked, in order to avoid locking money in transactions forever.
 
 \subsection{Smart contracts}
 
-Smart contracts support all aforementioned functionalities, so can easily implement our protocols.
-We use the Solidity - one of programming languages for Ethereum smart contracts~\cite{wood2014ethereum} - as an example.
-
+Smart contracts support all aforementioned functionalities, so can easily implement our protocol.
+We use Solidity - one of programming languages for Ethereum smart contracts~\cite{wood2014ethereum} - as an example.
 Our implementations are based on the original Atomic Swap Solidity implementation~\cite{AltCoinExchange/ethatomicswap},
 but extend the premium mechanism.
-
 Extending the premium mechanism includes:
 
 \begin{enumerate}
-    \item The enumeration \textit{AssetState} for maintaining the premium payment state
+    \item The enumeration \textit{PremiumState} for maintaining the premium payment state
     \item The modifiers \textit{isPremiumRedeemable()} and \textit{isPremiumRefundable()} for checking whether the premium can be redeemed or refunded
     \item The methods \textit{redeemPremium()} and \textit{refundPremium()} for redeeming and refunding the premium
 \end{enumerate}
@@ -151,12 +148,12 @@ In the original smart contract, an enumeration \textit{State} maintains the asse
 In our contract, we decouple \textit{State} to the asset state \textit{AssetState} and the premium state \textit{PremiumState}.
 Both \textit{AssetState} and \textit{PremiumState} are the same as the original \textit{State}.
 The code is shown in Listing~\ref{lst:state}.
-\textit{Empty} means Alice has not triggered \textbf{Initiate}($\cdot$), and has not deposited the premium yet.
-\textit{Filled} means Alice has deposited the premium, indicating that Alice has triggered \textbf{Initiate}($\cdot$), but neither Alice nor Bob refunds or redeems the premium.
+\textit{Empty} means Alice has not triggered \textbf{Initiate}, and has not deposited the premium yet.
+\textit{Filled} means Alice has deposited the premium, indicating that Alice has triggered \textbf{Initiate}, but neither Alice nor Bob refunds or redeems the premium.
 \textit{Redeemded} and \textit{refunded} means Bob redeems the premium and Alice refunds the premium, respectively.
 
 \paragraph{\textit{isPremiumRedeemable()} and \textit{isPremiumRefundable()}}
-Checking whether the premium is redeemable or refundable is the most critical part of our protocols.
+Checking whether the premium is redeemable or refundable is the most critical part of our protocol.
 Because the premium payment relies on the $Coin_2$ payment, checking the premium refundability and redeemability involves checking the $Coin_2$ status - \textit{AssetState} in our implementation.
 
 \textit{isPremiumRedeemable()} and \textit{isPremiumRefundable()} for the currency exchange-style Atomic Swap are shown in Figure~\ref{lst:premium_condition_currency}, and for the American Call Option-style Atomic Swap are shown in Figure~\ref{lst:premium_condition_options}.
@@ -214,7 +211,7 @@ function refundPremium(bytes32 secretHash)
 
 % bitcoin cannot implement
 % because stateless
-Unfortunately, Bitcoin cannot support our protocols directly, because Bitcoin does not support the stateful transaction functionalities.
+Unfortunately, Bitcoin cannot support our protocol directly, because Bitcoin does not support the stateful transaction functionalities.
 First, the Bitcoin script is designed to be stateless~\cite{okupski2014bitcoin}.
 Second, there is no such things like the Ethereum's ``world state''~\cite{wood2014ethereum} in Bitcoin:
 the only state in Bitcoin is the Unspent Transaction Outputs (UTXOs)~\cite{nakamoto2008bitcoin}.
@@ -222,7 +219,7 @@ the only state in Bitcoin is the Unspent Transaction Outputs (UTXOs)~\cite{nakam
 
 % new opcode
 \paragraph{New Opcode OP\_LOOKUP\_OUTPUT}
-In order to make Bitcoin script support our protocols, we use an opcode called OP\_LOOKUP\_OUTPUT.
+In order to make Bitcoin script support our protocol, we use an opcode called OP\_LOOKUP\_OUTPUT.
 OP\_LOOKUP\_OUTPUT was proposed, but has not implemented in Bitcoin yet~\cite{op-lookup-output-origin}.
 It takes the id of an output, and produces the address of the output's owner.
 With OP\_LOOKUP\_OUTPUT, the Bitcoin script can decide whether Alice or Bob should take the premium by
@@ -241,7 +238,6 @@ However, Bitcoin has no smart contracts, and the ``contract'' is created and inv
 In this way, the timelock starts right after the contract creation rather than the contract invocation.
 This is problematic: the premium contract should not be triggered until Bob participates in the swap.
 
-
 Thanks to the multi-signature transaction functionality in Bitcoin,
 Alice and Bob can first create the contract off-chain, then invoke the contract on-chain.
 
@@ -253,9 +249,9 @@ In Bitcoin, constructing a multi-signature transaction requires accounts to crea
 With multi-signature transactions, we can decouple the contract creation and invocation as follows:
 first, Alice and Bob create a 2-of-2 multi-signature address;
 second, Alice and Bob mutually construct and sign a transaction which includes the premium payment and the $Coin_2$ payment;
-finally, both Alice and Bob sign and publish the transaction with the 2-2 multi-signature address.
+finally, they publish the transaction in the name of the 2-2 multi-signature address.
 
-Note that the second step above is done off-chain:
+Note that constructing and signing the transaction is done off-chain:
 first, Bob creates the $Coin_2$ transaction and sends it to Alice;
 second, Alice creates the premium transaction which uses OP\_LOOKUP\_OUTPUT to check the ownership of $Coin_2$ transaction outputs;
 third, Alice merges the $Coin_2$ transaction and the premium transaction to a single transaction, signs the transaction, and sends it to Bob;

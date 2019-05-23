@@ -29,11 +29,11 @@ If the price of the swap participant's asset rises, the swap initiator will proc
 If the price of the swap participant's asset drops, the swap initiator can abort the swap, so that he won't lose money.
 
 % optionality
-We observe that, this problem is equivalent to the Optionality in Finance, which has already been studied for decades.
+We observe that, this problem is equivalent to the Optionality in Finance, which has already been studied for decades~\cite{higham2004introduction}.
 In Finance, an investment is said to have Optionality if
 1) settling this investment happens in the future rather than instantly;
 2) settling this investment is optional rather than mandatory.
-For an investment with Optionality, the option itself has value besides the underlying asset~\cite{higham2004introduction}, which is called the \textit{premium}.
+For an investment with Optionality, the option itself has value besides the underlying asset, which is called the \textit{premium}.
 The option buyer should pay for the premium besides the underlying asset, even if he aborts the contract.
 In this way, he can no longer speculate without penalties.
 
@@ -84,7 +84,7 @@ Our results show that, in the default timelock setting, the profit and the mitig
 \paragraph{We use the Cox-Ross-Rubinstein option pricing model to estimate the premium.}
 We use the Cox-Ross-Rubinstein option pricing model to estimate how much the premium should be for Atomic Swaps.
 In Finance, the Cox-Ross-Rubinstein model~\cite{cox1979option} is the conventional option pricing model for American-style options.
-Our results show that, in the default timelock setting, the premium should be approximately 2\% for Atomic Swaps with cryptocurrency pairs, while the premium is negligible ($\sim 0.3\%$) for American Call Options with stocks and fiat currencies.
+Our results show that, in the default timelock setting, the premium should be approximately 2\% for Atomic Swaps with cryptocurrency pairs, while the premium is approximately $0.3\%$ for American Call Options with stocks and fiat currencies.
 Also, the premium values rise for all assets with the strike time increasing, then start to converge when the strike time reaches 300 days.
 
 \paragraph{We propose an improvement on the Atomic Swap to make it fair.}
