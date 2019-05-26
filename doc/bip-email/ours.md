@@ -6,8 +6,12 @@
     * try to solve [original link]
     * why itz important
         - how profitable can it be
+        - explain optionality and premium
 + related work
     * exchange article
     * BIP197
     * thomas@eizinger.io
         - https://coblox.tech/docs/financial_crypto19.pdf
++ example usage
+    * spot
+    * american option
