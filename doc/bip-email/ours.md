@@ -15,3 +15,10 @@
 + example usage
     * spot
     * american option
+
+---
+
+Hi everybody!
+
+Here is a BIP draft brought up by Runchao and I to enable OP_LOOKUP_OUTPUT and thus to address the arbitrage problem, see this() and this() for detail.
+
