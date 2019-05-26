@@ -6,6 +6,7 @@
     * try to solve [original link]
     * why itz important
         - how profitable can it be
+            + maybe attach data
         - explain optionality and premium
 + related work
     * exchange article
