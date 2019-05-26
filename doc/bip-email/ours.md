@@ -21,5 +21,5 @@
 
 Hi everybody!
 
-Here is a BIP draft brought up by Runchao and I to enable OP_LOOKUP_OUTPUT and thus to address the arbitrage problem, see this() and this() for detail.
+Here is a BIP draft brought up by Runchao and I to enable OP_LOOKUP_OUTPUT and thus to mitigate the arbitrage risk during an Atomic Swap. Basically the initior can abort the deal without receiving any penalty, see this(https://lists.linuxfoundation.org/pipermail/lightning-dev/2018-May/001292.html) and this(https://lists.linuxfoundation.org/pipermail/lightning-dev/2018-December/001752.html) for detail.
 
