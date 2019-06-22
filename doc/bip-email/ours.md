@@ -13,15 +13,15 @@ To understand it better, you may also like to refer to:
 + https://en.bitcoin.it/wiki/Atomic_swap#Financial_optionality
 + https://blog.bitmex.com/atomic-swaps-and-distributed-exchanges-the-inadvertent-call-option/
 
-A few studies have been put into efforts, e.g., http://diyhpl.us/wiki/transcripts/scalingbitcoin/tokyo-2018/atomic-swaps/ and https://coblox.tech/docs/financial_crypto19.pdf
+A few studies have been put into efforts, e.g., http://diyhpl.us/wiki/transcripts/scalingbitcoin/tokyo-2018/atomic-swaps/ and https://coblox.tech/docs/financial_crypto19.pdf, using the premium mechanism as the collateral. The basic idea is that, the transaction for the premium needs to be locked with the same secret hash but with a flipped payout, i.e. when redeemed with the secret, the money goes back to Alice and after timelock, the premium goes to Bob as a compensation for Alice not revealing the secret. However, this introduces a new problem: Bob can get the premium without paying anything, by never participating in.
 
-However, there still exists some problems. Atmoic Swap can be used in Spot and Option. Coblox's solution is a fix for Spot but not for Option.
+To solve this, we need to know the status of a related transaction. Unfortunately, Bitcoin does not support the stateful transaction functionalities. 
 
-To solve this, we introduce the premium mechanism into Atomic Swap. __To acheive this, we need to__
-Therefore, we propose the new opcode: OP_LOOKUP_OUTPUT. __TO....__   __THE reason why__
+Therefore, we propose the new opcode: OP_LOOKUP_OUTPUT. It takes the id of an output, and produces the address of the output’s owner. With OP_LOOKUP_OUTPUT, the Bitcoin script can decide whether Alice or Bob should take the premium by “<output> OP_LOOKUP_OUTPUT <pubkeyhash> OP_EQUALVERIFY”.
 
+Assume that Alice and Bob exchange asset1 and asset2, and using premium (same asset type as asset2) as the collateral.
 
-A sample implementation of Atmoic Swap for Spot based on this opcode is:
+A sample premium transaction implementation of Atmoic Swap for Spot based on this opcode is:
 ```
 ScriptSig:
     Redeem: <Bob_sig> <Bob_pubkey> 1
@@ -41,7 +41,9 @@ ScriptPubKey:
     OP_CHECKSIG
 ```
 
-A sample implementation of Atmoic Swap for Option based on this opcode is here:
+We also explore the Atomic Swaps in American Call Options scenario, which is different from the Spot scenario. Alice should pay for the premium besides the underlying asset, regardless of whether the swap is successful or not. In reality, the option sellers are trustworthy - the option sellers never abort the contract. However, in Atomic Swaps, Bob can abort the contracts like Alice. To keep the Atomic Swap consistent with the American Call Options, the premium should follow that: Alice pays the premium to Bob if 1) Alice redeems Bob’s asset before Bob’s timelock, or 2) Bob refunds his asset after Bob’s timelock but before Alice’s timelock. If Alice’s timelock expires, Alice can refund her premium back.
+
+A sample premium transaction implementation of Atmoic Swap for Option based on this opcode is:
 ```
 ScriptSig:
     Redeem: <Bob_sig> <Bob_pubkey> 1
