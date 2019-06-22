@@ -8,7 +8,7 @@ The problem can be simply decribed as that, the initior can abort the deal, i.e.
 
 We have doned some research, including fetching cryptocurrency market history in the last year, and analyzing how profitable the arbitrage can be, given the default timelock setting (24/48 hrs) . Our result shows that the profit can be approximately 1% ~ 2.3%, which is non-negligible compared with 0.3% for stock market, and can be attractive considering it's risk-free.
 
-For better understanding, you may also refer to: 
+To understand it better, you may also like to refer to: 
 
 + https://en.bitcoin.it/wiki/Atomic_swap#Financial_optionality
 + https://blog.bitmex.com/atomic-swaps-and-distributed-exchanges-the-inadvertent-call-option/
