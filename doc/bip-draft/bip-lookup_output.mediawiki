@@ -48,24 +48,29 @@ First, the initiator picks a random secret _s_ only known to itself, and compute
 
 Then, the initiator creates an HTLC script contract_1 as described in [bip-0199](https://github.com/bitcoin/bips/blob/master/bip-0199.mediawiki):
 
->The initiator pays amount_1 coin_1 from initiator to participant if participant can provide the preimage _s_ to the hash _h_ before or on a timelock _t1_. After _t1_, the initiator can refund the money - get amount_1 coin_1 back.
+>The initiator pays amount_1 coin_1 from the initiator itself to the participant only if the participant can provide the preimage _s_ to the hash _h_ by a timelock _t1_. After _t1_, the initiator can refund the money - get amount_1 coin_1 back.
 
 bip-0199 also provides a sample contract.
 
 After creating contract_1, the initiator publishes contract_1 as a transaction transaction_1 on blockchain_1.
 
-Then, with the published _h_ in transaction_1, the initiator also creates another HTLC script contract_2:
+Then, with the published _h_ in transaction_1, the initiator also creates another HTLC script contract_2 on blockchain_2:
 
-> The participant pays amount_2 coin_2 from participant to initiator if initiator can provide secret _s_ before or on a timelock _t2_. After the time of _t2_, participant can refund the money - get amount_2 coin_2 back.
+> The participant pays amount_2 coin_2 from the participant to the initiator only if the initiator can provide secret _s_ by a timelock _t2_. After the time of _t2_, the participant can refund the money - get amount_2 coin_2 back.
 
 Here _t2_ should expire before _t1_.
 
-After creating contract_2, initiator publishes contract_2 as a transaction transaction_2 on blockchain_2.
+After creating contract_2, the initiator publishes contract_2 as a transaction transaction_2 on blockchain_2.
 
-Note that initiator knows _s_ so it can redeem amount_2 coin_2 in transaction_2 anytime before _t2_, but participant cannot redeem amount_1 coin_1 in transaction_1 because the preimage _s_ has not been revealed to participant yet.
+Note that the initiator knows _s_ so it can redeem amount_2 coin_2 in transaction_2 anytime before _t2_, but the participant cannot redeem amount_1 coin_1 in transaction_1 because the preimage _s_ has not been revealed to participant yet.
 
-To resolve the arbitrage, 
+To resolve the arbitrage, a premium contract is introduced:
 
+> The initiator pays amount_premium coin_2 to the participant if the participant refunds amount_2 coin_2 after _t2_ and before _t1_. If _t1_ expires, the initiator can refund amount_premium back.
+
+This also implies the initiator need to owe some amount of coin_2 first.
+
+Then the initiator also publish the premium contract onto blockchain_2.
 
 2.Participate
 <!-- 
