@@ -96,19 +96,8 @@ ScriptPubKey:
 Then the initiator also publish the premium contract onto blockchain_2.
 
 2.Participate
-<!-- 
-the participant participates in $\mathcal{AS}$ after \textbf{Initiate}.
-% contract
-With the published $h$ in transaction_1, the participant creates another HTLC script contract_2 that ``the participant pays amount_2 coin_2 from participant to initiator if the initiator can provide _s_ before or on a timelock _t2_ (which is a timestamp). After the time of _t2_, the participant can refund the money - get amount_2 coin_2 back.''
-Here _t2_ should expire before _t1_.
-% tx
-After creating contract_2, the participant publishes contract_2 as a transaction transaction_2 on blockchain_2.
-Note that the initiator knows _s_ so she can redeem amount_2 coin_2 in transaction_2 anytime before _t2_,
-but the participant cannot redeem amount_1 coin_1 in transaction_1 because he does not know _s_.
-% refund 
-Besides contract_2, the participant also creates a refund script $\mathcal{R}_2$ that ``the participant pays amount_2 coin_2 from participant to his another address.''
-This is to ensure amount_2 coin_2 can no longer be redeemed by the initiator. the participant can do this only after _t2_.
-If the initiator does not redeem amount_2 coin_2 before _t2_ expires, the participant can refund amount_2 coin_2 by publishing $\mathcal{R}_2$ as a transaction $tx_{\mathcal{R}, 2}$ on blockchain_2. -->
+
+The participant decides whether to participate in the contracts by auditing transaction_1 and transaction_2. If the participant thinks contracts are fair, it will choose to participate by signing transaction_2 and spending amount_2 coin_2.
 
 3.Redeem and Refund
 
