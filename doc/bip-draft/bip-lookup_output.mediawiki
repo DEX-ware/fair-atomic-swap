@@ -70,16 +70,18 @@ To resolve the arbitrage, a premium contract is introduced:
 
 This also implies the initiator need to owe some amount of coin_2 first.
 
+As we need to know the status of amount_2 coin_2, whether it has been refunded by the participant or been redeemed by the initiator, the new opcode OP_LOOKUP_OUTPUT needs to be used.
+
 A sample implementation for premium in bitcoin script is:
-<!-- TODO: fix comments -->
+<!-- TODO: fix? -->
 ```
 ScriptSig:
     Redeem: <participant_sig> <participant_pubkey> 1
     Refund: <initiator_sig> <initiator_pubkey> 0
 ScriptPubKey:
     OP_IF // Normal redeem path
-        // the owner of <asset2_output> should be initiator
-        // which means initiator has redeemed asset2
+        // the owner of <asset2_output> (the amount_2 coin_2 in contract_2) should be the initiator
+        // which means the initiator has redeemed asset2
         <asset2_output> OP_LOOKUP_OUTPUT <initiator_pubkeyhash> OP_EQUALVERIFY 
         OP_DUP OP_HASH160 <participant_pubkeyhash>
     OP_ELSE // Refund path
