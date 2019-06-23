@@ -1,2 +1,2 @@
-# RWorldSecCrossChainPayment
-On the Real-world Security of Cross-Chain Payment Channels
+# On the optionality and fairness of Atomic Swaps
+On the optionality and fairness of Atomic Swaps
