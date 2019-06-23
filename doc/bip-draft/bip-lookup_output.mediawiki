@@ -1,3 +1,5 @@
+https://www.mediawiki.org/wiki/Help:Formatting
+
 <pre>
   BIP: bip-lookup_output
   Layer: Consensus (soft fork)
@@ -39,6 +41,7 @@ To resolve the new problem, the owner of a refered output needs to be known, and
 A more fair atomic swap protocol has following steps:
 
 1.Initiate
+
 The initiator initiates the contract.
 
 First, the initiator picks a random secret _s_ only known to itself, and computes the secure hash _h_ of _s_.
