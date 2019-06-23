@@ -130,6 +130,10 @@ This neither introduces computation overhead, nor breaks the "stateless" design 
 
 As adding this opcode will not affect the way how existing HTLCs work, there is no need for backward compatibility. This opcode is indeed aiming at providing the new ability of a more fair atomic swap.
 
+==Reference Implementation==
+
+<!-- TODO -->
+
 ==Copyright==
 
 This document is placed in the public domain.
