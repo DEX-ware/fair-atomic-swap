@@ -1,0 +1,132 @@
+<pre>
+  BIP: bip-lookup_output
+  Layer: Consensus (soft fork)
+  Title: OP_LOOKUP_OUTPUT
+  Author: Runchao Han <runchao.han@monash.edu>
+          Haoyu Lin <chris.haoyul@gmail.com>
+  Comments-Summary: No comments yet.
+  Comments-URI:
+  Status: Draft
+  Type: Standards Track
+  Created:
+  License: BSD-3-Clause
+           CC0-1.0
+</pre>
+
+==Abstract==
+
+This BIP describes a new opcode (OP_LOOKUP_OUTPUT) for the Bitcoin scripting system that allowing a transaction output's owner to be looked up.
+
+==Summary==
+
+OP_LOOKUP_OUTPUT takes the id of an output, and produces the address of the output’s owner.
+
+==Motivation==
+
+Atomic swap protocols which exchange two different currencies (on different blockchains) can introduce an optionality. The initior can abort the deal without receiving any penalty. Such a problem is known as Free Option Problem as described in:
+
+* https://en.bitcoin.it/wiki/Atomic_swap#Financial_optionality
+* https://blog.bitmex.com/atomic-swaps-and-distributed-exchanges-the-inadvertent-call-option/
+* https://lists.linuxfoundation.org/pipermail/lightning-dev/2018-May/001292.html
+* https://lists.linuxfoundation.org/pipermail/lightning-dev/2018-December/001752.html
+
+To resolve this problem, the unfair behaviour should receive punishment. To apply the punishment, it requires that, besides the asset used to exchange, the initiator must put some asset as collateral, which is in fact premium. The transaction for the premium needs to be locked with the same secret hash but with a flipped payout, i.e. when redeemed with the secret, the premium goes back to the initiator and after timelock, the premium goes to the participant as a compensation for initiator not revealing the secret. However, this introduces a new problem: the participant can get the premium without paying anything, by never participating in.
+
+To resolve the new problem, the owner of a refered output needs to be known, and then it can be decided whether the initiator or the participant could take the premium.
+
+===Interaction===
+
+A more fair atomic swap protocol has following steps:
+
+1.Initiate
+The initiator initiates the contract.
+
+First, the initiator picks a random secret _s_ only known to itself, and computes the secure hash _h_ of _s_.
+
+Then, the initiator creates an HTLC script contract_1 as described in [bip-0199](https://github.com/bitcoin/bips/blob/master/bip-0199.mediawiki):
+
+>The initiator pays amount_1 coin_1 from initiator to participant if participant can provide the preimage _s_ to the hash _h_ before or on a timelock _t1_. After _t1_, the initiator can refund the money - get amount_1 coin_1 back.
+
+bip-0199 also provides a sample contract.
+
+After creating contract_1, the initiator publishes contract_1 as a transaction transaction_1 on blockchain_1.
+
+Then, with the published _h_ in transaction_1, the initiator also creates another HTLC script contract_2:
+
+> The participant pays amount_2 coin_2 from participant to initiator if initiator can provide secret _s_ before or on a timelock _t2_. After the time of _t2_, participant can refund the money - get amount_2 coin_2 back.
+
+Here _t2_ should expire before _t1_.
+
+After creating contract_2, initiator publishes contract_2 as a transaction transaction_2 on blockchain_2.
+
+Note that initiator knows _s_ so it can redeem amount_2 coin_2 in transaction_2 anytime before _t2_, but participant cannot redeem amount_1 coin_1 in transaction_1 because the preimage _s_ has not been revealed to participant yet.
+
+To resolve the arbitrage, 
+
+
+2.Participate
+<!-- 
+the participant participates in $\mathcal{AS}$ after \textbf{Initiate}.
+% contract
+With the published $h$ in transaction_1, the participant creates another HTLC script contract_2 that ``the participant pays amount_2 coin_2 from participant to initiator if the initiator can provide _s_ before or on a timelock _t2_ (which is a timestamp). After the time of _t2_, the participant can refund the money - get amount_2 coin_2 back.''
+Here _t2_ should expire before _t1_.
+% tx
+After creating contract_2, the participant publishes contract_2 as a transaction transaction_2 on blockchain_2.
+Note that the initiator knows _s_ so she can redeem amount_2 coin_2 in transaction_2 anytime before _t2_,
+but the participant cannot redeem amount_1 coin_1 in transaction_1 because he does not know _s_.
+% refund 
+Besides contract_2, the participant also creates a refund script $\mathcal{R}_2$ that ``the participant pays amount_2 coin_2 from participant to his another address.''
+This is to ensure amount_2 coin_2 can no longer be redeemed by the initiator. the participant can do this only after _t2_.
+If the initiator does not redeem amount_2 coin_2 before _t2_ expires, the participant can refund amount_2 coin_2 by publishing $\mathcal{R}_2$ as a transaction $tx_{\mathcal{R}, 2}$ on blockchain_2. -->
+
+3.Redeem and Refund
+
+
+<!-- the initiator redeems amount_2 coin_2 by publishing _s_, then the participant can also redeem amount_1 coin_1 with the published _s_.
+First, the initiator provides _s_ to transaction_2 in order to redeem amount_2 coin_2 in transaction_2.
+As a result, the initiator redeems amount_2 coin_2, but exposes _s_ to the participant.
+After that, the participant provides _s_ to transaction_1 in order to redeem amount_1 coin_1 in transaction_1.
+In this way, the initiator and the participant successfully exchanges amount_1 coin_1 and amount_2 coin_2.
+
+
+If the initiator does not redeem amount_2 coin_2 after _t2_ expires, the participant can refund his amount_2 coin_2 by publishing $tx_{\mathcal{R}, 2}$.
+As a result, the initiator cannot redeem amount_2 coin_2, and will not publish _s_.
+After _t1_, the initiator can also refund her amount_1 coin_1 by publishing transaction_2.
+ -->
+
+
+A sample implementation for premium is:
+```
+ScriptSig:
+    Redeem: <participant_sig> <participant_pubkey> 1
+    Refund: <initiator_sig> <initiator_pubkey> 0
+ScriptPubKey:
+    OP_IF // Normal redeem path
+        // the owner of <asset2_output> should be initiator
+        // which means initiator has redeemed asset2
+        <asset2_output> OP_LOOKUP_OUTPUT <initiator_pubkeyhash> OP_EQUALVERIFY 
+        OP_DUP OP_HASH160 <participant_pubkeyhash>
+    OP_ELSE // Refund path
+        // the premium timelock should be expired
+        <locktime> OP_CHECKLOCKTIMEVERIFY OP_DROP
+        OP_DUP OP_HASH160 <initiator_pubkeyhash>
+    OP_ENDIF
+    OP_EQUALVERIFY
+    OP_CHECKSIG
+```
+
+
+
+==Rationale==
+
+Implementing OP_LOOKUP_OUTPUT is easy in Bitcoin - it only queries the ownership of an output from the indexed blockchain database.
+
+This neither introduces computation overhead, nor breaks the "stateless" design of the Bitcoin script.
+
+==Backwards Compatibility==
+
+As adding this opcode will not affect the way how existing HTLCs work, there is no need for backward compatibility. This opcode is indeed aiming at providing the new ability of a more fair atomic swap.
+
+==Copyright==
+
+This document is placed in the public domain.
