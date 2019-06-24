@@ -73,7 +73,7 @@ This also implies the initiator need to owe some amount of coin_2 first.
 As we need to know the status of amount_2 coin_2, whether it has been refunded by the participant or been redeemed by the initiator, the new opcode OP_LOOKUP_OUTPUT needs to be used.
 
 A sample implementation for premium in bitcoin script is:
-<!-- TODO: fix? -->
+<!-- TODO:  OP_DUP OP_HASH160 <initiator_pubkeyhash>? -->
 ```
 ScriptSig:
     Redeem: <participant_sig> <participant_pubkey> 1
@@ -83,7 +83,7 @@ ScriptPubKey:
         // the owner of <asset2_output> (the amount_2 coin_2 in contract_2) should be the initiator
         // which means the initiator has redeemed asset2
         <asset2_output> OP_LOOKUP_OUTPUT <initiator_pubkeyhash> OP_EQUALVERIFY 
-        OP_DUP OP_HASH160 <participant_pubkeyhash>
+        OP_DUP OP_HASH160 <initiator_pubkeyhash>
     OP_ELSE // Refund path
         // the premium timelock should be expired
         <locktime> OP_CHECKLOCKTIMEVERIFY OP_DROP
@@ -107,22 +107,22 @@ Note that both Redeeming and Refunding are atomic:
 if the initiator chooses to redeem amount_2 coin_2, the participant can also redeem amount_1 coin_1;
 if the initiator chooses to refund amount_1 coin_1, the participant can also refund amount_2 coin_2.
 
+__Redeem:__
+The initiator redeems amount_2 coin_2 by publishing secret _s_, then the participant can also redeem amount_1 coin_1 with the published secret _s_.
 
-<!-- the initiator redeems amount_2 coin_2 by publishing _s_, then the participant can also redeem amount_1 coin_1 with the published _s_.
-First, the initiator provides _s_ to transaction_2 in order to redeem amount_2 coin_2 in transaction_2.
-As a result, the initiator redeems amount_2 coin_2, but exposes _s_ to the participant.
-After that, the participant provides _s_ to transaction_1 in order to redeem amount_1 coin_1 in transaction_1.
+First, the initiator provides secret _s_ to transaction_2 in order to redeem amount_2 coin_2 in transaction_2.
+As a result, the initiator redeems amount_2 coin_2, but exposes secret _s_ to the participant.
+After that, the participant provides secret _s_ to transaction_1 in order to redeem amount_1 coin_1 in transaction_1.
 In this way, the initiator and the participant successfully exchanges amount_1 coin_1 and amount_2 coin_2.
 
+__Refund:__
+If the initiator does not reveal secret _s_ and does not redeem amount_2 coin_2 after _t2_ expires, which means the initiator may be a malicious one and may be trying to make arbitrage by aborting the contract, the participant can refund its amount_2 coin_2. As a result, the initiator cannot redeem amount_2 coin_2 anymore. To punish this arbitrage, amount_premium coin_2 will also be transfered from the initiator to the participant under such a scenario.
 
-If the initiator does not redeem amount_2 coin_2 after _t2_ expires, the participant can refund his amount_2 coin_2 by publishing $tx_{\mathcal{R}, 2}$.
-As a result, the initiator cannot redeem amount_2 coin_2, and will not publish _s_.
-After _t1_, the initiator can also refund her amount_1 coin_1 by publishing transaction_2.
- -->
+Once _t1_ expires, the initiator can also refund its amount_1 coin_1 if the participant didn't participate. 
 
-
-
-
+As long as the initiator doesn't misbehave, i.e., 
+1. the initiator is an honest one but it is the participant who choose not to participate, making the deal aborted; or
+2. the initiator does reveal secret _s_ and the deal does not get aborted, the initior can refund amount_premium coin_2 at the end.
 
 ==Rationale==
 
