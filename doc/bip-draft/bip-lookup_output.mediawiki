@@ -101,6 +101,12 @@ The participant decides whether to participate in the contracts by auditing tran
 
 3.Redeem and Refund
 
+The initiator can choose either to redeem amount_2 coin_2 or refund amount_1 coin_1.
+
+Note that both Redeeming and Refunding are atomic:
+if the initiator chooses to redeem amount_2 coin_2, the participant can also redeem amount_1 coin_1;
+if the initiator chooses to refund amount_1 coin_1, the participant can also refund amount_2 coin_2.
+
 
 <!-- the initiator redeems amount_2 coin_2 by publishing _s_, then the participant can also redeem amount_1 coin_1 with the published _s_.
 First, the initiator provides _s_ to transaction_2 in order to redeem amount_2 coin_2 in transaction_2.
