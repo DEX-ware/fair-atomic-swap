@@ -113,7 +113,7 @@ Note that both Redeeming and Refunding are atomic:
 if the initiator chooses to redeem amount_2 coin_2, the participant can also redeem amount_1 coin_1;
 if the initiator chooses to refund amount_1 coin_1, the participant can also refund amount_2 coin_2.
 
-__Redeem:__
+: Redeem:
 The initiator redeems amount_2 coin_2 by publishing secret '''''s''''', then the participant can also redeem amount_1 coin_1 with the published secret '''''s'''''.
 
 First, the initiator provides secret '''''s''''' to transaction_2 in order to redeem amount_2 coin_2 in transaction_2.
@@ -121,7 +121,7 @@ As a result, the initiator redeems amount_2 coin_2, but exposes secret '''''s'''
 After that, the participant provides secret '''''s''''' to transaction_1 in order to redeem amount_1 coin_1 in transaction_1.
 In this way, the initiator and the participant successfully exchanges amount_1 coin_1 and amount_2 coin_2.
 
-__Refund:__
+: Refund:
 If the initiator does not reveal secret '''''s''''' and does not redeem amount_2 coin_2 after _t2_ expires, which means the initiator may be a malicious one and may be trying to make arbitrage by aborting the contract, the participant can refund its amount_2 coin_2. As a result, the initiator cannot redeem amount_2 coin_2 anymore. To punish this arbitrage, amount_premium coin_2 will also be transfered from the initiator to the participant under such a scenario.
 
 Once _t1_ expires, the initiator can also refund its amount_1 coin_1 if the participant didn't participate. 
