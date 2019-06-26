@@ -134,11 +134,11 @@ As long as the initiator doesn't misbehave, i.e.,
 
 Implementing OP_LOOKUP_OUTPUT is easy in Bitcoin - it only queries the ownership of an output from the indexed blockchain database.
 
-This neither introduces computation overhead, nor breaks the "stateless" design of the Bitcoin script.
+This neither introduce computation overhead, nor break the "stateless" design of the Bitcoin script.
 
 ==Backwards Compatibility==
 
-As adding this opcode will not affect the way how existing HTLCs work, there is no need for backward compatibility. This opcode is indeed aiming at providing the new ability of a more fair atomic swap.
+As adding this opcode will neither affect the way how existing HTLCs work nor break the "stateless" design of the Bitcoin script, it's backwards-compatible for old clients. This opcode is indeed aiming at providing the new ability of a more fair atomic swap.
 
 ==Copyright==
 
