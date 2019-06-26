@@ -58,7 +58,9 @@ After creating contract_1, the initiator publishes contract_1 as a transaction t
 
 Then, with the published _h_ in transaction_1, the initiator also creates another HTLC script contract_2 on blockchain_2:
 
-> The participant pays amount_2 coin_2 from the participant to the initiator only if the initiator can provide secret _s_ by a timelock _t2_. After the time of _t2_, the participant can refund the money - get amount_2 coin_2 back.
+<blockquote>
+<p>The participant pays amount_2 coin_2 from the participant to the initiator only if the initiator can provide secret <em>s</em> by a timelock <em>t2</em>. After the time of <em>t2</em>, the participant can refund the money - get amount_2 coin_2 back.</p>
+</blockquote>
 
 Here _t2_ should expire before _t1_.
 
