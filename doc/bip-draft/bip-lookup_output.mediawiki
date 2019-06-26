@@ -25,7 +25,7 @@ OP_LOOKUP_OUTPUT takes the id of an output, and produces the address of the outp
 
 ==Motivation==
 
-Atomic swap protocols which exchange two different currencies (on different blockchains) can introduce an optionality. The initior can abort the deal without receiving any penalty. Such a problem is known as Free Option Problem as described in:
+Atomic swap protocols which exchange two different currencies (on different blockchains) can introduce an optionality. The initior can abort the deal without receiving any penalty. Such a problem is known as ''Free Option Problem'' as described in:
 
 * https://en.bitcoin.it/wiki/Atomic_swap#Financial_optionality
 * https://blog.bitmex.com/atomic-swaps-and-distributed-exchanges-the-inadvertent-call-option/
@@ -46,37 +46,37 @@ The initiator initiates the contract.
 
 First, the initiator picks a random secret ''s'' only known to itself, and computes the secure hash ''h'' of ''s''.
 
-Then, the initiator creates an HTLC script contract_1 as described in [https://github.com/bitcoin/bips/blob/master/bip-0199.mediawiki bip-0199]:
+Then, the initiator creates an HTLC script ''contract_1'' as described in [https://github.com/bitcoin/bips/blob/master/bip-0199.mediawiki bip-0199]:
 
 <blockquote>
-<p>The initiator pays amount_1 coin_1 from the initiator itself to the participant only if the participant can provide the preimage ''s'' to the hash ''h'' by a timelock ''t1''. After ''t1'', the initiator can refund the money - get amount_1 coin_1 back.</p>
+<p>The initiator pays ''amount_1'' ''coin_1'' from the initiator itself to the participant only if the participant can provide the preimage ''s'' to the hash ''h'' by a timelock ''t1''. After ''t1'', the initiator can refund the money - get ''amount_1'' ''coin_1'' back.</p>
 </blockquote>
 
 bip-0199 also provides a sample contract.
 
-After creating contract_1, the initiator publishes contract_1 as a transaction transaction_1 on blockchain_1.
+After creating ''contract_1'', the initiator publishes ''contract_1'' as a transaction ''transaction_1'' on blockchain_1.
 
-Then, with the published ''h'' in transaction_1, the initiator also creates another HTLC script contract_2 on blockchain_2:
+Then, with the published ''h'' in ''transaction_1'', the initiator also creates another HTLC script contract_2 on blockchain_2:
 
 <blockquote>
-<p>The participant pays amount_2 coin_2 from the participant to the initiator only if the initiator can provide secret ''s'' by a timelock ''t2''. After the time of ''t2'', the participant can refund the money - get amount_2 coin_2 back.</p>
+<p>The participant pays ''amount_2'' ''coin_2'' from the participant to the initiator only if the initiator can provide secret ''s'' by a timelock ''t2''. After the time of ''t2'', the participant can refund the money - get ''amount_2'' ''coin_2'' back.</p>
 </blockquote>
 
 Here ''t2'' should expire before ''t1''.
 
-After creating contract_2, the initiator publishes contract_2 as a transaction transaction_2 on blockchain_2.
+After creating contract_2, the initiator publishes contract_2 as a transaction ''transaction_2'' on blockchain_2.
 
-Note that the initiator knows ''s'' so it can redeem amount_2 coin_2 in transaction_2 anytime before ''t2'', but the participant cannot redeem amount_1 coin_1 in transaction_1 because the preimage ''s'' has not been revealed to participant yet.
+Note that the initiator knows ''s'' so it can redeem ''amount_2'' ''coin_2'' in ''transaction_2'' anytime before ''t2'', but the participant cannot redeem ''amount_1'' ''coin_1'' in ''transaction_1'' because the preimage ''s'' has not been revealed to participant yet.
 
 To resolve the arbitrage, a premium contract is introduced:
 
 <blockquote>
-<p>The initiator pays amount_premium coin_2 to the participant if the participant refunds amount_2 coin_2 after ''t2'' and before ''t1''. If ''t1'' expires, the initiator can refund amount_premium back.</p>
+<p>The initiator pays amount_premium ''coin_2'' to the participant if the participant refunds ''amount_2'' ''coin_2'' after ''t2'' and before ''t1''. If ''t1'' expires, the initiator can refund amount_premium back.</p>
 </blockquote>
 
-This also implies the initiator need to owe some amount of coin_2 first.
+This also implies the initiator need to owe some amount of ''coin_2'' first.
 
-As we need to know the status of amount_2 coin_2, whether it has been refunded by the participant or been redeemed by the initiator, the new opcode OP_LOOKUP_OUTPUT needs to be used.
+As we need to know the status of ''amount_2'' ''coin_2'', whether it has been refunded by the participant or been redeemed by the initiator, the new opcode OP_LOOKUP_OUTPUT needs to be used.
 
 A sample implementation for premium in bitcoin script is:
 
@@ -86,7 +86,7 @@ ScriptSig:
     Refund: <initiator_sig> <initiator_pubkey> 0
 ScriptPubKey:
     OP_IF // Normal redeem path
-        // the owner of <asset2_output> (the amount_2 coin_2 in contract_2) should be the initiator
+        // the owner of <asset2_output> (the ''amount_2'' ''coin_2'' in contract_2) should be the initiator
         // which means the initiator has redeemed asset2
         <asset2_output> OP_LOOKUP_OUTPUT <initiator_pubkeyhash> OP_EQUALVERIFY 
         OP_DUP OP_HASH160 <participant_pubkey>
@@ -103,32 +103,32 @@ Then the initiator also publish the premium contract onto blockchain_2.
 
 ;2. Participate
 
-The participant decides whether to participate in the contracts by auditing transaction_1 and transaction_2. If the participant thinks contracts are fair, it will choose to participate by signing transaction_2 and spending amount_2 coin_2.
+The participant decides whether to participate in the contracts by auditing ''transaction_1'' and ''transaction_2''. If the participant thinks contracts are fair, it will choose to participate by signing ''transaction_2'' and spending ''amount_2'' ''coin_2''.
 
 ;3. Redeem and Refund
 
-The initiator can choose either to redeem amount_2 coin_2 or refund amount_1 coin_1.
+The initiator can choose either to redeem ''amount_2'' ''coin_2'' or refund ''amount_1'' ''coin_1''.
 
 Note that both Redeeming and Refunding are atomic:
-if the initiator chooses to redeem amount_2 coin_2, the participant can also redeem amount_1 coin_1;
-if the initiator chooses to refund amount_1 coin_1, the participant can also refund amount_2 coin_2.
+if the initiator chooses to redeem ''amount_2'' ''coin_2'', the participant can also redeem ''amount_1'' ''coin_1'';
+if the initiator chooses to refund ''amount_1'' ''coin_1'', the participant can also refund ''amount_2'' ''coin_2''.
 
 : Redeem:
-The initiator redeems amount_2 coin_2 by publishing secret ''s'', then the participant can also redeem amount_1 coin_1 with the published secret ''s''.
+The initiator redeems ''amount_2'' ''coin_2'' by publishing secret ''s'', then the participant can also redeem ''amount_1'' ''coin_1'' with the published secret ''s''.
 
-First, the initiator provides secret ''s'' to transaction_2 in order to redeem amount_2 coin_2 in transaction_2.
-As a result, the initiator redeems amount_2 coin_2, but exposes secret ''s'' to the participant.
-After that, the participant provides secret ''s'' to transaction_1 in order to redeem amount_1 coin_1 in transaction_1.
-In this way, the initiator and the participant successfully exchanges amount_1 coin_1 and amount_2 coin_2.
+First, the initiator provides secret ''s'' to ''transaction_2'' in order to redeem ''amount_2'' ''coin_2'' in ''transaction_2''.
+As a result, the initiator redeems ''amount_2'' ''coin_2'', but exposes secret ''s'' to the participant.
+After that, the participant provides secret ''s'' to ''transaction_1'' in order to redeem ''amount_1'' ''coin_1'' in ''transaction_1''.
+In this way, the initiator and the participant successfully exchanges ''amount_1'' ''coin_1'' and ''amount_2'' ''coin_2''.
 
 : Refund:
-If the initiator does not reveal secret ''s'' and does not redeem amount_2 coin_2 after ''t2'' expires, which means the initiator may be a malicious one and may be trying to make arbitrage by aborting the contract, the participant can refund its amount_2 coin_2. As a result, the initiator cannot redeem amount_2 coin_2 anymore. To punish this arbitrage, amount_premium coin_2 will also be transfered from the initiator to the participant under such a scenario.
+If the initiator does not reveal secret ''s'' and does not redeem ''amount_2'' ''coin_2'' after ''t2'' expires, which means the initiator may be a malicious one and may be trying to make arbitrage by aborting the contract, the participant can refund its ''amount_2'' ''coin_2''. As a result, the initiator cannot redeem ''amount_2'' ''coin_2'' anymore. To punish this arbitrage, amount_premium ''coin_2'' will also be transfered from the initiator to the participant under such a scenario.
 
-Once ''t1'' expires, the initiator can also refund its amount_1 coin_1 if the participant didn't participate. 
+Once ''t1'' expires, the initiator can also refund its ''amount_1'' ''coin_1'' if the participant didn't participate. 
 
 As long as the initiator doesn't misbehave, i.e., 
 1. the initiator is an honest one but it is the participant who choose not to participate, making the deal aborted; or
-2. the initiator does reveal secret ''s'' and the deal does not get aborted, the initior can refund amount_premium coin_2 at the end.
+2. the initiator does reveal secret ''s'' and the deal does not get aborted, the initior can refund amount_premium ''coin_2'' at the end.
 
 ==Rationale==
 
