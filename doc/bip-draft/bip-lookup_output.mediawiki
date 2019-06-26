@@ -127,8 +127,8 @@ If the initiator does not reveal secret ''s'' and does not redeem ''amount_2'' '
 Once ''t1'' expires, the initiator can also refund its ''amount_1'' ''coin_1'' if the participant didn't participate. 
 
 As long as the initiator doesn't misbehave, i.e., 
-1. the initiator is an honest one but it is the participant who choose not to participate, making the deal aborted; or
-2. the initiator does reveal secret ''s'' and the deal does not get aborted, the initior can refund amount_premium ''coin_2'' at the end.
+# the initiator is an honest one but it is the participant who choose not to participate, making the deal aborted; or
+# the initiator does reveal secret ''s'' and the deal does not get aborted, the initior can refund amount_premium ''coin_2'' at the end.
 
 ==Rationale==
 
