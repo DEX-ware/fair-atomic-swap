@@ -62,11 +62,11 @@ Then, with the published '''''h''''' in transaction_1, the initiator also create
 <p>The participant pays amount_2 coin_2 from the participant to the initiator only if the initiator can provide secret <em>s</em> by a timelock <em>t2</em>. After the time of <em>t2</em>, the participant can refund the money - get amount_2 coin_2 back.</p>
 </blockquote>
 
-Here _t2_ should expire before _t1_.
+Here '''''t2''''' should expire before '''''t1'''''.
 
 After creating contract_2, the initiator publishes contract_2 as a transaction transaction_2 on blockchain_2.
 
-Note that the initiator knows '''''s''''' so it can redeem amount_2 coin_2 in transaction_2 anytime before _t2_, but the participant cannot redeem amount_1 coin_1 in transaction_1 because the preimage '''''s''''' has not been revealed to participant yet.
+Note that the initiator knows '''''s''''' so it can redeem amount_2 coin_2 in transaction_2 anytime before '''''t2''''', but the participant cannot redeem amount_1 coin_1 in transaction_1 because the preimage '''''s''''' has not been revealed to participant yet.
 
 To resolve the arbitrage, a premium contract is introduced:
 
@@ -101,11 +101,11 @@ ScriptPubKey:
 
 Then the initiator also publish the premium contract onto blockchain_2.
 
-;2.Participate
+;2. Participate
 
 The participant decides whether to participate in the contracts by auditing transaction_1 and transaction_2. If the participant thinks contracts are fair, it will choose to participate by signing transaction_2 and spending amount_2 coin_2.
 
-;3.Redeem and Refund
+;3. Redeem and Refund
 
 The initiator can choose either to redeem amount_2 coin_2 or refund amount_1 coin_1.
 
@@ -122,9 +122,9 @@ After that, the participant provides secret '''''s''''' to transaction_1 in orde
 In this way, the initiator and the participant successfully exchanges amount_1 coin_1 and amount_2 coin_2.
 
 : Refund:
-If the initiator does not reveal secret '''''s''''' and does not redeem amount_2 coin_2 after _t2_ expires, which means the initiator may be a malicious one and may be trying to make arbitrage by aborting the contract, the participant can refund its amount_2 coin_2. As a result, the initiator cannot redeem amount_2 coin_2 anymore. To punish this arbitrage, amount_premium coin_2 will also be transfered from the initiator to the participant under such a scenario.
+If the initiator does not reveal secret '''''s''''' and does not redeem amount_2 coin_2 after '''''t2''''' expires, which means the initiator may be a malicious one and may be trying to make arbitrage by aborting the contract, the participant can refund its amount_2 coin_2. As a result, the initiator cannot redeem amount_2 coin_2 anymore. To punish this arbitrage, amount_premium coin_2 will also be transfered from the initiator to the participant under such a scenario.
 
-Once _t1_ expires, the initiator can also refund its amount_1 coin_1 if the participant didn't participate. 
+Once '''''t1''''' expires, the initiator can also refund its amount_1 coin_1 if the participant didn't participate. 
 
 As long as the initiator doesn't misbehave, i.e., 
 1. the initiator is an honest one but it is the participant who choose not to participate, making the deal aborted; or
