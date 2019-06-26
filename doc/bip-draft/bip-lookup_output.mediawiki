@@ -78,7 +78,8 @@ As we need to know the status of amount_2 coin_2, whether it has been refunded b
 
 A sample implementation for premium in bitcoin script is:
 <!-- TODO:  OP_DUP OP_HASH160 <initiator_pubkeyhash>? -->
-```
+
+<pre>
 ScriptSig:
     Redeem: <participant_sig> <participant_pubkey> 1
     Refund: <initiator_sig> <initiator_pubkey> 0
@@ -95,7 +96,7 @@ ScriptPubKey:
     OP_ENDIF
     OP_EQUALVERIFY
     OP_CHECKSIG
-```
+</pre>
 
 Then the initiator also publish the premium contract onto blockchain_2.
 
@@ -137,10 +138,6 @@ This neither introduces computation overhead, nor breaks the "stateless" design 
 ==Backwards Compatibility==
 
 As adding this opcode will not affect the way how existing HTLCs work, there is no need for backward compatibility. This opcode is indeed aiming at providing the new ability of a more fair atomic swap.
-
-==Reference Implementation==
-
-<!-- TODO -->
 
 ==Copyright==
 
