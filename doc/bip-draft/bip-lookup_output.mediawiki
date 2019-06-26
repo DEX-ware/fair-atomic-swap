@@ -46,7 +46,7 @@ The initiator initiates the contract.
 
 First, the initiator picks a random secret _s_ only known to itself, and computes the secure hash _h_ of _s_.
 
-Then, the initiator creates an HTLC script contract_1 as described in [bip-0199](https://github.com/bitcoin/bips/blob/master/bip-0199.mediawiki):
+Then, the initiator creates an HTLC script contract_1 as described in [https://github.com/bitcoin/bips/blob/master/bip-0199.mediawiki bip-0199]:
 
 <blockquote>
 <p>The initiator pays amount_1 coin_1 from the initiator itself to the participant only if the participant can provide the preimage <em>s</em> to the hash <em>h</em> by a timelock <em>t1</em>. After <em>t1</em>, the initiator can refund the money - get amount_1 coin_1 back.</p>
