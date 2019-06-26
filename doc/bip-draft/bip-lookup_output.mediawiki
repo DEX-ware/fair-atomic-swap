@@ -40,7 +40,7 @@ To resolve the new problem, the owner of a refered output needs to be known, and
 
 A more fair atomic swap protocol has following steps:
 
-1.Initiate
+;1. Initiate
 
 The initiator initiates the contract.
 
@@ -101,11 +101,11 @@ ScriptPubKey:
 
 Then the initiator also publish the premium contract onto blockchain_2.
 
-2.Participate
+;2.Participate
 
 The participant decides whether to participate in the contracts by auditing transaction_1 and transaction_2. If the participant thinks contracts are fair, it will choose to participate by signing transaction_2 and spending amount_2 coin_2.
 
-3.Redeem and Refund
+;3.Redeem and Refund
 
 The initiator can choose either to redeem amount_2 coin_2 or refund amount_1 coin_1.
 
