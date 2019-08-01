@@ -7,7 +7,7 @@ In blockchains, Atomic Swap is usually implemented by using Hashed Time-locked C
 The HTLC is a type of transaction that, the payee should provide the preimage of a hash value before a specified deadline, otherwise the payment fails - the money goes back to the payer and the payee will not get any money.
 
 % how important is Atomic Swap
-The Atomic Swaps have already been widely adopted in the cryptocurrency industry.
+Atomic Swap has already been widely adopted in the cryptocurrency industry.
 In particular, it realised the Decentralised Exchanges (DEXes), and started the era of Decentralised Finance (De-Fi).
 In a DEX, traders publish and participate in deals, and the dealing process is regulated by a smart contract embedding the Atomic Swap protocol.
 Different from centralised exchanges, DEXes are non-custodial - traders does not need to deposit their money in DEXes.
@@ -38,15 +38,15 @@ The option buyer should pay for the premium besides the underlying asset, even i
 In this way, he can no longer speculate without penalties.
 
 % initiator in atomic swap has optionality
-In the Atomic Swap, the swap initiator has the Optionality, as he can choose whether to proceed or abort the swap.
+In Atomic Swap, the swap initiator has the Optionality, as he can choose whether to proceed or abort the swap.
 Unfortunately, the swap initiator is not required to pay for the premium - the Atomic Swap does not take the Optionality into account.
 % atomic swap should not have optionality
-Furthermore, the Atomic Swap should not have Optionality.
-The Atomic Swap is designed for currency exchange, and the currency exchange has no Optionality.
+Furthermore, Atomic Swap should not have Optionality.
+Atomic Swap is designed for currency exchange, and the currency exchange has no Optionality.
 Instead, once both parties agree on a currency exchange, it should be settled without any chance to regret.
 
 % what we do briefly
-In this paper, we investigate the unfairness of the Atomic Swap.
+In this paper, we investigate the unfairness of Atomic Swap.
 We start from describing the Atomic Swap and the American Call Option in Finance,
 then we show how an Atomic Swap is equivalent to a premium-free American Call Option.
 After that, we then evaluate how unfair the Atomic Swap is from two different perspectives:
@@ -59,7 +59,7 @@ We also implement our protocol in Solidity (a smart contract programming languag
 
 Our contributions are as follows:
 
-\paragraph{We quantify the unfairness of the Atomic Swap, and compare it with that of conventional financial assets.}
+\paragraph{We quantify the unfairness of Atomic Swap, and compare it with that of conventional financial assets.}
 Following ZmnSCPxj's observation~\cite{optionality-origin} that the Atomic Swap is equivalent to the premium-free American Call Option,
 we quantify how unfair the Atomic Swap with mainstream cryptocurrency pairs is, and compare this unfairness with those of conventional financial assets (stocks and fiat currencies).
 We first classify the unfairness to two parts, namely the profit when the price rises and the mitigated loss when the price drops, then quantify them based on historical exchange rate volatility.
@@ -100,7 +100,7 @@ We also give that in Bitcoin script (which assumes ``OP\_LOOKUP\_OUTPUT'' exists
 
 The paper is structured as follows.
 Section~\ref{sec:background} describes the background of Atomic Swap and options in Finance.
-Section~\ref{sec:formalization} describes the Atomic Swap and the American Call Option, and points out the Atomic Swap protocol is equivalent to the premium-free American Call Option.
+Section~\ref{sec:formalization} describes the Atomic Swap and the American Call Option, and shows how the Atomic Swap protocol is equivalent to the premium-free American Call Option.
 Section~\ref{sec:evaluation} evaluates the Atomic Swap unfairness by analysing the volatility and pricing the premium of mainstream cryptocurrency pairs.
 Section~\ref{sec:fair_atomic_swap} describes our proposed fair Atomic Swap protocols.
 Section~\ref{sec:implementation} describes how to implement our proposed protocols on existing blockchains.
