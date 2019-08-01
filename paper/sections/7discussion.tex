@@ -43,8 +43,12 @@ With short timelocks, the transactions for setting up Atomic Swaps may be confir
 \subsection{Limitations of our solutions}
 
 Still, our solutions are not perfect.
+% should hold asset
 The initiators of Atomic Swaps need to hold some participant's asset to initiate an Atomic Swap,
 for either collateralising successful swaps or paying for the option itself.
 Unfortunately, the initiators do not always have participant's asset: they may just hope to get some participant's asset with only his asset.
 Before doing an Atomic Swap, the initiator should get some participant's asset by arbitrary means.
 For example, he can buy some participant's asset from cryptocurrency exchanges, or initiate a smaller Atomic Swap with shorter timelocks and no premium.
+% option seller cannot change premium in our protocols
+Also, in an exchange, the option seller can change the premium at any given time until the option buyer signs the option agreement, while in our protocols the option seller cannot update the premium after publishing the option contract.
+In this way, the original Atomic Swap protocol and our protocols are less efficient than centralised solutions in terms of the market liquidity.
