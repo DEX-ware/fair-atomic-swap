@@ -39,6 +39,10 @@ Unfortunately, short timelocks may cause unexpected consequences.
 Confirming transactions for setting up Atomic Swaps takes time, and the time required is highly unpredictable.
 With short timelocks, the transactions for setting up Atomic Swaps may be confirmed after the expiration of timelocks.
 
+The third solution is to use a trusted third party (TTP) to implement the premium mechanism.
+When Alice initiates an Atomic Swap, the TTP forces Alice to deposit the premium.
+Although this TTP does not require Alice and Bob to escrow their assets, the TTP should be trustworthy and can be a single point of failure.
+
 \subsection{Limitations of our protocols}
 
 Still, our solutions are not perfect.
