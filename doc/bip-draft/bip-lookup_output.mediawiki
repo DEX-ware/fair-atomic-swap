@@ -36,9 +36,9 @@ To resolve this problem, the unfair behaviour should receive punishment. To appl
 
 To resolve the new problem, the owner of a refered output needs to be known, and then it can be decided whether the initiator or the participant could take the premium.
 
-===Interaction===
+===A Fair Atomic Swap===
 
-A more fair atomic swap protocol has following steps:
+Here is a fair Atomic Swap protocol which implements the premium mechanism.
 
 ;1. Initiate
 
@@ -130,15 +130,11 @@ As long as the initiator doesn't misbehave, i.e.,
 # the initiator is an honest one but it is the participant who choose not to participate, making the deal aborted; or
 # the initiator does reveal secret ''s'' and the deal does not get aborted, the initior can refund amount_premium ''coin_2'' at the end.
 
-==Rationale==
+==Deployment==
 
-Implementing OP_LOOKUP_OUTPUT is easy in Bitcoin - it only queries the ownership of an output from the indexed blockchain database.
+Implementing OP_LOOKUP_OUTPUT is easy in Bitcoin: It queries the ownership of an output from the indexed blockchain database, then returns the address holding this output.
 
-This neither introduce computation overhead, nor break the "stateless" design of the Bitcoin script.
-
-==Backwards Compatibility==
-
-As adding this opcode will neither affect the way how existing HTLCs work nor break the "stateless" design of the Bitcoin script, it's backwards-compatible for old clients. This opcode is indeed aiming at providing the new ability of a more fair atomic swap.
+Adding this opcode will not break the "stateless" design of the Bitcoin script. It does not affect the verifications of old transactions, so only requires a soft fork rather than a hard fork.
 
 ==Copyright==
 
