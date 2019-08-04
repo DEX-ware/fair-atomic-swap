@@ -248,3 +248,5 @@ TSWLatexianTemp*
 *.pyc
 __pycache__
 .DS_Store
+
+tmp/
