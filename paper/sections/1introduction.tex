@@ -29,7 +29,7 @@ If the price of the swap participant's asset rises, the swap initiator will proc
 If the price of the swap participant's asset drops, the swap initiator can abort the swap, so that he won't lose money.
 
 % optionality
-ZmnSCPxj~\cite{optionality-origin} observed that, this problem is equivalent to the Optionality in Finance, which has already been studied for decades~\cite{higham2004introduction}.
+A persom entitled ZmnSCPxj initated a discussion at the Lightning-dev mailing list~\cite{optionality-origin} that, this problem is equivalent to the Optionality in Finance, which has already been studied for decades~\cite{higham2004introduction}.
 In Finance, an investment is said to have Optionality if
 1) settling this investment happens in the future rather than instantly;
 2) settling this investment is optional rather than mandatory.
@@ -59,9 +59,25 @@ We also implement our protocol in Solidity (a smart contract programming languag
 
 Our contributions are as follows:
 
+\paragraph{We show that the Atomic Swap is equivalent to the premium-free American Call Option.}
+We describe the Atomic Swap and the American Call Option,
+then we point out that an Atomic Swap is equivalent to a premium-free American Call Option, which is a type of Options (in Finance).
+More specifically:
+the initiator and the participant in an Atomic Swap are the option buyer and the option seller in an American Call Option, respectively;
+the initiator asset and the participant asset in an Atomic Swap are the used currency and the underlying asset in an American Call Option, respectively;
+the participant asset's timelock in an Atomic Swap is the strike time in an American Call Option;
+the current price of the participant asset in an Atomic Swap is the strike price in an American Call Option;
+redeeming cryptocurrencies in an Atomic Swap is equivalent to exercising the contract in an American Call Option.
+
+\paragraph{We show that the Atomic Swap is unfair to the participant.}
+We show that the Atomic Swap - represented as the premium-free American Call Option in Finance - is unfair to the participant, especially in the highly volatile cryptocurrency market.
+In practice, the initiator can decide whether to proceed the swap while investigating the cryptocurrency market.
+However, proceeding or aborting the swap does not require the initiator to pay for the premium.
+This leads to the scenario that, if the participant's asset price rises before the strike time, he will proceed the swap to profit, otherwise he will abort the swap to avoid losing money.
+In this way, the swap initiator can speculate without any risk in Atomic Swaps.
+
 \paragraph{We quantify the unfairness of Atomic Swap, and compare it with that of conventional financial assets.}
-Following ZmnSCPxj's observation~\cite{optionality-origin} that the Atomic Swap is equivalent to the premium-free American Call Option,
-we quantify how unfair the Atomic Swap with mainstream cryptocurrency pairs is, and compare this unfairness with those of conventional financial assets (stocks and fiat currencies).
+We quantify how unfair the Atomic Swap with mainstream cryptocurrency pairs is, and compare this unfairness with those of conventional financial assets (stocks and fiat currencies).
 We first classify the unfairness to two parts, namely the profit when the price rises and the mitigated loss when the price drops, then quantify them based on historical exchange rate volatility.
 Our results show that, in the default timelock setting, the profit and the mitigated loss of our selected cryptocurrency pairs are approximately 1\%, while for stocks and fiat currencies the values are approximately 0.3\% and 0.15\%, respectively.
 
