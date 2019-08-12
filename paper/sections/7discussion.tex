@@ -39,7 +39,7 @@ Unfortunately, short timelocks may cause unexpected consequences.
 Confirming transactions for setting up Atomic Swaps takes time, and the time required is highly unpredictable.
 With short timelocks, the transactions for setting up Atomic Swaps may be confirmed after the expiration of timelocks.
 
-The third solution is to use a trusted third party (TTP) to implement the premium mechanism.
+The third solution is using a trusted third party (TTP) to implement the premium mechanism.
 When Alice initiates an Atomic Swap, the TTP forces Alice to deposit the premium.
 Although this TTP does not require Alice and Bob to escrow their assets, the TTP should be trustworthy and can be a single point of failure.
 
@@ -53,5 +53,5 @@ Unfortunately, the initiators do not always have participant's asset: they may j
 Before doing an Atomic Swap, the initiator should get some participant's asset by arbitrary means.
 For example, he can buy some participant's asset from cryptocurrency exchanges, or initiate a smaller Atomic Swap with shorter timelocks and no premium.
 % option seller cannot change premium in our protocols
-Also, in an exchange, the option seller can change the premium at any given time until the option buyer signs the option agreement, while in our protocols the option seller cannot update the premium after publishing the option contract.
-In this way, the original Atomic Swap protocol and our protocols are less efficient than centralised solutions in terms of the market liquidity.
+% Also, in an exchange, the option seller can change the premium at any given time until the option buyer signs the option agreement, while in our protocols the option seller cannot update the premium after publishing the option contract.
+% In this way, the original Atomic Swap protocol and our protocols are less efficient than centralised solutions in terms of the market liquidity.
