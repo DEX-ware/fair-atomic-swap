@@ -12,7 +12,7 @@ pragma solidity ^0.5.0;
 //  + block.timestamp is safe to use,
 //    given that our timestamp can tolerate a 30-second drift in time;
 
-contract RiskySpeculativeAtomicSwapSpot {
+contract RiskySpeculativeAtomicSwapOption {
     enum Kind { Initiator, Participant }
     enum AssetState { Empty, Filled, Redeemed, Refunded }
     enum PremiumState { Empty, Filled, Redeemed, Refunded }
