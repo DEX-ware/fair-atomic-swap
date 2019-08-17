@@ -5,7 +5,7 @@ author: Runchao Han <runchao.han@monash.edu>, Haoyu Lin <chris.haoyul@gmail.com>
 discussions-to: https://github.com/HAOYUatHZ/fair-atomic-swap/issues
 status: Draft
 type: Standards Track
-category (*only required for Standard Track): ERC
+category: ERC
 created: 2019-08-17
 ---
 
