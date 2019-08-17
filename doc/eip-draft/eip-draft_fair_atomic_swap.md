@@ -13,7 +13,8 @@ created: 2019-08-17
 
 ## Simple Summary
 <!--"If you can't explain it simply, you don't understand it well enough." Provide a simplified and layman-accessible explanation of the EIP.-->
-If you can't explain it simply, you don't understand it well enough." Provide a simplified and layman-accessible explanation of the EIP.
+
+This EIP provides Atomic Swap Smart Contract templates under both American Call Option scenario and Spot scenario, to mitigate the arbitrage risk introduced by market fluctuation.
 
 ## Abstract
 <!--A short (~200 word) description of the technical issue being addressed.-->
