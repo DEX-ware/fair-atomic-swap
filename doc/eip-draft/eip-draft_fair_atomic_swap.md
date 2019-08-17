@@ -19,6 +19,9 @@ This EIP provides Atomic Swap Smart Contract templates under both American Call 
 ## Abstract
 <!--A short (~200 word) description of the technical issue being addressed.-->
 
+Atomic Swap enables two parties to atomically exchange their own cryptocurrencies without trusted third parties. There are investigations on the (un)fairness of the Atomic Swap protocol, and it is found that the Atomic Swap is equivalent to an American Call Option without the premium, thus is unfair to the swap participant. More specifically, in a market fluctuating market, the contract initior can take advantage of the unfairness and earn profit from it, without receiving any penalty. What is more, as revealed by the community, the profit is considerable, and therefore the initior have the motivation to arbitrage if allowed to.  To address such a problem, premium need to be introduced as penalty. This EIP proposes two fair Atomic Swap protocols, one is for currency exchange and the other is for American Call Options.
+
+
 ## Motivation
 <!--The motivation is critical for EIPs that want to change the Ethereum protocol. It should clearly explain why the existing protocol specification is inadequate to address the problem that the EIP solves. EIP submissions without sufficient motivation may be rejected outright.-->
 
