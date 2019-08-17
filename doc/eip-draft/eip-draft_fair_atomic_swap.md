@@ -18,11 +18,23 @@ This EIP provides Atomic Swap Smart Contract templates under both American Call 
 
 ## Abstract
 <!--A short (~200 word) description of the technical issue being addressed.-->
-A short (~200 word) description of the technical issue being addressed.
 
 ## Motivation
 <!--The motivation is critical for EIPs that want to change the Ethereum protocol. It should clearly explain why the existing protocol specification is inadequate to address the problem that the EIP solves. EIP submissions without sufficient motivation may be rejected outright.-->
-The motivation is critical for EIPs that want to change the Ethereum protocol. It should clearly explain why the existing protocol specification is inadequate to address the problem that the EIP solves. EIP submissions without sufficient motivation may be rejected outright.
+
+The Atomic Swap protocol enables two parties to exchange cryptocurrencies on different blockchains atomically. However, the usage of Hash Timelocked Contracts (HTLCs) in Atomic Swap introduces optionality: The initior can abort the deal without receiving any penalty. This problem is known as "Free Option Problem". See [Atomic Swaps and Distributed Exchanges: The Inadvertent Call Option - BitMEX Blog](https://blog.bitmex.com/atomic-swaps-and-distributed-exchanges-the-inadvertent-call-option/) for more details.
+
+According to a research [On the optionality and fairness of Atomic Swaps](https://eprint.iacr.org/2019/896), given the timelock setting (24/48 hrs), the arbitrage can be as profitable as approximately 1% ~ 2.3%, which is non-negligible compared with 0.3% for stock market. Such a arbitrage opportunity can be considered attractive because it's totally risk-free.
+
+Several studies have proposed for solving this problem. e.g.,
+
++ http://diyhpl.us/wiki/transcripts/scalingbitcoin/tokyo-2018/atomic-swaps/
++ https://coblox.tech/docs/financial_crypto19.pdf. 
+ 
+Their basic idea is that, the transaction for the premium needs to be locked with the same secret hash but with a flipped payout, i.e. when redeemed with the secret, the asset goes back to the initior and after timelock, the premium goes to the participant as a compensation for the initior not revealing the secret. However, this introduces a new problem: the participant can get the premium without paying anything, by never participating in.
+
+Therefore, this EIP aims at address such problems, help more people in the community aware of them, and bring up a fair Atmoic Swap implementation for the community to refer to.
+
 
 ## Specification
 <!--The technical specification should describe the syntax and semantics of any new feature. The specification should be detailed enough to allow competing, interoperable implementations for any of the current Ethereum platforms (go-ethereum, parity, cpp-ethereum, ethereumj, ethereumjs, and [others](https://github.com/ethereum/wiki/wiki/Clients)).-->
