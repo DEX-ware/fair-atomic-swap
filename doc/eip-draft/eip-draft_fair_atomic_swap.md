@@ -14,7 +14,7 @@ created: 2019-08-17
 ## Simple Summary
 <!--"If you can't explain it simply, you don't understand it well enough." Provide a simplified and layman-accessible explanation of the EIP.-->
 
-This EIP provides Atomic Swap Smart Contract templates under both American Call Option scenario and Spot scenario, to mitigate the arbitrage risk introduced by market fluctuation.
+This EIP provides Atomic Swap Smart Contract templates under both Spot scenario and American Call Option scenario, to mitigate the arbitrage risk introduced by market fluctuation.
 
 ## Abstract
 <!--A short (~200 word) description of the technical issue being addressed.-->
@@ -52,21 +52,20 @@ To resolve the "Free Option Problem", the unfair behaviour should receive punish
 
 To apply the punishment, it requires that, besides the asset used to exchange, the initiator must put some asset as collateral, which is in fact premium. The transaction for the premium needs to be locked with the same secret hash but with a flipped payout, i.e. when redeemed with the secret, the premium goes back to the initiator and after timelock, the premium goes to the participant as a compensation for initiator not revealing the secret.
 
-However, this introduces a new problem: the participant can get the premium without paying anything, by never participating in.
+However, this introduces a new problem: this time the participant gains the optionality -- it can get the premium without paying anything, by never participating in.
 
----
+To resolve the new problem, the premium:
 
-To resolve the new problem, the premium need to be allowed to be ???
++ should be refunded back to the initior if the participant does not participate in at all, or if **the participant's funding is redeemed by the initior**; or
++ should be redeemed for the participant if the initior holds the secret used in hash lock maliciously, which indicates that **the participant's funding is refunded back**.
 
-Such a logic is hard to implement in stateless script system like Bitcoin, but can be empowered in Ethereum-style stateful systems.
+Such a logic is hard to implement in stateless script system like Bitcoin, because, in the aspect of transaction, **where the premium should go, strictly depends on where the participant's funding goes**, but can be empowered in Ethereum-style stateful systems.
 
+In a word, a simple HTLCs-based Atomic Swap on Spot scenario is natively equivalent to an American Call Option without premium, but adding well-designed premium mechanism mitigates the arbitrage risk for both parties.
 
-The discussions above are related to Spot, and it is also interesting to investigate on the American Call Option.
+Meanwhile, it is also worthy to investigate on HTLCs-based Atomic Swaps on American Call Option scenario, with built-in premium.
 
-???
-
-
-
+__TODO:__
 
 ## Backwards Compatibility
 <!--All EIPs that introduce backwards incompatibilities must include a section describing these incompatibilities and their severity. The EIP must explain how the author proposes to deal with these incompatibilities. EIP submissions without a sufficient backwards compatibility treatise may be rejected outright.-->
