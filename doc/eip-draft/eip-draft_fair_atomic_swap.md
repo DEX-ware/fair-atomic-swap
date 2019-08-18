@@ -54,9 +54,17 @@ To apply the punishment, it requires that, besides the asset used to exchange, t
 
 However, this introduces a new problem: the participant can get the premium without paying anything, by never participating in.
 
-To resolve the new problem, 
+---
 
-**TODO**
+To resolve the new problem, the premium need to be allowed to be ???
+
+Such a logic is hard to implement in stateless script system like Bitcoin, but can be empowered in Ethereum-style stateful systems.
+
+
+The discussions above are related to Spot, and it is also interesting to investigate on the American Call Option.
+
+???
+
 
 
 
