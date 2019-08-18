@@ -57,7 +57,7 @@ However, this introduces a new problem: this time the participant gains the opti
 To resolve the new problem, the premium:
 
 + should be refunded back to the initior if the participant does not participate in at all, or if **the participant's funding is redeemed by the initior**; or
-+ should be redeemed for the participant if the initior holds the secret used in hash lock maliciously, which indicates that **the participant's funding is refunded back**.
++ should be redeemed for the participant if the initior holds the secret used in hash lock maliciously, which also implies that **the participant's funding is refunded back**.
 
 Such a logic is hard to implement in stateless script system like Bitcoin, because, in the aspect of transaction, **where the premium should go, strictly depends on where the participant's funding goes**, but can be empowered in Ethereum-style stateful systems.
 
@@ -65,7 +65,10 @@ In a word, a simple HTLCs-based Atomic Swap on Spot scenario is natively equival
 
 Meanwhile, it is also worthy to investigate on HTLCs-based Atomic Swaps on American Call Option scenario, with built-in premium.
 
-__TODO:__
+In American Call Option with premium, the premium:
+
++ should be refundable for the initior if the participant doesn't participate; or
++ should be redeemable for the participant if the participant does participate.
 
 ## Backwards Compatibility
 <!--All EIPs that introduce backwards incompatibilities must include a section describing these incompatibilities and their severity. The EIP must explain how the author proposes to deal with these incompatibilities. EIP submissions without a sufficient backwards compatibility treatise may be rejected outright.-->
