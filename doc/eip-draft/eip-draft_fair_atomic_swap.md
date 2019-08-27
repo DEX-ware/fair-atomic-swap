@@ -1,6 +1,6 @@
 ---
 eip: <to be assigned>
-title: Fair Atomic Swap Contract Standard
+title: Atomic Swap-based American Call Option Contract Standard
 author: Runchao Han <runchao.han@monash.edu>, Haoyu Lin <chris.haoyul@gmail.com>, Jiangshan Yu <jiangshan.yu@monash.edu>
 discussions-to: https://github.com/HAOYUatHZ/fair-atomic-swap/issues
 status: Draft
