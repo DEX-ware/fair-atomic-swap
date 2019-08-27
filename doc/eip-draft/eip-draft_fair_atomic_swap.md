@@ -83,7 +83,7 @@ In American Call Option with premium, the premium:
 ## Backwards Compatibility
 <!--All EIPs that introduce backwards incompatibilities must include a section describing these incompatibilities and their severity. The EIP must explain how the author proposes to deal with these incompatibilities. EIP submissions without a sufficient backwards compatibility treatise may be rejected outright.-->
 
-There is no backwards incompatibility as what it requires is stateful smart contract, which is already supported in Ethereum.
+There is no backwards incompatibility as what it requires is stateful token standard, which is already supported in Ethereum.
 
 ## Implementation
 <!--The implementations must be completed before any EIP is given status "Final", but it need not be completed before the EIP is accepted. While there is merit to the approach of reaching consensus on the specification and rationale before writing code, the principle of "rough consensus and running code" is still useful when it comes to resolving many discussions of API details.-->
