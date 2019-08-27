@@ -1,3 +1,13 @@
+* 823 Token Exchange Standard
+    + https://github.com/ethereum/EIPs/blob/master/EIPS/eip-823.md
++ 875 Simpler NFT standard with batching and native atomic swaps
+    + https://github.com/ethereum/EIPs/blob/master/EIPS/eip-875.md
++ 1327 Extendable Atomic Swaps
+    + https://github.com/ethereum/EIPs/issues/1327
++ 1630 Hashed Time-Locked Contract Standard
+    + https://github.com/ethereum/EIPs/issues/1631
+
+
 ---
 eip: <to be assigned>
 title: Atomic Swap-based American Call Option Contract Standard
