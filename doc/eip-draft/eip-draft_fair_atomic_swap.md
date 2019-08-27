@@ -24,12 +24,22 @@ created: 2019-08-17
 ## Simple Summary
 <!--"If you can't explain it simply, you don't understand it well enough." Provide a simplified and layman-accessible explanation of the EIP.-->
 
+__TODO: fix__
+
+> A ... token supporting Atomic Swap-based American Call Options...
+> The American Call Option is ...
+> Our protocol ... (give reference and descriptions on our protocol)
+
 This EIP provides Atomic Swap Smart Contract templates under both Spot scenario and American Call Option scenario, to mitigate the arbitrage risk introduced by market fluctuation.
 
 ## Abstract
 <!--A short (~200 word) description of the technical issue being addressed.-->
 
 Atomic Swap enables two parties to atomically exchange their own cryptocurrencies without trusted third parties. There have been investigations on the (un)fairness of the Atomic Swap protocol, and it is found that the Atomic Swap is equivalent to an American Call Option without the premium, and thus unfair to the swap participant. More specifically, in a fluctuating market, the contract initior can take advantage of the unfairness and earn profit from it, without receiving any penalty. What is more, given the timelock setting (24/48 hrs), as [revealed by the community](https://ethereum-magicians.org/t/eip-xxx-fair-atomic-swap-contract/3549), the profit is considerably high, compared with that of conventional financial assets (stocks and fiat currencies). Therefore the initior have the motivation to arbitrage if allowed to, especially when such an arbitrage is risk-free. To address such a problem, one idea is to introduce premium as penalty. However, as described in this EIP, if introducing premium directly, it is also possible that the participant become the arbitrageur. This EIP proposes two fair Atomic Swap protocols, one is for Spots and the other is for American Call Options, addessing all the issues mentioned above.
+
+## Purpose
+
+__TODO__
 
 
 ## Motivation
@@ -51,6 +61,12 @@ Therefore, this EIP aims at address such problems, help more people in the commu
 
 ## Specification
 <!--The technical specification should describe the syntax and semantics of any new feature. The specification should be detailed enough to allow competing, interoperable implementations for any of the current Ethereum platforms (go-ethereum, parity, cpp-ethereum, ethereumj, ethereumjs, and [others](https://github.com/ethereum/wiki/wiki/Clients)).-->
+
+__TODO:__
+> Here, we need to make this EIP to describe a token standard rather than a contract.
+> 
+> For example, extend this section to two sections: Specification and Interfaces.
+Specification describes our interfaces, and Interfaces gives our function headers.
 
 The fair Atomic Swap Smart Contract should follows the syntax and semantics of 
 the stateful smart contract in Ethereum, with hash locks support and time locks support.
@@ -89,9 +105,11 @@ There is no backwards incompatibility as what it requires is stateful token stan
 <!--The implementations must be completed before any EIP is given status "Final", but it need not be completed before the EIP is accepted. While there is merit to the approach of reaching consensus on the specification and rationale before writing code, the principle of "rough consensus and running code" is still useful when it comes to resolving many discussions of API details.-->
 
 **Atomic Swap Smart Contract in Spot Scenario**
+
 Please visit this [page](https://github.com/HAOYUatHZ/fair-atomic-swap/blob/master/src/atomicswap/ethatomicswap/contract/src/contracts/RiskySpeculativeAtomicSwapSpot.sol) to see an example implementation
 
 **Atomic Swap Smart Contract in American Call Option Scenario**
+
 Please visit this [page](https://github.com/HAOYUatHZ/fair-atomic-swap/blob/master/src/atomicswap/ethatomicswap/contract/src/contracts/RiskySpeculativeAtomicSwapOption.sol) to see an example implementation
 
 
