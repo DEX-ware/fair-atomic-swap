@@ -29,11 +29,10 @@ A standard for token contracts, providing Atomic Swap-based American Call Option
 
 ## Purpose
 
-Atomic Swap enables two parties to atomically exchange their own assets without trusted third parties.
+This EIP proposes a token standard supporting Atomic Swap-based American Call Options:
 
-And an American-style Option is a contract which gives the option buyer the right to buy or sell an asset, while the buyer can exercise the contract no later than the strike time.
- 
-This EIP proposes a token standard supporting Atomic Swap-based American Call Options.
++ Atomic Swap enables two parties to atomically exchange their own assets without trusted third parties; and
++ an American-style Option is a contract which gives the option buyer the right to buy or sell an asset, while the buyer can exercise the contract no later than the strike time.
 
 
 ## Motivation
