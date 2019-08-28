@@ -24,17 +24,16 @@ created: 2019-08-17
 ## Simple Summary
 <!--"If you can't explain it simply, you don't understand it well enough." Provide a simplified and layman-accessible explanation of the EIP.-->
 
-A token standard supporting Atomic Swap-based American Call Options. You can view out an example implementation in the repo here: https://github.com/HAOYUatHZ/fair-atomic-swap/blob/master/src/eip/
+A standard for token contracts, providing Atomic Swap-based American Call Option sevice. You can view out an example implementation in the repo here: https://github.com/HAOYUatHZ/fair-atomic-swap/blob/master/src/eip/
 
-
-## Abstract
-<!--A short (~200 word) description of the technical issue being addressed.-->
-
-Atomic Swap enables two parties to atomically exchange their own cryptocurrencies without trusted third parties. An American-style Option is a contract which gives the option buyer the right to buy or sell an asset, and the buyer can exercise the contract no later than the strike time. This EIP proposes a token standard supporting Atomic Swap-based American Call Options.
 
 ## Purpose
 
-__TODO__
+Atomic Swap enables two parties to atomically exchange their own assets without trusted third parties.
+
+And an American-style Option is a contract which gives the option buyer the right to buy or sell an asset, while the buyer can exercise the contract no later than the strike time.
+ 
+This EIP proposes a token standard supporting Atomic Swap-based American Call Options.
 
 
 ## Motivation
