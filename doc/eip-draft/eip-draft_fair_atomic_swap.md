@@ -24,7 +24,7 @@ created: 2019-08-17
 ## Simple Summary
 <!--"If you can't explain it simply, you don't understand it well enough." Provide a simplified and layman-accessible explanation of the EIP.-->
 
-A token standard supporting Atomic Swap-based American Call Options. This standard mitigates the arbitrage risk introduced by market fluctuation. You can view out an example implementation in the repo here: https://github.com/HAOYUatHZ/fair-atomic-swap/blob/master/src/atomicswap/ethatomicswap/contract/src/contracts/
+A token standard supporting Atomic Swap-based American Call Options. You can view out an example implementation in the repo here: https://github.com/HAOYUatHZ/fair-atomic-swap/blob/master/src/eip/
 
 
 ## Abstract
