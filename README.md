@@ -15,7 +15,7 @@ This is the code of the paper [On the optionality and fairness of Atomic Swaps](
 
 ## Reference
 
-Han, R., Lin H., Yu J. (2019) On the optionality and fairness of Atomic Swaps. To appear in The First ACM Conference on Advances in Financial Technologies (AFT’19), Oct 2019.
+Runchao Han, Haoyu Lin and Jiangshan Yu. On the optionality and fairness of Atomic Swaps. To appear in The First ACM Conference on Advances in Financial Technologies (AFT’19), Oct 2019.
 
 ## License
 
