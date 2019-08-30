@@ -26,13 +26,19 @@ created: 2019-08-17
 
 A standard for token contracts, providing Atomic Swap-based American Call Option sevice. You can view out an example implementation in the repo here: https://github.com/HAOYUatHZ/fair-atomic-swap/blob/master/src/eip/
 
+<!-- 
 
-## Purpose
+`American-style Option`: is a contract which gives the option buyer the right to buy or sell an asset, while the buyer can exercise the contract no later than the strike time.
+ -->
 
-This EIP proposes a token standard supporting Atomic Swap-based American Call Options:
+## Abstarct
+The following standard provides functionality to make Atomic Swap-based American Call Option payment. This standard allows ERC20 token holders to atomically exchange their tokens without trusted third parties, which is known as `Atomic Swap`, by ; . 
 
-+ Atomic Swap enables two parties to atomically exchange their own assets without trusted third parties; and
-+ an American-style Option is a contract which gives the option buyer the right to buy or sell an asset, while the buyer can exercise the contract no later than the strike time.
+
+
+
+
+
 
 
 ## Motivation
@@ -92,7 +98,8 @@ In American Call Option with premium, the premium:
 ## Backwards Compatibility
 <!--All EIPs that introduce backwards incompatibilities must include a section describing these incompatibilities and their severity. The EIP must explain how the author proposes to deal with these incompatibilities. EIP submissions without a sufficient backwards compatibility treatise may be rejected outright.-->
 
-There is no backwards incompatibility as what it requires is stateful token standard, which is already supported in Ethereum.
+This proposal is fully backward compatible. Tokens extended by this proposal should also be following ERC20 standard. The functionality of ERC20 standard should not be affected by this proposal but will provide additional functionality to it.
+
 
 ## Implementation
 <!--The implementations must be completed before any EIP is given status "Final", but it need not be completed before the EIP is accepted. While there is merit to the approach of reaching consensus on the specification and rationale before writing code, the principle of "rough consensus and running code" is still useful when it comes to resolving many discussions of API details.-->
