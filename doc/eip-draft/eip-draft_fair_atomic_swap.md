@@ -26,18 +26,21 @@ created: 2019-08-17
 
 A standard for token contracts, providing Atomic Swap-based American Call Option sevice. You can view out an example implementation in the repo here: https://github.com/HAOYUatHZ/fair-atomic-swap/blob/master/src/eip/
 
-<!-- 
-
-`American-style Option`: is a contract which gives the option buyer the right to buy or sell an asset, while the buyer can exercise the contract no later than the strike time.
- -->
 
 ## Abstarct
-The following standard provides functionality to make Atomic Swap-based American Call Option payment. This standard allows ERC20 token holders to atomically exchange their tokens without trusted third parties, which is known as `Atomic Swap`, by ; . 
+The following standard provides functionality to make Atomic Swap-based American Call Option payment. This standard allows ERC20 token holders to atomically exchange their tokens without trusted third parties, which is known as `Atomic Swap`, by
 
+<!-- HTLC -->
 
+ ; . 
 
+<!-- 
 
+talk about 
 
+`American-style Option`: is a contract which gives the option buyer the right to buy or sell an asset, while the buyer can exercise the contract no later than the strike time.
+
+ -->
 
 
 
@@ -100,6 +103,8 @@ In American Call Option with premium, the premium:
 
 This proposal is fully backward compatible. Tokens extended by this proposal should also be following ERC20 standard. The functionality of ERC20 standard should not be affected by this proposal but will provide additional functionality to it.
 
+__TODO:__
+talk about stateful?
 
 ## Implementation
 <!--The implementations must be completed before any EIP is given status "Final", but it need not be completed before the EIP is accepted. While there is merit to the approach of reaching consensus on the specification and rationale before writing code, the principle of "rough consensus and running code" is still useful when it comes to resolving many discussions of API details.-->
