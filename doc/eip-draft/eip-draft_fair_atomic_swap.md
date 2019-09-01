@@ -38,21 +38,7 @@ A standard for token contracts, providing Atomic Swap-based American Call Option
 
 ## Abstarct
 
-__TODO:__
-
-The following standard provides functionality to make Atomic Swap-based American Call Option payment. This standard allows ERC20 token holders to atomically exchange their tokens without trusted third parties, which is known as `Atomic Swap`, by
-
-<!-- HTLC -->
-
- ; . 
-
-<!-- 
-
-talk about 
-
-`American-style Option`: is a contract which gives the option buyer the right to buy or sell an asset, while the buyer can exercise the contract no later than the strike time.
-
- -->
+The following standard provides functionality to make Atomic Swap-based American Call Option payment. This standard allows ERC20 token holders to atomically exchange their tokens without trusted third parties, which is known as `Atomic Swap`, by the use of Hashed Time-Locked Contract; and to exchange their tokens as a type of financial derivatives, named "American-style Option". More specifically, Hashed Time-Locked Contract is a type of smart contract that use hashlocks and timelocks to require that the receiver of a payment either acknowledge receiving the payment prior to a deadline by generating cryptographic proof of payment or forfeit the ability to claim the payment, returning it to the payer [^1]. And an American-style Option is a contract which gives the option buyer the right to buy or sell an asset, while the buyer can exercise the contract no later than the strike time.
 
 
 
@@ -171,3 +157,5 @@ Please visit this [page](https://github.com/HAOYUatHZ/fair-atomic-swap/blob/mast
 
 ## Copyright
 Copyright and related rights waived via [CC0](https://creativecommons.org/publicdomain/zero/1.0/).
+
+[^1]: https://en.bitcoin.it/wiki/Hash_Time_Locked_Contracts
