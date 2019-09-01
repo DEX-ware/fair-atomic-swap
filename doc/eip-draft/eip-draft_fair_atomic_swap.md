@@ -31,10 +31,15 @@ created: 2019-08-17
 ## Simple Summary
 <!--"If you can't explain it simply, you don't understand it well enough." Provide a simplified and layman-accessible explanation of the EIP.-->
 
+__TODO: fix link__
+
 A standard for token contracts, providing Atomic Swap-based American Call Option sevice. You can view out an example implementation in the repo here: https://github.com/HAOYUatHZ/fair-atomic-swap/blob/master/src/eip/
 
 
 ## Abstarct
+
+__TODO:__
+
 The following standard provides functionality to make Atomic Swap-based American Call Option payment. This standard allows ERC20 token holders to atomically exchange their tokens without trusted third parties, which is known as `Atomic Swap`, by
 
 <!-- HTLC -->
@@ -54,6 +59,8 @@ talk about
 ## Motivation
 <!--The motivation is critical for EIPs that want to change the Ethereum protocol. It should clearly explain why the existing protocol specification is inadequate to address the problem that the EIP solves. EIP submissions without sufficient motivation may be rejected outright.-->
 
+__TODO:__
+
 The Atomic Swap protocol enables two parties to exchange cryptocurrencies on different blockchains atomically. However, the usage of Hash Timelocked Contracts (HTLCs) in Atomic Swap introduces optionality: The initior can abort the deal without receiving any penalty. This problem is known as "Free Option Problem". See [Atomic Swaps and Distributed Exchanges: The Inadvertent Call Option - BitMEX Blog](https://blog.bitmex.com/atomic-swaps-and-distributed-exchanges-the-inadvertent-call-option/) for more details.
 
 According to a research [On the optionality and fairness of Atomic Swaps](https://eprint.iacr.org/2019/896), given the timelock setting (24/48 hrs), the arbitrage can be as profitable as approximately 1% ~ 2.3%, which is non-negligible compared with 0.3% for stock market. Such a arbitrage opportunity can be considered attractive because it's totally risk-free.
@@ -71,19 +78,13 @@ Therefore, this EIP aims at address such problems, help more people in the commu
 ## Specification
 <!--The technical specification should describe the syntax and semantics of any new feature. The specification should be detailed enough to allow competing, interoperable implementations for any of the current Ethereum platforms (go-ethereum, parity, cpp-ethereum, ethereumj, ethereumjs, and [others](https://github.com/ethereum/wiki/wiki/Clients)).-->
 
-__TODO:__
-> Here, we need to make this EIP to describe a token standard rather than a contract.
-> 
-> For example, extend this section to two sections: Specification and Interfaces.
-Specification describes our interfaces, and Interfaces gives our function headers.
-
 The fair Atomic Swap Smart Contract should follows the syntax and semantics of 
 the stateful smart contract in Ethereum, with hash locks support and time locks support.
 
 
 ### Definitions
 
-+ `initior`: the party who publishes the advertisement of the exchange.
++ `initior`: the party who publishes the advertisement of the swap.
 + `participant`: the party who agrees on the advertisement and want to take the deal.
 + `asset`: token(s) to be exchanged.
 + `premium`: the upfront cost that the `initior` pays for the overall profitability of the trade.
@@ -96,21 +97,41 @@ the stateful smart contract in Ethereum, with hash locks support and time locks 
 
 ### Interfaces
 
+__TODO:__
+
 ### Events
 
 #### SetUp
+This event logs that one of the parties has set the contract up based on a `secrect_hash`, specifying the amount of the `asset` and the `premium`, and the involved parties.
+
 #### Initiated
+This event logs that the `initior` has pay for the token to be exchanged.
+
 #### Participated
+This event logs that the `participant` has pay for the token to be exchanged.
+
 #### PremiumFilled
+This event logs that the `initior` has pay for the `premium`.
+
 #### AssetRedeemed
+This event logs that the `asset` has been redeemed by the counter party, and redeemed before the `asset` timelock, providing the preimage of the `secrect_hash`.
+
 #### AssetRefunded
+This event logs that the `asset` has been refunded back to the original owner, because of the `asset` timelock expiration.
+
 #### PremiumRedeemed
+This event logs that the `premium` has been redeemed by the `participant`, and redeemed before the premium timelock, if the `participant` participates in the swap. This also implies that the `asset` is either redeemed by the `initior` if it can provide the preimage of the `secrect_hash` before  `asset` timelock expires; or refunded by the `participant` if `asset` timelock expires.
+
 #### PremiumRefunded
+This event logs that the `premium` has been refunded back to the `initior`, because of the `participant` doesn't participate at all, by the time of `premium` timelock expires.
+
 
 
 
 ## Rationale
 <!--The rationale fleshes out the specification by describing what motivated the design and why particular design decisions were made. It should describe alternate designs that were considered and related work, e.g. how the feature is supported in other languages. The rationale may also provide evidence of consensus within the community, and should discuss important objections or concerns raised during discussion.-->
+
+__TODO:__
 
 To resolve the "Free Option Problem", the unfair behaviour should receive punishment.
 
@@ -142,6 +163,8 @@ This proposal is fully backward compatible. Tokens extended by this proposal sho
 
 ## Implementation
 <!--The implementations must be completed before any EIP is given status "Final", but it need not be completed before the EIP is accepted. While there is merit to the approach of reaching consensus on the specification and rationale before writing code, the principle of "rough consensus and running code" is still useful when it comes to resolving many discussions of API details.-->
+
+__TODO:__
 
 Please visit this [page](https://github.com/HAOYUatHZ/fair-atomic-swap/blob/master/src/atomicswap/ethatomicswap/contract/src/contracts/RiskySpeculativeAtomicSwapOption.sol) to see an example implementation
 
