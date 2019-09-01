@@ -78,8 +78,7 @@ Therefore, this EIP aims at address such problems, help more people in the commu
 ## Specification
 <!--The technical specification should describe the syntax and semantics of any new feature. The specification should be detailed enough to allow competing, interoperable implementations for any of the current Ethereum platforms (go-ethereum, parity, cpp-ethereum, ethereumj, ethereumjs, and [others](https://github.com/ethereum/wiki/wiki/Clients)).-->
 
-The fair Atomic Swap Smart Contract should follows the syntax and semantics of 
-the stateful smart contract in Ethereum, with hash locks support and time locks support.
+The Atomic Swap-based American Call Option Smart Contract should follows the syntax and semantics of the stateful smart contract in Ethereum, with hash locks support and time locks support.
 
 
 ### Definitions
@@ -164,7 +163,7 @@ This proposal is fully backward compatible. Tokens extended by this proposal sho
 ## Implementation
 <!--The implementations must be completed before any EIP is given status "Final", but it need not be completed before the EIP is accepted. While there is merit to the approach of reaching consensus on the specification and rationale before writing code, the principle of "rough consensus and running code" is still useful when it comes to resolving many discussions of API details.-->
 
-__TODO:__
+__TODO: fix link__
 
 Please visit this [page](https://github.com/HAOYUatHZ/fair-atomic-swap/blob/master/src/atomicswap/ethatomicswap/contract/src/contracts/RiskySpeculativeAtomicSwapOption.sol) to see an example implementation
 
