@@ -80,6 +80,19 @@ Specification describes our interfaces, and Interfaces gives our function header
 The fair Atomic Swap Smart Contract should follows the syntax and semantics of 
 the stateful smart contract in Ethereum, with hash locks support and time locks support.
 
+### Definitions
+
++ `initior`: the party who publishes the advertisement of the exchange.
++ `participant`: the party who agrees on the advertisement and want to take the deal.
++ `asset`: token(s) to be exchanged.
++ `premium`: the upfront cost that the `initior` pays for the overall profitability of the trade.
++ `redeem`: the action to claim the agreed amount of token.
++ `refund`: the event that the agreed amount of token goes back to the original owner, because of timelock expiration.
++ `secrect`: random number chosen by the `initior`, revealed to allow the `participant` to redeem the fund.
++ `secrect_hash`: hash of the `secrect`, used in the contruction of HTLC. 
++ `timelock`: time limit in the form of block timestamp, ahead of when the fund can only be claimed by a certain party, and otherwise be refunded back to the counter-party after.
+
+
 ### Interfaces
 
 ### Events
