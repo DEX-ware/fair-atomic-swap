@@ -80,6 +80,21 @@ Specification describes our interfaces, and Interfaces gives our function header
 The fair Atomic Swap Smart Contract should follows the syntax and semantics of 
 the stateful smart contract in Ethereum, with hash locks support and time locks support.
 
+### Interfaces
+
+### Events
+
+#### SetUp
+#### Initiated
+#### Participated
+#### PremiumFilled
+#### AssetRedeemed
+#### AssetRefunded
+#### PremiumRedeemed
+#### PremiumRefunded
+
+
+
 ## Rationale
 <!--The rationale fleshes out the specification by describing what motivated the design and why particular design decisions were made. It should describe alternate designs that were considered and related work, e.g. how the feature is supported in other languages. The rationale may also provide evidence of consensus within the community, and should discuss important objections or concerns raised during discussion.-->
 
