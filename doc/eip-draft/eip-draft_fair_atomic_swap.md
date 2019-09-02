@@ -65,6 +65,15 @@ The Atomic Swap-based American Call Option Smart Contract should follows the syn
 + `secrect_hash`: hash of the `secrect`, used in the contruction of HTLC. 
 + `timelock`: time limit in the form of block timestamp, ahead of when the fund can only be claimed by a certain party, and otherwise be refunded back to the counter-party after.
 
+### Storage Variables
+#### swaps
+This mapping 
+__TODO:__
+
+```
+mapping(bytes32 => Swap) public swaps;
+```
+
 
 ### Interfaces
 
