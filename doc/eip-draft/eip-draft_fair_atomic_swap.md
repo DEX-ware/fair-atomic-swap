@@ -38,27 +38,13 @@ A standard for token contracts, providing Atomic Swap-based American Call Option
 
 ## Abstarct
 
-The following standard provides functionality to make Atomic Swap-based American Call Option payment. This standard allows ERC20 token holders to atomically exchange their tokens without trusted third parties, which is known as `Atomic Swap`, by the use of Hashed Time-Locked Contract; and to exchange their tokens as a type of financial derivatives, named "American-style Option". More specifically, Hashed Time-Locked Contract is a type of smart contract that use hashlocks and timelocks to require that the receiver of a payment either acknowledge receiving the payment prior to a deadline by generating cryptographic proof of payment or forfeit the ability to claim the payment, returning it to the payer [^1]. And an American-style Option is a contract which gives the option buyer the right to buy or sell an asset, while the buyer can exercise the contract no later than the strike time.
-
+The following standard provides functionality to make Atomic Swap-based American Call Option payment. This standard allows ERC20 token holders to atomically exchange their tokens without trusted third parties, which is known as `Atomic Swap`, by the use of Hashed Time-Locked Contract; and to exchange their tokens as a type of financial derivatives, named "American-style Option". More specifically, Hashed Time-Locked Contract is a type of smart contract that use hashlocks and timelocks to require that the receiver of a payment either acknowledge receiving the payment prior to a deadline by generating cryptographic proof of payment or forfeit the ability to claim the payment, returning it to the payer [^1]. And an American-style Option is a contract which gives the option buyer the right to buy or sell an asset, while the buyer can exercise the contract no later than the strike time. After a successful swap, the two parties exchange their tokens, and the participant gets the premium. Otherwise the tokens are refunded back to their original owners. 
 
 
 ## Motivation
 <!--The motivation is critical for EIPs that want to change the Ethereum protocol. It should clearly explain why the existing protocol specification is inadequate to address the problem that the EIP solves. EIP submissions without sufficient motivation may be rejected outright.-->
 
-__TODO:__
-
-The Atomic Swap protocol enables two parties to exchange cryptocurrencies on different blockchains atomically. However, the usage of Hash Timelocked Contracts (HTLCs) in Atomic Swap introduces optionality: The initior can abort the deal without receiving any penalty. This problem is known as "Free Option Problem". See [Atomic Swaps and Distributed Exchanges: The Inadvertent Call Option - BitMEX Blog](https://blog.bitmex.com/atomic-swaps-and-distributed-exchanges-the-inadvertent-call-option/) for more details.
-
-According to a research [On the optionality and fairness of Atomic Swaps](https://eprint.iacr.org/2019/896), given the timelock setting (24/48 hrs), the arbitrage can be as profitable as approximately 1% ~ 2.3%, which is non-negligible compared with 0.3% for stock market. Such a arbitrage opportunity can be considered attractive because it's totally risk-free.
-
-Several studies have proposed for solving this problem. e.g.,
-
-+ http://diyhpl.us/wiki/transcripts/scalingbitcoin/tokyo-2018/atomic-swaps/
-+ https://coblox.tech/docs/financial_crypto19.pdf. 
- 
-Their basic idea is that, the transaction for the premium needs to be locked with the same secret hash but with a flipped payout, i.e. when redeemed with the secret, the asset goes back to the initior and after timelock, the premium goes to the participant as a compensation for the initior not revealing the secret. However, this introduces a new problem: the participant can get the premium without paying anything, by never participating in.
-
-Therefore, this EIP aims at address such problems, help more people in the community aware of them, and bring up a fair Atmoic Swap implementation for the community to refer to.
+The Atomic Swap protocol enables two parties to exchange cryptocurrencies on different blockchains atomically, by the means of Hash Timelocked Contracts (HTLCs). Also, Atomic Swap-based American Call Option Smart Contract, with built-in premium, mitigate the risk of "_Free Option Problem_"[^2]. Existing standards do not regulate the procedure of Atomic Swap-based American Call Option, and the prerequisites of of each step. This standard aims at specifying the procedure, to prevent any arbitrage opportunity if a user regret about the deal, or try to lock the counter party's token maliciously.
 
 
 ## Specification
@@ -159,3 +145,4 @@ Please visit this [page](https://github.com/HAOYUatHZ/fair-atomic-swap/blob/mast
 Copyright and related rights waived via [CC0](https://creativecommons.org/publicdomain/zero/1.0/).
 
 [^1]: https://en.bitcoin.it/wiki/Hash_Time_Locked_Contracts
+[^2]: [Atomic Swaps and Distributed Exchanges: The Inadvertent Call Option - BitMEX Blog](https://blog.bitmex.com/atomic-swaps-and-distributed-exchanges-the-inadvertent-call-option/) 
