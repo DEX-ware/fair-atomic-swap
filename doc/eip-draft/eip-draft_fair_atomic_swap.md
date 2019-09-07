@@ -67,8 +67,8 @@ The Atomic Swap-based American Call Option Smart Contract should follows the syn
 
 ### Storage Variables
 #### swaps
-This mapping 
-__TODO:__
+
+This mapping stores the metadata of the swap contracts, and the state of the swaps. This mapping acts as a record to denote the detailed contract, distinguished by the `secretHash` used insided. Each contract uses different `secretHash`. 
 
 ```
 mapping(bytes32 => Swap) public swaps;
