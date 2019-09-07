@@ -10,12 +10,6 @@
 
 ---
 
-<!-- 
-TODO:
-1. fix EIP num
-2. fix discussion link
- -->
-
 eip: 2266
 title: Atomic Swap-based American Call Option Contract Standard
 author: Runchao Han <runchao.han@monash.edu>, Haoyu Lin <chris.haoyul@gmail.com>, Jiangshan Yu <jiangshan.yu@monash.edu>
