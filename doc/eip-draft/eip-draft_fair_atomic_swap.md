@@ -16,10 +16,10 @@ TODO:
 2. fix discussion link
  -->
 
-eip: <to be assigned>
+eip: 2266
 title: Atomic Swap-based American Call Option Contract Standard
 author: Runchao Han <runchao.han@monash.edu>, Haoyu Lin <chris.haoyul@gmail.com>, Jiangshan Yu <jiangshan.yu@monash.edu>
-discussions-to: https://github.com/HAOYUatHZ/fair-atomic-swap/issues
+discussions-to: https://github.com/ethereum/EIPs/issues/2266
 status: Draft
 type: Standards Track
 category: ERC
@@ -78,6 +78,12 @@ mapping(bytes32 => Swap) public swaps;
 ### Interfaces
 
 __TODO:__
+
+```
+function setup(bytes32 secretHash, address payable initiator, address payable participant, uint256 assetValue, uint256 premiumValue) public payable
+```
+
+
 
 ### Events
 
