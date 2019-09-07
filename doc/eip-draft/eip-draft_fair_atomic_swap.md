@@ -27,7 +27,7 @@ created: 2019-08-17
 
 __TODO: fix link__
 
-A standard for token contracts, providing Atomic Swap-based American Call Option sevice. You can view out an example implementation in the repo here: https://github.com/HAOYUatHZ/fair-atomic-swap/blob/master/src/eip/
+A standard for token contracts, providing Atomic Swap-based American Call Option sevice. You can view out an example implementation in the repo here: https://github.com/HAOYUatHZ/fair-atomic-swap/blob/master/src/atomicswap/eip2266/
 
 
 ## Abstarct
@@ -71,7 +71,9 @@ mapping(bytes32 => Swap) public swaps;
 
 ### Interfaces
 
-__TODO:__
+__TODO: (maybe need to distiguish initor and participant)__
+
+
 
 ```
 function setup(bytes32 secretHash, address payable initiator, address payable participant, uint256 assetValue, uint256 premiumValue) public payable
@@ -144,10 +146,7 @@ This proposal is fully backward compatible. Tokens extended by this proposal sho
 ## Implementation
 <!--The implementations must be completed before any EIP is given status "Final", but it need not be completed before the EIP is accepted. While there is merit to the approach of reaching consensus on the specification and rationale before writing code, the principle of "rough consensus and running code" is still useful when it comes to resolving many discussions of API details.-->
 
-__TODO: fix link__
-
-Please visit this [page](https://github.com/HAOYUatHZ/fair-atomic-swap/blob/master/src/atomicswap/ethatomicswap/contract/src/contracts/RiskySpeculativeAtomicSwapOption.sol) to see an example implementation
-
+Please visit [here](https://github.com/HAOYUatHZ/fair-atomic-swap/blob/master/src/atomicswap/eip2266/) to see an example implementation
 
 
 ## Copyright
