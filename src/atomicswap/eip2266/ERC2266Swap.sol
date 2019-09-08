@@ -47,7 +47,7 @@ contract ERC2266
         address participant,
         address initiatorAssetToken,
         uint256 initiatorAssetValue,
-        uint256 assetRefundTimestamp,
+        uint256 assetRefundTimestamp
     );
 
     event PremiumFilled(
