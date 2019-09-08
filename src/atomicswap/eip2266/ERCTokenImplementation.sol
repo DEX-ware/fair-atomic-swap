@@ -1,6 +1,32 @@
+// TODO:
+// maybe distinguish initor&participant
+
+// https://github.com/lukem512/token-swap/blob/master/contracts/TokenSwap.sol
+
+pragma solidity ^0.5.0;
+
 contract ERC2266
 {
-    
+    enum Kind { Initiator, Participant }
+    enum AssetState { Empty, Filled, Redeemed, Refunded }
+    enum PremiumState { Empty, Filled, Redeemed, Refunded }
+
+    struct Swap {
+        bytes32 secretHash;
+        bytes32 secret;
+        address payable initiator;
+        address payable participant;
+        Kind kind;
+        uint256 assetValue;
+        uint256 assetRefundTimestamp;
+        AssetState assetState;
+        uint256 premiumValue;
+        uint256 premiumRefundTimestamp;
+        PremiumState premiumState;
+    }
+
+    mapping(bytes32 => Swap) public swaps;
+
     event AssetRefunded(
         uint256 refundTimestamp,
         bytes32 secretHash,
@@ -63,11 +89,21 @@ contract ERC2266
         uint256 premiumRefundTimestamp
     );
 
-    event SetUp(
+    event SetUpByParticipant(
         bytes32 secretHash,
         address initiator,
         address participant,
         uint256 assetValue,
         uint256 premiumValue
     );
+
+    event SetUpByInitiator(
+        bytes32 secretHash,
+        address initiator,
+        address participant,
+        uint256 assetValue,
+        uint256 premiumValue
+    );
+
+    constructor() public {}
 }
