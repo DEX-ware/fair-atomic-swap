@@ -19,11 +19,11 @@ contract ERC2266
         address payable initiator;
         address payable participant;
         // Kind kind;
-        address initiatorToken;
+        address tokenA;
+        address tokenB;
         uint256 initiatorAssetValue;
         uint256 initiatorAssetRefundTimestamp;
         AssetState initiatorAssetState;
-        address participantToken;
         uint256 participantAssetValue;
         uint256 participantAssetRefundTimestamp;
         AssetState participantAssetState;
@@ -47,17 +47,6 @@ contract ERC2266
     //     bytes32 secret,
     //     address redeemer,
     //     uint256 value
-    // );
-
-    // event PremiumFilled(
-    //     uint256 fillPremiumTimestamp,
-    //     bytes32 secretHash,
-    //     address initiator,
-    //     address participant,
-    //     uint256 assetValue,
-    //     uint256 assetRefundTimestamp,
-    //     uint256 premiumValue,
-    //     uint256 premiumRefundTimestamp
     // );
 
     // event Participated(
@@ -90,10 +79,10 @@ contract ERC2266
     event SetUp(
         bytes32 secretHash,
         address initiator,
-        address initiatorToken,
-        uint256 initiatorAssetValue,
         address participant,
-        address participantToken,
+        address tokenA,
+        address tokenB,
+        uint256 initiatorAssetValue,
         uint256 participantAssetValue,
         uint256 premiumValue
     );
@@ -103,9 +92,19 @@ contract ERC2266
         bytes32 secretHash,
         address initiator,
         address participant,
-        address initiatorToken,
+        address tokenA,
         uint256 initiatorAssetValue,
         uint256 assetRefundTimestamp,
+    );
+
+    event PremiumFilled(
+        uint256 fillPremiumTimestamp,
+        bytes32 secretHash,
+        address initiator,
+        address participant,
+        address premiumToken,
+        uint256 premiumValue,
+        uint256 premiumRefundTimestamp
     );
 
     event PremiumRedeemed(
@@ -147,6 +146,13 @@ contract ERC2266
     modifier canInitiate(bytes32 secretHash) {
         require(swaps[secretHash].initiator == msg.sender);
         require(swaps[secretHash].initiatorAssetState == AssetState.Empty);
+        _;
+    }
+
+    // TODO: maybe check balance?
+    modifier canFillPremium(bytes32 secretHash) {
+        require(swaps[secretHash].initiator == msg.sender);
+        require(swaps[secretHash].premiumState == PremiumState.Empty);
         _;
     }
 
@@ -203,7 +209,7 @@ contract ERC2266
         canInitiate(secretHash)
         checkRefundTimestampOverflow(assetRefundTime)
     {
-        swaps[secretHash].initiatorToken.transferFrom(swaps[secretHash].initiator, address(this), swaps[secretHash].initiatorAssetValue);
+        swaps[secretHash].tokenA.transferFrom(swaps[secretHash].initiator, address(this), swaps[secretHash].initiatorAssetValue);
         swaps[secretHash].initiatorAssetState = AssetState.Filled;
         swaps[secretHash].initiatorAssetRefundTimestamp = block.timestamp + assetRefundTime;
         
@@ -212,9 +218,31 @@ contract ERC2266
             secretHash,
             msg.sender,
             swaps[secretHash].participant,
-            swaps[secretHash].initiatorToken,
+            swaps[secretHash].tokenA,
             swaps[secretHash].initiatorAssetValue,
             swaps[secretHash].initiatorAssetRefundTimestamp,
+        );
+    }
+
+    // Initiator needs to pay for the premium with premiumValue
+    function fillPremium(bytes32 secretHash, uint256 premiumRefundTime)
+        public
+        payable
+        canFillPremium(secretHash)
+        checkRefundTimestampOverflow(premiumRefundTime)
+    {   
+        swaps[secretHash].tokenB.transferFrom(swaps[secretHash].initiator, address(this), swaps[secretHash].premiumValue);
+        swaps[secretHash].premiumState = AssetState.Filled;
+        swaps[secretHash].premiumRefundTimestamp = block.timestamp + premiumRefundTime;
+        
+        emit PremiumFilled(
+            block.timestamp,
+            secretHash,
+            msg.sender,
+            swaps[secretHash].participant,
+            swaps[secretHash].tokenB,
+            swaps[secretHash].premiumValue,
+            swaps[secretHash].premiumRefundTimestamp
         );
     }
 }
