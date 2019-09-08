@@ -155,7 +155,7 @@ contract ERC2266
 
     modifier canFillPremium(bytes32 secretHash) {
         require(swaps[secretHash].initiator == msg.sender);
-        require(swaps[secretHash].premiumState == PremiumState.Empty);
+        require(swaps[secretHash].premiumState == AssetState.Empty);
         require(swaps[secretHash].tokenB.balanceOf(msg.sender) >= swaps[secretHash].premiumValue);
         _;
     }
@@ -163,7 +163,7 @@ contract ERC2266
     modifier canParticipate(bytes32 secretHash) {
         require(swaps[secretHash].participant == msg.sender);
         require(swaps[secretHash].participantAssetState == AssetState.Empty);
-        require(swaps[secretHash].premiumState == PremiumState.Filled);
+        require(swaps[secretHash].premiumState == AssetState.Filled);
         require(swaps[secretHash].tokenB.balanceOf(msg.sender) >= swaps[secretHash].participantAssetValue);
         _;
     }
@@ -201,7 +201,7 @@ contract ERC2266
     }
 
     modifier isPremiumFilledState(bytes32 secretHash) {
-        require(swaps[secretHash].premiumState == PremiumState.Filled);
+        require(swaps[secretHash].premiumState == AssetState.Filled);
         _;
     }
 
@@ -211,7 +211,7 @@ contract ERC2266
         // the participant invokes this method to redeem the premium
         require(swaps[secretHash].participant == msg.sender);
         // the premium should be deposited
-        require(swaps[secretHash].premiumState == PremiumState.Filled);
+        require(swaps[secretHash].premiumState == AssetState.Filled);
         // if Bob participates, which means participantAsset will be: Filled -> (Redeemed/Refunded)
         require(swaps[secretHash].participantAssetState == AssetState.Refunded || swaps[secretHash].participantAssetState == AssetState.Redeemed);
         // the premium timelock should not be expired
@@ -225,7 +225,7 @@ contract ERC2266
         // the initiator invokes this method to refund the premium
         require(swaps[secretHash].initiator == msg.sender);
         // the premium should be deposited
-        require(swaps[secretHash].premiumState == PremiumState.Filled);
+        require(swaps[secretHash].premiumState == AssetState.Filled);
         // asset2 should be empty
         // which means Bob does not participate
         require(swaps[secretHash].premiumState == AssetState.Empty);
@@ -288,7 +288,7 @@ contract ERC2266
             swaps[secretHash].participant,
             swaps[secretHash].tokenA,
             swaps[secretHash].initiatorAssetValue,
-            swaps[secretHash].initiatorAssetRefundTimestamp,
+            swaps[secretHash].initiatorAssetRefundTimestamp
         );
     }
 
@@ -405,7 +405,7 @@ contract ERC2266
         isPremiumRedeemable(secretHash)
     {
         ERC20(swaps[secretHash].tokenB).transfer(msg.sender, swaps[secretHash].premiumValue);
-        swaps[secretHash].premiumState = PremiumState.Redeemed;
+        swaps[secretHash].premiumState = AssetState.Redeemed;
 
         emit PremiumRefunded(
             block.timestamp,
@@ -421,7 +421,7 @@ contract ERC2266
         isPremiumRefundable(secretHash)
     {
         ERC20(swaps[secretHash].tokenB).transfer(msg.sender, swaps[secretHash].premiumValue);
-        swaps[secretHash].premiumState = PremiumState.Refunded;
+        swaps[secretHash].premiumState = AssetState.Refunded;
 
         emit PremiumRefunded(
             block.timestamp,
