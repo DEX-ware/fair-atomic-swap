@@ -71,17 +71,6 @@ contract ERC2266
     //     uint256 premiumRefundTimestamp
     // );
 
-    // event Initiated(
-    //     uint256 initiateTimestamp,
-    //     bytes32 secretHash,
-    //     address initiator,
-    //     address participant,
-    //     uint256 assetValue,
-    //     uint256 assetRefundTimestamp,
-    //     uint256 premiumValue,
-    //     uint256 premiumRefundTimestamp
-    // );
-
     // event SetUpByParticipant(
     //     bytes32 secretHash,
     //     address initiator,
@@ -107,6 +96,16 @@ contract ERC2266
         address participantToken,
         uint256 participantAssetValue,
         uint256 premiumValue
+    );
+
+    event Initiated(
+        uint256 initiateTimestamp,
+        bytes32 secretHash,
+        address initiator,
+        address participant,
+        address initiatorToken,
+        uint256 initiatorAssetValue,
+        uint256 assetRefundTimestamp,
     );
 
     event PremiumRedeemed(
@@ -208,16 +207,14 @@ contract ERC2266
         swaps[secretHash].initiatorAssetState = AssetState.Filled;
         swaps[secretHash].initiatorAssetRefundTimestamp = block.timestamp + assetRefundTime;
         
-        // TODO:
         emit Initiated(
             block.timestamp,
             secretHash,
             msg.sender,
             swaps[secretHash].participant,
-            msg.value,
-            swaps[secretHash].assetRefundTimestamp,
-            swaps[secretHash].premiumValue,
-            swaps[secretHash].premiumRefundTimestamp
+            swaps[secretHash].initiatorToken,
+            swaps[secretHash].initiatorAssetValue,
+            swaps[secretHash].initiatorAssetRefundTimestamp,
         );
     }
 }
