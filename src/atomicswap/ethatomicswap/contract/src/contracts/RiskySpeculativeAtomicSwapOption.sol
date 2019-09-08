@@ -344,7 +344,7 @@ contract RiskySpeculativeAtomicSwapOption {
         swaps[secretHash].participant.transfer(swaps[secretHash].premiumValue);
         swaps[secretHash].premiumState = PremiumState.Redeemed;
 
-        emit PremiumRefunded(
+        emit PremiumRedeemed(
             block.timestamp,
             swaps[secretHash].secretHash,
             msg.sender,
