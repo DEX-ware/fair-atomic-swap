@@ -79,6 +79,24 @@ contract ERC2266
         uint256 participantAssetRefundTimestamp
     );
 
+    event InitiatorAssetRedeemed(
+        uint256 redeemTimestamp,
+        bytes32 secretHash,
+        bytes32 secret,
+        address redeemer,
+        address assetToken,
+        uint256 value
+    );
+
+    event ParticipantAssetRedeemed(
+        uint256 redeemTimestamp,
+        bytes32 secretHash,
+        bytes32 secret,
+        address redeemer,
+        address assetToken,
+        uint256 value
+    );
+
     // event AssetRefunded(
     //     uint256 refundTimestamp,
     //     bytes32 secretHash,
@@ -155,6 +173,18 @@ contract ERC2266
         require(swaps[secretHash].participant == msg.sender);
         require(swaps[secretHash].participantAssetState == AssetState.Empty);
         require(swaps[secretHash].premiumState == PremiumState.Filled);
+        _;
+    }
+
+    modifier isAssetRedeemable(bytes32 secretHash, bytes32 secret) {
+        if (swaps[secretHash].initiator == msg.sender) {
+            require(swaps[secretHash].initiatorAssetState == AssetState.Filled);
+            require(block.timestamp <= swaps[secretHash].initiatorAssetRefundTimestamp);
+        } else {
+            require(swaps[secretHash].participantAssetState == AssetState.Filled);
+            require(block.timestamp <= swaps[secretHash].participantAssetRefundTimestamp);
+        }
+        require(sha256(abi.encodePacked(secret)) == secretHash);
         _;
     }
 
@@ -271,5 +301,35 @@ contract ERC2266
             swaps[secretHash].participantAssetValue,
             swaps[secretHash].participantAssetRefundTimestamp
         );
+    }
+
+    function redeemAsset(bytes32 secret, bytes32 secretHash)
+        public
+        isAssetRedeemable(secretHash, secret)
+    {
+        swaps[secretHash].secret = secret;
+        if (swaps[secretHash].initiator == msg.sender) {
+            swaps[secretHash].tokenB.transfer(msg.sender, swaps[secretHash].participantAssetValue);
+            swaps[secretHash].participantAssetState = AssetState.Redeemed;
+            emit ParticipantAssetRedeemed(
+                block.timestamp,
+                secretHash,
+                secret,
+                msg.sender,
+                swaps[secretHash].tokenB,
+                swaps[secretHash].participantAssetValue
+            );
+        } else {
+            swaps[secretHash].tokenA.transfer(msg.sender, swaps[secretHash].initiatorAssetValue);
+            swaps[secretHash].initiatorAssetState = AssetState.Redeemed;
+            emit InitiatorAssetRedeemed(
+                block.timestamp,
+                secretHash,
+                secret,
+                msg.sender,
+                swaps[secretHash].tokenA,
+                swaps[secretHash].initiatorAssetValue
+            );
+        }
     }
 }
