@@ -216,6 +216,8 @@ contract ERC2266
     }
 
     // Initiator needs to pay for the premium with premiumValue
+    // TODO: we also need approval, https://ethereum.stackexchange.com/questions/46318/how-can-i-transfer-erc20-tokens-from-a-contract-to-an-user-account
+    // TODO: update balance?
     function fillPremium(bytes32 secretHash, uint256 premiumRefundTime)
         public
         payable
@@ -237,6 +239,8 @@ contract ERC2266
         );
     }
 
+    // TODO: we also need approval, https://ethereum.stackexchange.com/questions/46318/how-can-i-transfer-erc20-tokens-from-a-contract-to-an-user-account
+    // TODO: update balance?
     function participate(bytes32 secretHash, uint256 assetRefundTime)
         public
         payable
