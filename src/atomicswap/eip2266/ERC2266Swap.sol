@@ -34,21 +34,6 @@ contract ERC2266
 
     mapping(bytes32 => Swap) public swaps;
 
-    // event AssetRefunded(
-    //     uint256 refundTimestamp,
-    //     bytes32 secretHash,
-    //     address refunder,
-    //     uint256 value
-    // );
-
-    // event AssetRedeemed(
-    //     uint256 redeemTimestamp,
-    //     bytes32 secretHash,
-    //     bytes32 secret,
-    //     address redeemer,
-    //     uint256 value
-    // );
-
     event SetUp(
         bytes32 secretHash,
         address initiator,
@@ -90,21 +75,36 @@ contract ERC2266
         uint256 participantAssetRefundTimestamp
     );
 
-    event PremiumRedeemed(
-        uint256 redeemTimestamp,
-        bytes32 secretHash,
-        address redeemer,
-        address token,
-        uint256 value
-    );
+    // event AssetRefunded(
+    //     uint256 refundTimestamp,
+    //     bytes32 secretHash,
+    //     address refunder,
+    //     uint256 value
+    // );
 
-    event PremiumRefunded(
-        uint256 refundTimestamp,
-        bytes32 secretHash,
-        address refunder,
-        address token,
-        uint256 value
-    );
+    // event AssetRedeemed(
+    //     uint256 redeemTimestamp,
+    //     bytes32 secretHash,
+    //     bytes32 secret,
+    //     address redeemer,
+    //     uint256 value
+    // );
+
+    // event PremiumRedeemed(
+    //     uint256 redeemTimestamp,
+    //     bytes32 secretHash,
+    //     address redeemer,
+    //     address token,
+    //     uint256 value
+    // );
+
+    // event PremiumRefunded(
+    //     uint256 refundTimestamp,
+    //     bytes32 secretHash,
+    //     address refunder,
+    //     address token,
+    //     uint256 value
+    // );
 
     constructor() public {}
 
