@@ -160,14 +160,14 @@ contract ERC2266
     modifier canInitiate(bytes32 secretHash) {
         require(swaps[secretHash].initiator == msg.sender);
         require(swaps[secretHash].initiatorAssetState == AssetState.Empty);
-        require(swaps[secretHash].tokenA.balanceOf(msg.sender) >= swaps[secretHash].initiatorAssetValue);
+        require(ERC20(swaps[secretHash].tokenA).balanceOf(msg.sender) >= swaps[secretHash].initiatorAssetValue);
         _;
     }
 
     modifier canFillPremium(bytes32 secretHash) {
         require(swaps[secretHash].initiator == msg.sender);
         require(swaps[secretHash].premiumState == AssetState.Empty);
-        require(swaps[secretHash].tokenB.balanceOf(msg.sender) >= swaps[secretHash].premiumValue);
+        require(ERC20(swaps[secretHash].tokenB).balanceOf(msg.sender) >= swaps[secretHash].premiumValue);
         _;
     }
 
@@ -175,7 +175,7 @@ contract ERC2266
         require(swaps[secretHash].participant == msg.sender);
         require(swaps[secretHash].participantAssetState == AssetState.Empty);
         require(swaps[secretHash].premiumState == AssetState.Filled);
-        require(swaps[secretHash].tokenB.balanceOf(msg.sender) >= swaps[secretHash].participantAssetValue);
+        require(ERC20(swaps[secretHash].tokenB).balanceOf(msg.sender) >= swaps[secretHash].participantAssetValue);
         _;
     }
 
