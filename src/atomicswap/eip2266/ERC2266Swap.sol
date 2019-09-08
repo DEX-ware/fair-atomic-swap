@@ -277,7 +277,7 @@ contract ERC2266
         canInitiate(secretHash)
         checkRefundTimestampOverflow(assetRefundTime)
     {
-        swaps[secretHash].tokenA.transferFrom(swaps[secretHash].initiator, address(this), swaps[secretHash].initiatorAssetValue);
+        ERC20(swaps[secretHash].tokenA).transferFrom(swaps[secretHash].initiator, address(this), swaps[secretHash].initiatorAssetValue);
         swaps[secretHash].initiatorAssetState = AssetState.Filled;
         swaps[secretHash].initiatorAssetRefundTimestamp = block.timestamp + assetRefundTime;
         
@@ -300,7 +300,7 @@ contract ERC2266
         canFillPremium(secretHash)
         checkRefundTimestampOverflow(premiumRefundTime)
     {   
-        swaps[secretHash].tokenB.transferFrom(swaps[secretHash].initiator, address(this), swaps[secretHash].premiumValue);
+        ERC20(swaps[secretHash].tokenB).transferFrom(swaps[secretHash].initiator, address(this), swaps[secretHash].premiumValue);
         swaps[secretHash].premiumState = AssetState.Filled;
         swaps[secretHash].premiumRefundTimestamp = block.timestamp + premiumRefundTime;
         
@@ -323,7 +323,7 @@ contract ERC2266
         canParticipate(secretHash)
         checkRefundTimestampOverflow(assetRefundTime)
     {
-        swaps[secretHash].tokenB.transferFrom(swaps[secretHash].participant, address(this), swaps[secretHash].participantAssetValue);
+        ERC20(swaps[secretHash].tokenB).transferFrom(swaps[secretHash].participant, address(this), swaps[secretHash].participantAssetValue);
         swaps[secretHash].participantAssetState = AssetState.Filled;
         swaps[secretHash].participantAssetRefundTimestamp = block.timestamp + assetRefundTime;        
         
@@ -344,7 +344,7 @@ contract ERC2266
     {
         swaps[secretHash].secret = secret;
         if (swaps[secretHash].initiator == msg.sender) {
-            swaps[secretHash].tokenB.transfer(msg.sender, swaps[secretHash].participantAssetValue);
+            ERC20(swaps[secretHash].tokenB).transfer(msg.sender, swaps[secretHash].participantAssetValue);
             swaps[secretHash].participantAssetState = AssetState.Redeemed;
 
             emit ParticipantAssetRedeemed(
@@ -356,7 +356,7 @@ contract ERC2266
                 swaps[secretHash].participantAssetValue
             );
         } else {
-            swaps[secretHash].tokenA.transfer(msg.sender, swaps[secretHash].initiatorAssetValue);
+            ERC20(swaps[secretHash].tokenA).transfer(msg.sender, swaps[secretHash].initiatorAssetValue);
             swaps[secretHash].initiatorAssetState = AssetState.Redeemed;
 
             emit InitiatorAssetRedeemed(
@@ -376,7 +376,7 @@ contract ERC2266
         isAssetRefundable(secretHash)
     {
         if (swaps[secretHash].initiator == msg.sender) {
-            swaps[secretHash].tokenA.transfer(msg.sender, swaps[secretHash].initiatorAssetValue);
+            ERC20(swaps[secretHash].tokenA).transfer(msg.sender, swaps[secretHash].initiatorAssetValue);
             swaps[secretHash].initiatorAssetState = AssetState.Refunded;
 
             emit InitiatorAssetRefunded(
@@ -387,7 +387,7 @@ contract ERC2266
                 swaps[secretHash].initiatorAssetValue
             );
         } else {
-            swaps[secretHash].tokenB.transfer(msg.sender, swaps[secretHash].participantAssetValue);
+            ERC20(swaps[secretHash].tokenB).transfer(msg.sender, swaps[secretHash].participantAssetValue);
             swaps[secretHash].participantAssetState = AssetState.Refunded;
 
             emit ParticipantAssetRefunded(
@@ -404,7 +404,7 @@ contract ERC2266
         public
         isPremiumRedeemable(secretHash)
     {
-        swaps[secretHash].tokenB.transfer(msg.sender, swaps[secretHash].premiumValue);
+        ERC20(swaps[secretHash].tokenB).transfer(msg.sender, swaps[secretHash].premiumValue);
         swaps[secretHash].premiumState = PremiumState.Redeemed;
 
         emit PremiumRefunded(
@@ -420,7 +420,7 @@ contract ERC2266
         public
         isPremiumRefundable(secretHash)
     {
-        swaps[secretHash].tokenB.transfer(msg.sender, swaps[secretHash].premiumValue);
+        ERC20(swaps[secretHash].tokenB).transfer(msg.sender, swaps[secretHash].premiumValue);
         swaps[secretHash].premiumState = PremiumState.Refunded;
 
         emit PremiumRefunded(
