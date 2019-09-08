@@ -104,14 +104,6 @@ contract ERC2266
     //     uint256 value
     // );
 
-    // event AssetRedeemed(
-    //     uint256 redeemTimestamp,
-    //     bytes32 secretHash,
-    //     bytes32 secret,
-    //     address redeemer,
-    //     uint256 value
-    // );
-
     // event PremiumRedeemed(
     //     uint256 redeemTimestamp,
     //     bytes32 secretHash,
@@ -176,11 +168,19 @@ contract ERC2266
         _;
     }
 
+    modifier checkRefundTimestampOverflow(uint256 refundTime) {
+        uint256 refundTimestamp = block.timestamp + refundTime;
+        require(refundTimestamp > block.timestamp, "calc refundTimestamp overflow");
+        require(refundTimestamp > refundTime, "calc refundTimestamp overflow");
+        _;
+    }
+
     modifier isAssetRedeemable(bytes32 secretHash, bytes32 secret) {
         if (swaps[secretHash].initiator == msg.sender) {
             require(swaps[secretHash].initiatorAssetState == AssetState.Filled);
             require(block.timestamp <= swaps[secretHash].initiatorAssetRefundTimestamp);
         } else {
+            require(swaps[secretHash].participant == msg.sender);
             require(swaps[secretHash].participantAssetState == AssetState.Filled);
             require(block.timestamp <= swaps[secretHash].participantAssetRefundTimestamp);
         }
@@ -188,10 +188,20 @@ contract ERC2266
         _;
     }
 
-    modifier checkRefundTimestampOverflow(uint256 refundTime) {
-        uint256 refundTimestamp = block.timestamp + refundTime;
-        require(refundTimestamp > block.timestamp, "calc refundTimestamp overflow");
-        require(refundTimestamp > refundTime, "calc refundTimestamp overflow");
+    modifier isAssetRefundable(bytes32 secretHash) {
+        if (swaps[secretHash].initiator == msg.sender) {
+            require(swaps[secretHash].initiatorAssetState == AssetState.Filled);
+            require(block.timestamp > swaps[secretHash].initiatorAssetRefundTimestamp);
+        } else {
+            require(swaps[secretHash].participant == msg.sender);
+            require(swaps[secretHash].participantAssetState == AssetState.Filled);
+            require(block.timestamp > swaps[secretHash].participantAssetRefundTimestamp);
+        }
+        _;
+    }
+
+    modifier isPremiumFilledState(bytes32 secretHash) {
+        require(swaps[secretHash].premiumState == PremiumState.Filled);
         _;
     }
 
@@ -331,5 +341,22 @@ contract ERC2266
                 swaps[secretHash].initiatorAssetValue
             );
         }
+    }
+
+    function refundAsset(bytes32 secretHash)
+        public
+        isPremiumFilledState(secretHash)
+        isAssetRefundable(secretHash)
+    {
+        // msg.sender.transfer(swaps[secretHash].assetValue);
+
+        // swaps[secretHash].assetState = AssetState.Refunded;
+
+        // emit AssetRefunded(
+        //     block.timestamp,
+        //     swaps[secretHash].secretHash,
+        //     msg.sender,
+        //     swaps[secretHash].assetValue
+        // );
     }
 }
