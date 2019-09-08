@@ -49,22 +49,6 @@ contract ERC2266
     //     uint256 value
     // );
 
-    event PremiumRefunded(
-        uint256 refundTimestamp,
-        bytes32 secretHash,
-        address refunder,
-        address token,
-        uint256 value
-    );
-
-    event PremiumRedeemed(
-        uint256 redeemTimestamp,
-        bytes32 secretHash,
-        address redeemer,
-        address token,
-        uint256 value
-    );
-
     // event PremiumFilled(
     //     uint256 fillPremiumTimestamp,
     //     bytes32 secretHash,
@@ -123,6 +107,22 @@ contract ERC2266
         address participantToken,
         uint256 participantAssetValue,
         uint256 premiumValue
+    );
+
+    event PremiumRedeemed(
+        uint256 redeemTimestamp,
+        bytes32 secretHash,
+        address redeemer,
+        address token,
+        uint256 value
+    );
+
+    event PremiumRefunded(
+        uint256 refundTimestamp,
+        bytes32 secretHash,
+        address refunder,
+        address token,
+        uint256 value
     );
 
     constructor() public {}
