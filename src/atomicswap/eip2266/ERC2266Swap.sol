@@ -49,33 +49,6 @@ contract ERC2266
     //     uint256 value
     // );
 
-    // event Participated(
-    //     uint256 participateTimestamp,
-    //     bytes32 secretHash,
-    //     address initiator,
-    //     address participant,
-    //     uint256 assetValue,
-    //     uint256 assetRefundTimestamp,
-    //     uint256 premiumValue,
-    //     uint256 premiumRefundTimestamp
-    // );
-
-    // event SetUpByParticipant(
-    //     bytes32 secretHash,
-    //     address initiator,
-    //     address participant,
-    //     uint256 assetValue,
-    //     uint256 premiumValue
-    // );
-
-    // event SetUpByInitiator(
-    //     bytes32 secretHash,
-    //     address initiator,
-    //     address participant,
-    //     uint256 assetValue,
-    //     uint256 premiumValue
-    // );
-
     event SetUp(
         bytes32 secretHash,
         address initiator,
@@ -92,7 +65,7 @@ contract ERC2266
         bytes32 secretHash,
         address initiator,
         address participant,
-        address tokenA,
+        address initiatorAssetToken,
         uint256 initiatorAssetValue,
         uint256 assetRefundTimestamp,
     );
@@ -105,6 +78,16 @@ contract ERC2266
         address premiumToken,
         uint256 premiumValue,
         uint256 premiumRefundTimestamp
+    );
+
+    event Participated(
+        uint256 participateTimestamp,
+        bytes32 secretHash,
+        address initiator,
+        address participant,
+        address participantAssetToken,
+        uint256 participantAssetValue,
+        uint256 participantAssetRefundTimestamp
     );
 
     event PremiumRedeemed(
@@ -153,6 +136,14 @@ contract ERC2266
     modifier canFillPremium(bytes32 secretHash) {
         require(swaps[secretHash].initiator == msg.sender);
         require(swaps[secretHash].premiumState == PremiumState.Empty);
+        _;
+    }
+
+    // TODO: maybe check balance?
+    modifier canParticipate(bytes32 secretHash) {
+        require(swaps[secretHash].participant == msg.sender);
+        require(swaps[secretHash].participantAssetState == AssetState.Empty);
+        require(swaps[secretHash].premiumState == PremiumState.Filled);
         _;
     }
 
@@ -246,25 +237,24 @@ contract ERC2266
         );
     }
 
-    // TODO:
     function participate(bytes32 secretHash, uint256 assetRefundTime)
         public
         payable
         canParticipate(secretHash)
         checkRefundTimestampOverflow(assetRefundTime)
     {
-        swaps[secretHash].assetState = AssetState.Filled;
-        swaps[secretHash].assetRefundTimestamp = block.timestamp + assetRefundTime;        
+        swaps[secretHash].tokenB.transferFrom(swaps[secretHash].participant, address(this), swaps[secretHash].participantAssetValue);
+        swaps[secretHash].participantAssetState = AssetState.Filled;
+        swaps[secretHash].participantAssetRefundTimestamp = block.timestamp + assetRefundTime;        
         
         emit Participated(
             block.timestamp,
             secretHash,
             swaps[secretHash].initiator,
             msg.sender,
-            msg.value,
-            swaps[secretHash].assetRefundTimestamp,
-            swaps[secretHash].premiumValue,
-            swaps[secretHash].premiumRefundTimestamp
+            swaps[secretHash].tokenB,
+            swaps[secretHash].participantAssetValue,
+            swaps[secretHash].participantAssetRefundTimestamp
         );
     }
 }
