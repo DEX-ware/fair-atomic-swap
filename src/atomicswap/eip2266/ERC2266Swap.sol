@@ -245,4 +245,26 @@ contract ERC2266
             swaps[secretHash].premiumRefundTimestamp
         );
     }
+
+    // TODO:
+    function participate(bytes32 secretHash, uint256 assetRefundTime)
+        public
+        payable
+        canParticipate(secretHash)
+        checkRefundTimestampOverflow(assetRefundTime)
+    {
+        swaps[secretHash].assetState = AssetState.Filled;
+        swaps[secretHash].assetRefundTimestamp = block.timestamp + assetRefundTime;        
+        
+        emit Participated(
+            block.timestamp,
+            secretHash,
+            swaps[secretHash].initiator,
+            msg.sender,
+            msg.value,
+            swaps[secretHash].assetRefundTimestamp,
+            swaps[secretHash].premiumValue,
+            swaps[secretHash].premiumRefundTimestamp
+        );
+    }
 }
