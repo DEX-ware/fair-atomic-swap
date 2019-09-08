@@ -1,5 +1,6 @@
 // TODO:
-// maybe distinguish initor&participant
+// maybe distinguish initor&participant?
+// maybe separate contract for tokens?
 
 // https://github.com/lukem512/token-swap/blob/master/contracts/TokenSwap.sol
 
