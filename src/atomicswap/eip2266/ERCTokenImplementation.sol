@@ -144,6 +144,20 @@ contract ERC2266
         _;
     }
 
+    // TODO: maybe check balance?
+    modifier canInitiate(bytes32 secretHash) {
+        require(swaps[secretHash].initiator == msg.sender);
+        require(swaps[secretHash].assetState == AssetState.Empty);
+        _;
+    }
+
+    modifier checkRefundTimestampOverflow(uint256 refundTime) {
+        uint256 refundTimestamp = block.timestamp + refundTime;
+        require(refundTimestamp > block.timestamp, "calc refundTimestamp overflow");
+        require(refundTimestamp > refundTime, "calc refundTimestamp overflow");
+        _;
+    }
+
     function setup(bytes32 secretHash,
                     address payable initiator,
                     address initiatorToken,
@@ -179,6 +193,31 @@ contract ERC2266
             participantToken,
             participantAssetValue,
             premiumValue
+        );
+    }
+
+    // TODO: we also need approval, https://ethereum.stackexchange.com/questions/46318/how-can-i-transfer-erc20-tokens-from-a-contract-to-an-user-account
+    // TODO: update balance?
+    function initiate(bytes32 secretHash, uint256 assetRefundTime)
+        public
+        payable
+        canInitiate(secretHash)
+        checkRefundTimestampOverflow(assetRefundTime)
+    {
+        swaps[secretHash].initiatorToken.transferFrom(swaps[secretHash].initiator, address(this), swaps[secretHash].initiatorAssetValue);
+        swaps[secretHash].initiatorAssetState = AssetState.Filled;
+        swaps[secretHash].initiatorAssetRefundTimestamp = block.timestamp + assetRefundTime;
+        
+        // TODO:
+        emit Initiated(
+            block.timestamp,
+            secretHash,
+            msg.sender,
+            swaps[secretHash].participant,
+            msg.value,
+            swaps[secretHash].assetRefundTimestamp,
+            swaps[secretHash].premiumValue,
+            swaps[secretHash].premiumRefundTimestamp
         );
     }
 }
