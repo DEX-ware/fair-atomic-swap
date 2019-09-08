@@ -113,21 +113,21 @@ contract ERC2266
         uint256 value
     );
 
-    // event PremiumRedeemed(
-    //     uint256 redeemTimestamp,
-    //     bytes32 secretHash,
-    //     address redeemer,
-    //     address token,
-    //     uint256 value
-    // );
+    event PremiumRedeemed(
+        uint256 redeemTimestamp,
+        bytes32 secretHash,
+        address redeemer,
+        address token,
+        uint256 value
+    );
 
-    // event PremiumRefunded(
-    //     uint256 refundTimestamp,
-    //     bytes32 secretHash,
-    //     address refunder,
-    //     address token,
-    //     uint256 value
-    // );
+    event PremiumRefunded(
+        uint256 refundTimestamp,
+        bytes32 secretHash,
+        address refunder,
+        address token,
+        uint256 value
+    );
 
     constructor() public {}
 
@@ -211,6 +211,34 @@ contract ERC2266
 
     modifier isPremiumFilledState(bytes32 secretHash) {
         require(swaps[secretHash].premiumState == PremiumState.Filled);
+        _;
+    }
+
+    // Premium is redeemable for Bob if Bob participates and redeem
+    // before premium's timelock expires
+    modifier isPremiumRedeemable(bytes32 secretHash) {
+        // the participant invokes this method to redeem the premium
+        require(swaps[secretHash].participant == msg.sender);
+        // the premium should be deposited
+        require(swaps[secretHash].premiumState == PremiumState.Filled);
+        // if Bob participates, which means participantAsset will be: Filled -> (Redeemed/Refunded)
+        require(swaps[secretHash].participantAssetState == AssetState.Refunded || swaps[secretHash].participantAssetState == AssetState.Redeemed);
+        // the premium timelock should not be expired
+        require(block.timestamp <= swaps[secretHash].premiumRefundTimestamp);
+        _;
+    }
+
+    // Premium is refundable for Alice only when Alice initiates
+    // but Bob does not participate after premium's timelock expires
+    modifier isPremiumRefundable(bytes32 secretHash) {
+        // the initiator invokes this method to refund the premium
+        require(swaps[secretHash].initiator == msg.sender);
+        // the premium should be deposited
+        require(swaps[secretHash].premiumState == PremiumState.Filled);
+        // asset2 should be empty
+        // which means Bob does not participate
+        require(swaps[secretHash].premiumState == AssetState.Empty);
+        require(block.timestamp > swaps[secretHash].premiumRefundTimestamp);
         _;
     }
 
@@ -330,6 +358,7 @@ contract ERC2266
         if (swaps[secretHash].initiator == msg.sender) {
             swaps[secretHash].tokenB.transfer(msg.sender, swaps[secretHash].participantAssetValue);
             swaps[secretHash].participantAssetState = AssetState.Redeemed;
+
             emit ParticipantAssetRedeemed(
                 block.timestamp,
                 secretHash,
@@ -341,6 +370,7 @@ contract ERC2266
         } else {
             swaps[secretHash].tokenA.transfer(msg.sender, swaps[secretHash].initiatorAssetValue);
             swaps[secretHash].initiatorAssetState = AssetState.Redeemed;
+
             emit InitiatorAssetRedeemed(
                 block.timestamp,
                 secretHash,
@@ -360,6 +390,7 @@ contract ERC2266
         if (swaps[secretHash].initiator == msg.sender) {
             swaps[secretHash].tokenA.transfer(msg.sender, swaps[secretHash].initiatorAssetValue);
             swaps[secretHash].initiatorAssetState = AssetState.Refunded;
+
             emit InitiatorAssetRefunded(
                 block.timestamp,
                 secretHash,
@@ -370,6 +401,7 @@ contract ERC2266
         } else {
             swaps[secretHash].tokenB.transfer(msg.sender, swaps[secretHash].participantAssetValue);
             swaps[secretHash].participantAssetState = AssetState.Refunded;
+
             emit ParticipantAssetRefunded(
                 block.timestamp,
                 secretHash,
@@ -378,5 +410,37 @@ contract ERC2266
                 swaps[secretHash].participantAssetValue
             );
         }
+    }
+
+    function redeemPremium(bytes32 secretHash)
+        public
+        isPremiumRedeemable(secretHash)
+    {
+        swaps[secretHash].tokenB.transfer(msg.sender, swaps[secretHash].premiumValue);
+        swaps[secretHash].premiumState = PremiumState.Redeemed;
+
+        emit PremiumRefunded(
+            block.timestamp,
+            swaps[secretHash].secretHash,
+            msg.sender,
+            swaps[secretHash].tokenB,
+            swaps[secretHash].premiumValue
+        );
+    }
+    
+    function refundPremium(bytes32 secretHash)
+        public
+        isPremiumRefundable(secretHash)
+    {
+        swaps[secretHash].tokenB.transfer(msg.sender, swaps[secretHash].premiumValue);
+        swaps[secretHash].premiumState = PremiumState.Refunded;
+
+        emit PremiumRefunded(
+            block.timestamp,
+            swaps[secretHash].secretHash,
+            msg.sender,
+            swaps[secretHash].tokenB,
+            swaps[secretHash].premiumValue
+        );
     }
 }
