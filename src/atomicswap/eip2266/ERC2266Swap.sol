@@ -1,20 +1,12 @@
-// TODO:
-// maybe distinguish initor&participant?
-// maybe separate contract for tokens?
-
 // ref:
 // + https://ethereum.stackexchange.com/questions/46318/how-can-i-transfer-erc20-tokens-from-a-contract-to-an-user-account
 // + https://theethereum.wiki/w/index.php/ERC20_Token_Standard
-
-// https://github.com/lukem512/token-swap/blob/master/contracts/TokenSwap.sol
+// + https://github.com/lukem512/token-swap/blob/master/contracts/TokenSwap.sol
 
 pragma solidity ^0.5.0;
 
 contract ERC2266
 {
-    // enum Kind { Initiator, Participant }
-    // enum InitiatorAssetState { Empty, Filled, Redeemed, Refunded }
-    // enum ParticipantAssetState { Empty, Filled, Redeemed, Refunded }
     enum AssetState { Empty, Filled, Redeemed, Refunded }
 
     struct Swap {
@@ -22,7 +14,6 @@ contract ERC2266
         bytes32 secret;
         address payable initiator;
         address payable participant;
-        // Kind kind;
         address tokenA;
         address tokenB;
         uint256 initiatorAssetValue;
