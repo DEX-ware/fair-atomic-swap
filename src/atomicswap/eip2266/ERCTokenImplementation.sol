@@ -8,9 +8,9 @@ pragma solidity ^0.5.0;
 contract ERC2266
 {
     // enum Kind { Initiator, Participant }
-    enum AnitiatorAssetState { Empty, Filled, Redeemed, Refunded }
-    enum ParticipantAssetState { Empty, Filled, Redeemed, Refunded }
-    enum PremiumState { Empty, Filled, Redeemed, Refunded }
+    // enum InitiatorAssetState { Empty, Filled, Redeemed, Refunded }
+    // enum ParticipantAssetState { Empty, Filled, Redeemed, Refunded }
+    enum AssetState { Empty, Filled, Redeemed, Refunded }
 
     struct Swap {
         bytes32 secretHash;
@@ -19,16 +19,16 @@ contract ERC2266
         address payable participant;
         // Kind kind;
         address initiatorToken;
-        address participantToken;
         uint256 initiatorAssetValue;
         uint256 initiatorAssetRefundTimestamp;
         AssetState initiatorAssetState;
+        address participantToken;
         uint256 participantAssetValue;
         uint256 participantAssetRefundTimestamp;
         AssetState participantAssetState;
         uint256 premiumValue;
         uint256 premiumRefundTimestamp;
-        PremiumState premiumState;
+        AssetState premiumState;
     }
 
     mapping(bytes32 => Swap) public swaps;
@@ -113,6 +113,17 @@ contract ERC2266
     //     uint256 premiumValue
     // );
 
+    event SetUp(
+        bytes32 secretHash,
+        address initiator,
+        address initiatorToken,
+        uint256 initiatorAssetValue,
+        address participant,
+        address participantToken,
+        uint256 participantAssetValue,
+        uint256 premiumValue
+    );
+
     constructor() public {}
 
     // modifiers...
@@ -132,22 +143,24 @@ contract ERC2266
     {
         swaps[secretHash].secretHash = secretHash;
         swaps[secretHash].initiator = initiator;
+        swaps[secretHash].initiatorToken = initiatorToken;
+        swaps[secretHash].initiatorAssetValue = initiatorAssetValue;
+        swaps[secretHash].initiatorAssetState = AssetState.Empty;
         swaps[secretHash].participant = participant;
-        // if (msg.sender == initiator) {
-        //     swaps[secretHash].kind = Kind.Initiator;
-        // } else {
-        //     swaps[secretHash].kind = Kind.Participant;
-        // }
-        swaps[secretHash].assetValue = assetValue;
-        swaps[secretHash].assetState = AssetState.Empty;
+        swaps[secretHash].participantToken = participantToken;
+        swaps[secretHash].participantAssetValue = participantAssetValue;
+        swaps[secretHash].participantAssetState = AssetState.Empty;
         swaps[secretHash].premiumValue = premiumValue;
-        swaps[secretHash].premiumState = PremiumState.Empty;
+        swaps[secretHash].premiumState = AssetState.Empty;
         
         emit SetUp(
             secretHash,
             initiator,
+            initiatorToken,
+            initiatorAssetValue,
             participant,
-            assetValue,
+            participantToken,
+            participantAssetValue,
             premiumValue
         );
     }
