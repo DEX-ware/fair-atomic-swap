@@ -125,6 +125,13 @@ contract ERC2266
         _;
     }
 
+    modifier canSetup(bytes32 secretHash) {
+        require(swaps[secretHash].initiatorAssetState == AssetState.Empty);
+        require(swaps[secretHash].premiumState == AssetState.Empty);
+        require(swaps[secretHash].participantAssetState == AssetState.Empty);
+        _;
+    }
+
     // TODO: maybe check balance?
     modifier canInitiate(bytes32 secretHash) {
         require(swaps[secretHash].initiator == msg.sender);
@@ -164,9 +171,7 @@ contract ERC2266
                     uint256 premiumValue)
         public
         payable
-        isInitiatorAssetEmptyState(secretHash)
-        isParticipantAssetEmptyState(secretHash)
-        isPremiumEmptyState(secretHash)
+        canSetup(secretHash)
     {
         swaps[secretHash].secretHash = secretHash;
         swaps[secretHash].initiator = initiator;
