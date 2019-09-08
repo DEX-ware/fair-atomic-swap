@@ -146,7 +146,7 @@ contract ERC2266
     // TODO: maybe check balance?
     modifier canInitiate(bytes32 secretHash) {
         require(swaps[secretHash].initiator == msg.sender);
-        require(swaps[secretHash].assetState == AssetState.Empty);
+        require(swaps[secretHash].initiatorAssetState == AssetState.Empty);
         _;
     }
 
