@@ -115,8 +115,40 @@ contract ERC2266
 
     constructor() public {}
 
-
     // modifiers...
 
-    
+    function setup(bytes32 secretHash,
+                    address payable initiator,
+                    address initiatorToken,
+                    uint256 initiatorAssetValue,
+                    address payable participant,
+                    address participantToken,
+                    uint256 participantAssetValue,
+                    uint256 premiumValue)
+        public
+        payable
+        isAssetEmptyState(secretHash) // TODO:
+        isPremiumEmptyState(secretHash) // TODO:
+    {
+        swaps[secretHash].secretHash = secretHash;
+        swaps[secretHash].initiator = initiator;
+        swaps[secretHash].participant = participant;
+        // if (msg.sender == initiator) {
+        //     swaps[secretHash].kind = Kind.Initiator;
+        // } else {
+        //     swaps[secretHash].kind = Kind.Participant;
+        // }
+        swaps[secretHash].assetValue = assetValue;
+        swaps[secretHash].assetState = AssetState.Empty;
+        swaps[secretHash].premiumValue = premiumValue;
+        swaps[secretHash].premiumState = PremiumState.Empty;
+        
+        emit SetUp(
+            secretHash,
+            initiator,
+            participant,
+            assetValue,
+            premiumValue
+        );
+    }
 }
