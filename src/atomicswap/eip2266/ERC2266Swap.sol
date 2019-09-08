@@ -97,12 +97,21 @@ contract ERC2266
         uint256 value
     );
 
-    // event AssetRefunded(
-    //     uint256 refundTimestamp,
-    //     bytes32 secretHash,
-    //     address refunder,
-    //     uint256 value
-    // );
+    event InitiatorAssetRefunded(
+        uint256 refundTimestamp,
+        bytes32 secretHash,
+        address refunder,
+        address assetToken,
+        uint256 value
+    );
+
+    event ParticipantAssetRefunded(
+        uint256 refundTimestamp,
+        bytes32 secretHash,
+        address refunder,
+        address assetToken,
+        uint256 value
+    );
 
     // event PremiumRedeemed(
     //     uint256 redeemTimestamp,
@@ -348,15 +357,26 @@ contract ERC2266
         isPremiumFilledState(secretHash)
         isAssetRefundable(secretHash)
     {
-        // msg.sender.transfer(swaps[secretHash].assetValue);
-
-        // swaps[secretHash].assetState = AssetState.Refunded;
-
-        // emit AssetRefunded(
-        //     block.timestamp,
-        //     swaps[secretHash].secretHash,
-        //     msg.sender,
-        //     swaps[secretHash].assetValue
-        // );
+        if (swaps[secretHash].initiator == msg.sender) {
+            swaps[secretHash].tokenA.transfer(msg.sender, swaps[secretHash].initiatorAssetValue);
+            swaps[secretHash].initiatorAssetState = AssetState.Refunded;
+            emit InitiatorAssetRefunded(
+                block.timestamp,
+                secretHash,
+                msg.sender,
+                swaps[secretHash].tokenA,
+                swaps[secretHash].initiatorAssetValue
+            );
+        } else {
+            swaps[secretHash].tokenB.transfer(msg.sender, swaps[secretHash].participantAssetValue);
+            swaps[secretHash].participantAssetState = AssetState.Refunded;
+            emit ParticipantAssetRefunded(
+                block.timestamp,
+                secretHash,
+                msg.sender,
+                swaps[secretHash].tokenB,
+                swaps[secretHash].participantAssetValue
+            );
+        }
     }
 }
