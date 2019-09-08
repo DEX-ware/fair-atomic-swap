@@ -2,6 +2,10 @@
 // maybe distinguish initor&participant?
 // maybe separate contract for tokens?
 
+// ref:
+// + https://ethereum.stackexchange.com/questions/46318/how-can-i-transfer-erc20-tokens-from-a-contract-to-an-user-account
+// + https://theethereum.wiki/w/index.php/ERC20_Token_Standard
+
 // https://github.com/lukem512/token-swap/blob/master/contracts/TokenSwap.sol
 
 pragma solidity ^0.5.0;
@@ -197,7 +201,8 @@ contract ERC2266
         );
     }
 
-    // TODO: we also need approval, https://ethereum.stackexchange.com/questions/46318/how-can-i-transfer-erc20-tokens-from-a-contract-to-an-user-account
+    // Initiator needs to pay for the initiatorAsset(tokenA) with initiatorAssetValue
+    // Initiator will also need to call tokenA.approve(this_contract_address, initiatorAssetValue) in advance
     // TODO: update balance?
     function initiate(bytes32 secretHash, uint256 assetRefundTime)
         public
@@ -220,8 +225,8 @@ contract ERC2266
         );
     }
 
-    // Initiator needs to pay for the premium with premiumValue
-    // TODO: we also need approval, https://ethereum.stackexchange.com/questions/46318/how-can-i-transfer-erc20-tokens-from-a-contract-to-an-user-account
+    // Initiator needs to pay for the premium(tokenB) with premiumValue
+    // Initiator will also need to call tokenB.approve(this_contract_address, premiumValue) in advance
     // TODO: update balance?
     function fillPremium(bytes32 secretHash, uint256 premiumRefundTime)
         public
@@ -244,7 +249,8 @@ contract ERC2266
         );
     }
 
-    // TODO: we also need approval, https://ethereum.stackexchange.com/questions/46318/how-can-i-transfer-erc20-tokens-from-a-contract-to-an-user-account
+    // Participant needs to pay for the participantAsset(tokenB) with participantAssetValue
+    // Participant will also need to call tokenB.approve(this_contract_address, participantAssetValue) in advance
     // TODO: update balance?
     function participate(bytes32 secretHash, uint256 assetRefundTime)
         public
