@@ -114,4 +114,9 @@ contract ERC2266
     // );
 
     constructor() public {}
+
+
+    // modifiers...
+
+    
 }
