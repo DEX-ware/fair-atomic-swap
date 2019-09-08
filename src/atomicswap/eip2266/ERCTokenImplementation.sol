@@ -7,8 +7,9 @@ pragma solidity ^0.5.0;
 
 contract ERC2266
 {
-    enum Kind { Initiator, Participant }
-    enum AssetState { Empty, Filled, Redeemed, Refunded }
+    // enum Kind { Initiator, Participant }
+    enum AnitiatorAssetState { Empty, Filled, Redeemed, Refunded }
+    enum ParticipantAssetState { Empty, Filled, Redeemed, Refunded }
     enum PremiumState { Empty, Filled, Redeemed, Refunded }
 
     struct Swap {
@@ -16,10 +17,15 @@ contract ERC2266
         bytes32 secret;
         address payable initiator;
         address payable participant;
-        Kind kind;
-        uint256 assetValue;
-        uint256 assetRefundTimestamp;
-        AssetState assetState;
+        // Kind kind;
+        address initiatorToken;
+        address participantToken;
+        uint256 initiatorAssetValue;
+        uint256 initiatorAssetRefundTimestamp;
+        AssetState initiatorAssetState;
+        uint256 participantAssetValue;
+        uint256 participantAssetRefundTimestamp;
+        AssetState participantAssetState;
         uint256 premiumValue;
         uint256 premiumRefundTimestamp;
         PremiumState premiumState;
