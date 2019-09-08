@@ -271,7 +271,6 @@ contract ERC2266
 
     // Initiator needs to pay for the initiatorAsset(tokenA) with initiatorAssetValue
     // Initiator will also need to call tokenA.approve(this_contract_address, initiatorAssetValue) in advance
-    // TODO: update balance?
     function initiate(bytes32 secretHash, uint256 assetRefundTime)
         public
         payable
@@ -295,7 +294,6 @@ contract ERC2266
 
     // Initiator needs to pay for the premium(tokenB) with premiumValue
     // Initiator will also need to call tokenB.approve(this_contract_address, premiumValue) in advance
-    // TODO: update balance?
     function fillPremium(bytes32 secretHash, uint256 premiumRefundTime)
         public
         payable
@@ -319,7 +317,6 @@ contract ERC2266
 
     // Participant needs to pay for the participantAsset(tokenB) with participantAssetValue
     // Participant will also need to call tokenB.approve(this_contract_address, participantAssetValue) in advance
-    // TODO: update balance?
     function participate(bytes32 secretHash, uint256 assetRefundTime)
         public
         payable
