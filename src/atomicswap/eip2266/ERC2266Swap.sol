@@ -146,25 +146,25 @@ contract ERC2266
         _;
     }
 
-    // TODO: maybe check balance?
     modifier canInitiate(bytes32 secretHash) {
         require(swaps[secretHash].initiator == msg.sender);
         require(swaps[secretHash].initiatorAssetState == AssetState.Empty);
+        require(swaps[secretHash].tokenA.balanceOf(msg.sender) >= swaps[secretHash].initiatorAssetValue);
         _;
     }
 
-    // TODO: maybe check balance?
     modifier canFillPremium(bytes32 secretHash) {
         require(swaps[secretHash].initiator == msg.sender);
         require(swaps[secretHash].premiumState == PremiumState.Empty);
+        require(swaps[secretHash].tokenB.balanceOf(msg.sender) >= swaps[secretHash].premiumValue);
         _;
     }
 
-    // TODO: maybe check balance?
     modifier canParticipate(bytes32 secretHash) {
         require(swaps[secretHash].participant == msg.sender);
         require(swaps[secretHash].participantAssetState == AssetState.Empty);
         require(swaps[secretHash].premiumState == PremiumState.Filled);
+        require(swaps[secretHash].tokenB.balanceOf(msg.sender) >= swaps[secretHash].participantAssetValue);
         _;
     }
 
