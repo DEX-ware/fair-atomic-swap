@@ -133,8 +133,6 @@ contract ERC2266
 
     constructor() public {}
 
-    // modifiers...
-
     modifier isInitiatorAssetEmptyState(bytes32 secretHash) {
         require(swaps[secretHash].initiatorAssetState == AssetState.Empty);
         _;
@@ -246,10 +244,10 @@ contract ERC2266
 
     function setup(bytes32 secretHash,
                     address payable initiator,
-                    address initiatorToken,
+                    address tokenA,
+                    address tokenB,
                     uint256 initiatorAssetValue,
                     address payable participant,
-                    address participantToken,
                     uint256 participantAssetValue,
                     uint256 premiumValue)
         public
@@ -258,11 +256,11 @@ contract ERC2266
     {
         swaps[secretHash].secretHash = secretHash;
         swaps[secretHash].initiator = initiator;
-        swaps[secretHash].initiatorToken = initiatorToken;
+        swaps[secretHash].participant = participant;
+        swaps[secretHash].tokenA = tokenA;
+        swaps[secretHash].tokenB = tokenB;
         swaps[secretHash].initiatorAssetValue = initiatorAssetValue;
         swaps[secretHash].initiatorAssetState = AssetState.Empty;
-        swaps[secretHash].participant = participant;
-        swaps[secretHash].participantToken = participantToken;
         swaps[secretHash].participantAssetValue = participantAssetValue;
         swaps[secretHash].participantAssetState = AssetState.Empty;
         swaps[secretHash].premiumValue = premiumValue;
@@ -271,10 +269,10 @@ contract ERC2266
         emit SetUp(
             secretHash,
             initiator,
-            initiatorToken,
-            initiatorAssetValue,
             participant,
-            participantToken,
+            tokenA,
+            tokenB,
+            initiatorAssetValue,
             participantAssetValue,
             premiumValue
         );
