@@ -129,6 +129,21 @@ contract ERC2266
 
     // modifiers...
 
+    modifier isInitiatorAssetEmptyState(bytes32 secretHash) {
+        require(swaps[secretHash].initiatorAssetState == AssetState.Empty);
+        _;
+    }
+
+    modifier isParticipantAssetEmptyState(bytes32 secretHash) {
+        require(swaps[secretHash].participantAssetState == AssetState.Empty);
+        _;
+    }
+
+    modifier isPremiumEmptyState(bytes32 secretHash) {
+        require(swaps[secretHash].premiumState == AssetState.Empty);
+        _;
+    }
+
     function setup(bytes32 secretHash,
                     address payable initiator,
                     address initiatorToken,
@@ -139,8 +154,9 @@ contract ERC2266
                     uint256 premiumValue)
         public
         payable
-        isAssetEmptyState(secretHash) // TODO:
-        isPremiumEmptyState(secretHash) // TODO:
+        isInitiatorAssetEmptyState(secretHash)
+        isParticipantAssetEmptyState(secretHash)
+        isPremiumEmptyState(secretHash)
     {
         swaps[secretHash].secretHash = secretHash;
         swaps[secretHash].initiator = initiator;
