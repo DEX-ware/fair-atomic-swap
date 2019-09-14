@@ -1,15 +1,3 @@
-* 823 Token Exchange Standard
-    + https://github.com/ethereum/EIPs/blob/master/EIPS/eip-823.md
-+ 875 Simpler NFT standard with batching and native atomic swaps
-    + https://github.com/ethereum/EIPs/blob/master/EIPS/eip-875.md
-+ 1327 Extendable Atomic Swaps
-    + https://github.com/ethereum/EIPs/issues/1327
-+ 1630 Hashed Time-Locked Contract Standard
-    + https://github.com/ethereum/EIPs/issues/1631
-
-
----
-
 eip: 2266
 title: Atomic Swap-based American Call Option Contract Standard
 author: Runchao Han <runchao.han@monash.edu>, Haoyu Lin <chris.haoyul@gmail.com>, Jiangshan Yu <jiangshan.yu@monash.edu>
@@ -25,7 +13,6 @@ created: 2019-08-17
 ## Simple Summary
 <!--"If you can't explain it simply, you don't understand it well enough." Provide a simplified and layman-accessible explanation of the EIP.-->
 
-__TODO: fix link__
 
 A standard for token contracts, providing Atomic Swap-based American Call Option sevice. You can view out an example implementation in the repo here: https://github.com/HAOYUatHZ/fair-atomic-swap/blob/master/src/atomicswap/eip2266/
 
