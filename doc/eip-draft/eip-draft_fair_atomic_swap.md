@@ -81,17 +81,11 @@ mapping(bytes32 => PremiumAsset) public premiumAsset;
 ```
 
 
-
 ### Interfaces
 
-__TODO: (maybe need to distiguish initor and participant)__
-
-
-
 ```
-function setup(bytes32 secretHash, address payable initiator, address payable participant, uint256 assetValue, uint256 premiumValue) public payable
+function setup(bytes32 secretHash, address payable initiator, address tokenA, address tokenB, uint256 initiatorAssetAmount, address payable participant, uint256 participantAssetAmount, uint256 premiumAmount) public payable
 ```
-
 
 
 ### Events
