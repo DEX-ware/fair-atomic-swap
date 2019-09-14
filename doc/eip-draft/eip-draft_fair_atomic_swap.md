@@ -36,14 +36,14 @@ The Atomic Swap-based American Call Option Smart Contract should follows the syn
 
 ### Definitions
 
-+ `initior`: the party who publishes the advertisement of the swap.
++ `initiator`: the party who publishes the advertisement of the swap.
 + `participant`: the party who agrees on the advertisement and want to take the deal.
 + `asset`: token(s) to be exchanged.
-+ `premium`: the upfront cost that the `initior` pays for the overall profitability of the trade.
++ `premium`: the upfront cost that the `initiator` pays for the overall profitability of the trade.
 + `redeem`: the action to claim the agreed amount of token.
 + `refund`: the event that the agreed amount of token goes back to the original owner, because of timelock expiration.
-+ `secrect`: random number chosen by the `initior`, revealed to allow the `participant` to redeem the fund.
-+ `secrect_hash`: hash of the `secrect`, used in the contruction of HTLC. 
++ `secrect`: random number chosen by the `initiator`, revealed to allow the `participant` to redeem the fund.
++ `secrectHash`: hash of the `secrect`, used in the contruction of HTLC. 
 + `timelock`: time limit in the form of block timestamp, ahead of when the fund can only be claimed by a certain party, and otherwise be refunded back to the counter-party after.
 
 ### Storage Variables
@@ -77,7 +77,7 @@ mapping(bytes32 => ParticipantAsset) public participantAsset;
 This mapping stores the details of the premium the initiator attach within the swap contract, including the amount, the timelock and the state. It is asscociated with the swap contract with the same `secretHash`.
 
 ```
-mapping(bytes32 => PremiumAsset) public premiumAsset;
+mapping(bytes32 => Premium) public premium;
 ```
 
 
@@ -154,13 +154,13 @@ function refundPremium(bytes32 secretHash) public
 This event logs that one of the parties has set the contract up based on a `secrect_hash`, specifying the amount of the `asset` and the `premium`, and the involved parties.
 
 #### Initiated
-This event logs that the `initior` has pay for the token to be exchanged.
+This event logs that the `initiator` has pay for the token to be exchanged.
 
 #### Participated
 This event logs that the `participant` has pay for the token to be exchanged.
 
 #### PremiumFilled
-This event logs that the `initior` has pay for the `premium`.
+This event logs that the `initiator` has pay for the `premium`.
 
 #### AssetRedeemed
 This event logs that the `asset` has been redeemed by the counter party, and redeemed before the `asset` timelock, providing the preimage of the `secrect_hash`.
@@ -169,10 +169,10 @@ This event logs that the `asset` has been redeemed by the counter party, and red
 This event logs that the `asset` has been refunded back to the original owner, because of the `asset` timelock expiration.
 
 #### PremiumRedeemed
-This event logs that the `premium` has been redeemed by the `participant`, and redeemed before the premium timelock, if the `participant` participates in the swap. This also implies that the `asset` is either redeemed by the `initior` if it can provide the preimage of the `secrect_hash` before  `asset` timelock expires; or refunded by the `participant` if `asset` timelock expires.
+This event logs that the `premium` has been redeemed by the `participant`, and redeemed before the premium timelock, if the `participant` participates in the swap. This also implies that the `asset` is either redeemed by the `initiator` if it can provide the preimage of the `secrect_hash` before  `asset` timelock expires; or refunded by the `participant` if `asset` timelock expires.
 
 #### PremiumRefunded
-This event logs that the `premium` has been refunded back to the `initior`, because of the `participant` doesn't participate at all, by the time of `premium` timelock expires.
+This event logs that the `premium` has been refunded back to the `initiator`, because of the `participant` doesn't participate at all, by the time of `premium` timelock expires.
 
 
 ## Rationale
@@ -188,8 +188,8 @@ However, this introduces a new problem: this time the participant gains the opti
 
 To resolve the new problem, the premium:
 
-+ should be refunded back to the initior if the participant does not participate in at all, or if **the participant's funding is redeemed by the initior**; or
-+ should be redeemed for the participant if the initior holds the secret used in hash lock maliciously, which also implies that **the participant's funding is refunded back**.
++ should be refunded back to the initiator if the participant does not participate in at all, or if **the participant's funding is redeemed by the initiator**; or
++ should be redeemed for the participant if the initiator holds the secret used in hash lock maliciously, which also implies that **the participant's funding is refunded back**.
 
 Such a logic is hard to implement in stateless script system like Bitcoin, because, in the aspect of transaction, **where the premium should go, strictly depends on where the participant's funding goes**, but can be empowered in Ethereum-style stateful systems.
 
@@ -199,7 +199,7 @@ Meanwhile, it is also worthy to investigate on HTLCs-based Atomic Swaps on Ameri
 
 In American Call Option with premium, the premium:
 
-+ should be refundable for the initior if the participant doesn't participate; or
++ should be refundable for the initiator if the participant doesn't participate; or
 + should be redeemable for the participant if the participant does participate.
 
 ## Backwards Compatibility
