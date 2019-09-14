@@ -47,13 +47,39 @@ The Atomic Swap-based American Call Option Smart Contract should follows the syn
 + `timelock`: time limit in the form of block timestamp, ahead of when the fund can only be claimed by a certain party, and otherwise be refunded back to the counter-party after.
 
 ### Storage Variables
-#### swaps
 
-This mapping stores the metadata of the swap contracts, and the state of the swaps. This mapping acts as a record to denote the detailed contract, distinguished by the `secretHash` used insided. Each contract uses different `secretHash`. 
+#### swap
+
+This mapping stores the metadata of the swap contracts, including the parties and tokens involved. Each contract uses different `secretHash`, and is distinguished by the `secretHash`.
 
 ```
-mapping(bytes32 => Swap) public swaps;
+mapping(bytes32 => Swap) public swap;
 ```
+
+#### initiatorAsset
+
+This mapping stores the details of the asset the initiator want to sell, including the amount, the timelock and the state. It is asscociated with the swap contract with the same `secretHash`.
+
+```
+mapping(bytes32 => InitiatorAsset) public initiatorAsset;
+```
+
+#### participantAsset
+
+This mapping stores the details of the asset the participant want to sell, including the amount, the timelock and the state. It is asscociated with the swap contract with the same `secretHash`.
+
+```
+mapping(bytes32 => ParticipantAsset) public participantAsset;
+```
+
+#### premiumAsset
+
+This mapping stores the details of the premium the initiator attach within the swap contract, including the amount, the timelock and the state. It is asscociated with the swap contract with the same `secretHash`.
+
+```
+mapping(bytes32 => PremiumAsset) public premiumAsset;
+```
+
 
 
 ### Interfaces
