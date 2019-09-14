@@ -1,9 +1,8 @@
-// ref:
-// + https://ethereum.stackexchange.com/questions/46318/how-can-i-transfer-erc20-tokens-from-a-contract-to-an-user-account
-// + https://theethereum.wiki/w/index.php/ERC20_Token_Standard
-// + https://github.com/lukem512/token-swap/blob/master/contracts/TokenSwap.sol
+// Copyright (c) 2019 Chris Haoyu LIN, Runchao HAN, Jiangshan YU
+// ERC2266 is compatible with ERC20 standard: https://theethereum.wiki/w/index.php/ERC20_Token_Standard
+// naming style follows the guide: https://solidity.readthedocs.io/en/v0.5.11/style-guide.html#naming-styles
 
-pragma solidity ^0.5.0;
+pragma solidity ^0.5.11;
 
 contract ERC20 {
     function totalSupply() public view returns (uint);
@@ -27,18 +26,30 @@ contract ERC2266
         address payable participant;
         address tokenA;
         address tokenB;
-        uint256 initiatorAssetValue;
-        uint256 initiatorAssetRefundTimestamp;
-        AssetState initiatorAssetState;
-        uint256 participantAssetValue;
-        uint256 participantAssetRefundTimestamp;
-        AssetState participantAssetState;
-        uint256 premiumValue;
-        uint256 premiumRefundTimestamp;
-        AssetState premiumState;
     }
 
-    mapping(bytes32 => Swap) public swaps;
+    struct InitiatorAsset {
+        uint256 value;
+        uint256 refundTimestamp;
+        AssetState state;
+    }
+
+    struct ParticipantAsset {
+        uint256 value;
+        uint256 refundTimestamp;
+        AssetState state;
+    }
+
+    struct PremiumAsset {
+        uint256 value;
+        uint256 refundTimestamp;
+        AssetState state;
+    }
+
+    mapping(bytes32 => Swap) public swap;
+    mapping(bytes32 => InitiatorAsset) public initiatorAsset;
+    mapping(bytes32 => ParticipantAsset) public participantAsset;
+    mapping(bytes32 => PremiumAsset) public premiumAsset;
 
     event SetUp(
         bytes32 secretHash,
@@ -134,46 +145,46 @@ contract ERC2266
     constructor() public {}
 
     modifier isInitiatorAssetEmptyState(bytes32 secretHash) {
-        require(swaps[secretHash].initiatorAssetState == AssetState.Empty);
+        require(initiatorAsset[secretHash].state == AssetState.Empty);
         _;
     }
 
     modifier isParticipantAssetEmptyState(bytes32 secretHash) {
-        require(swaps[secretHash].participantAssetState == AssetState.Empty);
+        require(participantAsset[secretHash].state == AssetState.Empty);
         _;
     }
 
     modifier isPremiumEmptyState(bytes32 secretHash) {
-        require(swaps[secretHash].premiumState == AssetState.Empty);
+        require(premiumAsset[secretHash].state == AssetState.Empty);
         _;
     }
 
     modifier canSetup(bytes32 secretHash) {
-        require(swaps[secretHash].initiatorAssetState == AssetState.Empty);
-        require(swaps[secretHash].premiumState == AssetState.Empty);
-        require(swaps[secretHash].participantAssetState == AssetState.Empty);
+        require(initiatorAsset[secretHash].state == AssetState.Empty);
+        require(participantAsset[secretHash].state == AssetState.Empty);
+        require(premiumAsset[secretHash].state == AssetState.Empty);
         _;
     }
 
     modifier canInitiate(bytes32 secretHash) {
-        require(swaps[secretHash].initiator == msg.sender);
-        require(swaps[secretHash].initiatorAssetState == AssetState.Empty);
-        require(ERC20(swaps[secretHash].tokenA).balanceOf(msg.sender) >= swaps[secretHash].initiatorAssetValue);
+        require(swap[secretHash].initiator == msg.sender);
+        require(initiatorAsset[secretHash].state == AssetState.Empty);
+        require(ERC20(swap[secretHash].tokenA).balanceOf(msg.sender) >= initiatorAsset[secretHash].value);
         _;
     }
 
     modifier canFillPremium(bytes32 secretHash) {
-        require(swaps[secretHash].initiator == msg.sender);
-        require(swaps[secretHash].premiumState == AssetState.Empty);
-        require(ERC20(swaps[secretHash].tokenB).balanceOf(msg.sender) >= swaps[secretHash].premiumValue);
+        require(swap[secretHash].initiator == msg.sender);
+        require(premiumAsset[secretHash].state == AssetState.Empty);
+        require(ERC20(swap[secretHash].tokenB).balanceOf(msg.sender) >= premiumAsset[secretHash].value);
         _;
     }
 
     modifier canParticipate(bytes32 secretHash) {
-        require(swaps[secretHash].participant == msg.sender);
-        require(swaps[secretHash].participantAssetState == AssetState.Empty);
-        require(swaps[secretHash].premiumState == AssetState.Filled);
-        require(ERC20(swaps[secretHash].tokenB).balanceOf(msg.sender) >= swaps[secretHash].participantAssetValue);
+        require(swap[secretHash].participant == msg.sender);
+        require(participantAsset[secretHash].state == AssetState.Empty);
+        require(premiumAsset[secretHash].state == AssetState.Filled);
+        require(ERC20(swap[secretHash].tokenB).balanceOf(msg.sender) >= participantAsset[secretHash].value);
         _;
     }
 
@@ -185,32 +196,32 @@ contract ERC2266
     }
 
     modifier isAssetRedeemable(bytes32 secretHash, bytes32 secret) {
-        if (swaps[secretHash].initiator == msg.sender) {
-            require(swaps[secretHash].initiatorAssetState == AssetState.Filled);
-            require(block.timestamp <= swaps[secretHash].initiatorAssetRefundTimestamp);
+        if (swap[secretHash].initiator == msg.sender) {
+            require(initiatorAsset[secretHash].state == AssetState.Filled);
+            require(block.timestamp <= initiatorAsset[secretHash].refundTimestamp);
         } else {
-            require(swaps[secretHash].participant == msg.sender);
-            require(swaps[secretHash].participantAssetState == AssetState.Filled);
-            require(block.timestamp <= swaps[secretHash].participantAssetRefundTimestamp);
+            require(swap[secretHash].participant == msg.sender);
+            require(participantAsset[secretHash].state == AssetState.Filled);
+            require(block.timestamp <= participantAsset[secretHash].refundTimestamp);
         }
         require(sha256(abi.encodePacked(secret)) == secretHash);
         _;
     }
 
     modifier isAssetRefundable(bytes32 secretHash) {
-        if (swaps[secretHash].initiator == msg.sender) {
-            require(swaps[secretHash].initiatorAssetState == AssetState.Filled);
-            require(block.timestamp > swaps[secretHash].initiatorAssetRefundTimestamp);
+        if (swap[secretHash].initiator == msg.sender) {
+            require(initiatorAsset[secretHash].state == AssetState.Filled);
+            require(block.timestamp > initiatorAsset[secretHash].refundTimestamp);
         } else {
-            require(swaps[secretHash].participant == msg.sender);
-            require(swaps[secretHash].participantAssetState == AssetState.Filled);
-            require(block.timestamp > swaps[secretHash].participantAssetRefundTimestamp);
+            require(swap[secretHash].participant == msg.sender);
+            require(participantAsset[secretHash].state == AssetState.Filled);
+            require(block.timestamp > participantAsset[secretHash].refundTimestamp);
         }
         _;
     }
 
     modifier isPremiumFilledState(bytes32 secretHash) {
-        require(swaps[secretHash].premiumState == AssetState.Filled);
+        require(premiumAsset[secretHash].state == AssetState.Filled);
         _;
     }
 
@@ -218,13 +229,13 @@ contract ERC2266
     // before premium's timelock expires
     modifier isPremiumRedeemable(bytes32 secretHash) {
         // the participant invokes this method to redeem the premium
-        require(swaps[secretHash].participant == msg.sender);
+        require(swap[secretHash].participant == msg.sender);
         // the premium should be deposited
-        require(swaps[secretHash].premiumState == AssetState.Filled);
+        require(premiumAsset[secretHash].state == AssetState.Filled);
         // if Bob participates, which means participantAsset will be: Filled -> (Redeemed/Refunded)
-        require(swaps[secretHash].participantAssetState == AssetState.Refunded || swaps[secretHash].participantAssetState == AssetState.Redeemed);
+        require(participantAsset[secretHash].state == AssetState.Refunded || participantAsset[secretHash].state == AssetState.Redeemed);
         // the premium timelock should not be expired
-        require(block.timestamp <= swaps[secretHash].premiumRefundTimestamp);
+        require(block.timestamp <= premiumAsset[secretHash].refundTimestamp);
         _;
     }
 
@@ -232,13 +243,13 @@ contract ERC2266
     // but Bob does not participate after premium's timelock expires
     modifier isPremiumRefundable(bytes32 secretHash) {
         // the initiator invokes this method to refund the premium
-        require(swaps[secretHash].initiator == msg.sender);
+        require(swap[secretHash].initiator == msg.sender);
         // the premium should be deposited
-        require(swaps[secretHash].premiumState == AssetState.Filled);
+        require(premiumAsset[secretHash].state == AssetState.Filled);
         // asset2 should be empty
         // which means Bob does not participate
-        require(swaps[secretHash].premiumState == AssetState.Empty);
-        require(block.timestamp > swaps[secretHash].premiumRefundTimestamp);
+        require(premiumAsset[secretHash].state == AssetState.Empty);
+        require(block.timestamp > premiumAsset[secretHash].refundTimestamp);
         _;
     }
 
@@ -254,17 +265,17 @@ contract ERC2266
         payable
         canSetup(secretHash)
     {
-        swaps[secretHash].secretHash = secretHash;
-        swaps[secretHash].initiator = initiator;
-        swaps[secretHash].participant = participant;
-        swaps[secretHash].tokenA = tokenA;
-        swaps[secretHash].tokenB = tokenB;
-        swaps[secretHash].initiatorAssetValue = initiatorAssetValue;
-        swaps[secretHash].initiatorAssetState = AssetState.Empty;
-        swaps[secretHash].participantAssetValue = participantAssetValue;
-        swaps[secretHash].participantAssetState = AssetState.Empty;
-        swaps[secretHash].premiumValue = premiumValue;
-        swaps[secretHash].premiumState = AssetState.Empty;
+        swap[secretHash].secretHash = secretHash;
+        swap[secretHash].initiator = initiator;
+        swap[secretHash].participant = participant;
+        swap[secretHash].tokenA = tokenA;
+        swap[secretHash].tokenB = tokenB;
+        initiatorAsset[secretHash].value = initiatorAssetValue;
+        initiatorAsset[secretHash].state = AssetState.Empty;
+        participantAsset[secretHash].value = participantAssetValue;
+        participantAsset[secretHash].state = AssetState.Empty;
+        premiumAsset[secretHash].value = premiumValue;
+        premiumAsset[secretHash].state = AssetState.Empty;
         
         emit SetUp(
             secretHash,
@@ -286,18 +297,18 @@ contract ERC2266
         canInitiate(secretHash)
         checkRefundTimestampOverflow(assetRefundTime)
     {
-        ERC20(swaps[secretHash].tokenA).transferFrom(swaps[secretHash].initiator, address(this), swaps[secretHash].initiatorAssetValue);
-        swaps[secretHash].initiatorAssetState = AssetState.Filled;
-        swaps[secretHash].initiatorAssetRefundTimestamp = block.timestamp + assetRefundTime;
+        ERC20(swap[secretHash].tokenA).transferFrom(swap[secretHash].initiator, address(this), initiatorAsset[secretHash].value);
+        initiatorAsset[secretHash].state = AssetState.Filled;
+        initiatorAsset[secretHash].refundTimestamp = block.timestamp + assetRefundTime;
         
         emit Initiated(
             block.timestamp,
             secretHash,
             msg.sender,
-            swaps[secretHash].participant,
-            swaps[secretHash].tokenA,
-            swaps[secretHash].initiatorAssetValue,
-            swaps[secretHash].initiatorAssetRefundTimestamp
+            swap[secretHash].participant,
+            swap[secretHash].tokenA,
+            initiatorAsset[secretHash].value,
+            initiatorAsset[secretHash].refundTimestamp
         );
     }
 
@@ -309,18 +320,18 @@ contract ERC2266
         canFillPremium(secretHash)
         checkRefundTimestampOverflow(premiumRefundTime)
     {   
-        ERC20(swaps[secretHash].tokenB).transferFrom(swaps[secretHash].initiator, address(this), swaps[secretHash].premiumValue);
-        swaps[secretHash].premiumState = AssetState.Filled;
-        swaps[secretHash].premiumRefundTimestamp = block.timestamp + premiumRefundTime;
+        ERC20(swap[secretHash].tokenB).transferFrom(swap[secretHash].initiator, address(this), premiumAsset[secretHash].value);
+        premiumAsset[secretHash].state = AssetState.Filled;
+        premiumAsset[secretHash].refundTimestamp = block.timestamp + premiumRefundTime;
         
         emit PremiumFilled(
             block.timestamp,
             secretHash,
             msg.sender,
-            swaps[secretHash].participant,
-            swaps[secretHash].tokenB,
-            swaps[secretHash].premiumValue,
-            swaps[secretHash].premiumRefundTimestamp
+            swap[secretHash].participant,
+            swap[secretHash].tokenB,
+            premiumAsset[secretHash].value,
+            premiumAsset[secretHash].refundTimestamp
         );
     }
 
@@ -332,18 +343,18 @@ contract ERC2266
         canParticipate(secretHash)
         checkRefundTimestampOverflow(assetRefundTime)
     {
-        ERC20(swaps[secretHash].tokenB).transferFrom(swaps[secretHash].participant, address(this), swaps[secretHash].participantAssetValue);
-        swaps[secretHash].participantAssetState = AssetState.Filled;
-        swaps[secretHash].participantAssetRefundTimestamp = block.timestamp + assetRefundTime;        
+        ERC20(swap[secretHash].tokenB).transferFrom(swap[secretHash].participant, address(this), participantAsset[secretHash].value);
+        participantAsset[secretHash].state = AssetState.Filled;
+        participantAsset[secretHash].refundTimestamp = block.timestamp + assetRefundTime;        
         
         emit Participated(
             block.timestamp,
             secretHash,
-            swaps[secretHash].initiator,
+            swap[secretHash].initiator,
             msg.sender,
-            swaps[secretHash].tokenB,
-            swaps[secretHash].participantAssetValue,
-            swaps[secretHash].participantAssetRefundTimestamp
+            swap[secretHash].tokenB,
+            participantAsset[secretHash].value,
+            participantAsset[secretHash].refundTimestamp
         );
     }
 
@@ -351,30 +362,30 @@ contract ERC2266
         public
         isAssetRedeemable(secretHash, secret)
     {
-        swaps[secretHash].secret = secret;
-        if (swaps[secretHash].initiator == msg.sender) {
-            ERC20(swaps[secretHash].tokenB).transfer(msg.sender, swaps[secretHash].participantAssetValue);
-            swaps[secretHash].participantAssetState = AssetState.Redeemed;
+        swap[secretHash].secret = secret;
+        if (swap[secretHash].initiator == msg.sender) {
+            ERC20(swap[secretHash].tokenB).transfer(msg.sender, participantAsset[secretHash].value);
+            participantAsset[secretHash].state = AssetState.Redeemed;
 
             emit ParticipantAssetRedeemed(
                 block.timestamp,
                 secretHash,
                 secret,
                 msg.sender,
-                swaps[secretHash].tokenB,
-                swaps[secretHash].participantAssetValue
+                swap[secretHash].tokenB,
+                participantAsset[secretHash].value
             );
         } else {
-            ERC20(swaps[secretHash].tokenA).transfer(msg.sender, swaps[secretHash].initiatorAssetValue);
-            swaps[secretHash].initiatorAssetState = AssetState.Redeemed;
+            ERC20(swap[secretHash].tokenA).transfer(msg.sender, initiatorAsset[secretHash].value);
+            initiatorAsset[secretHash].state = AssetState.Redeemed;
 
             emit InitiatorAssetRedeemed(
                 block.timestamp,
                 secretHash,
                 secret,
                 msg.sender,
-                swaps[secretHash].tokenA,
-                swaps[secretHash].initiatorAssetValue
+                swap[secretHash].tokenA,
+                initiatorAsset[secretHash].value
             );
         }
     }
@@ -384,27 +395,27 @@ contract ERC2266
         isPremiumFilledState(secretHash)
         isAssetRefundable(secretHash)
     {
-        if (swaps[secretHash].initiator == msg.sender) {
-            ERC20(swaps[secretHash].tokenA).transfer(msg.sender, swaps[secretHash].initiatorAssetValue);
-            swaps[secretHash].initiatorAssetState = AssetState.Refunded;
+        if (swap[secretHash].initiator == msg.sender) {
+            ERC20(swap[secretHash].tokenA).transfer(msg.sender, initiatorAsset[secretHash].value);
+            initiatorAsset[secretHash].state = AssetState.Refunded;
 
             emit InitiatorAssetRefunded(
                 block.timestamp,
                 secretHash,
                 msg.sender,
-                swaps[secretHash].tokenA,
-                swaps[secretHash].initiatorAssetValue
+                swap[secretHash].tokenA,
+                initiatorAsset[secretHash].value
             );
         } else {
-            ERC20(swaps[secretHash].tokenB).transfer(msg.sender, swaps[secretHash].participantAssetValue);
-            swaps[secretHash].participantAssetState = AssetState.Refunded;
+            ERC20(swap[secretHash].tokenB).transfer(msg.sender, participantAsset[secretHash].value);
+            participantAsset[secretHash].state = AssetState.Refunded;
 
             emit ParticipantAssetRefunded(
                 block.timestamp,
                 secretHash,
                 msg.sender,
-                swaps[secretHash].tokenB,
-                swaps[secretHash].participantAssetValue
+                swap[secretHash].tokenB,
+                participantAsset[secretHash].value
             );
         }
     }
@@ -413,31 +424,31 @@ contract ERC2266
         public
         isPremiumRedeemable(secretHash)
     {
-        ERC20(swaps[secretHash].tokenB).transfer(msg.sender, swaps[secretHash].premiumValue);
-        swaps[secretHash].premiumState = AssetState.Redeemed;
+        ERC20(swap[secretHash].tokenB).transfer(msg.sender, premiumAsset[secretHash].value);
+        premiumAsset[secretHash].state = AssetState.Redeemed;
 
         emit PremiumRefunded(
             block.timestamp,
-            swaps[secretHash].secretHash,
+            swap[secretHash].secretHash,
             msg.sender,
-            swaps[secretHash].tokenB,
-            swaps[secretHash].premiumValue
+            swap[secretHash].tokenB,
+            premiumAsset[secretHash].value
         );
     }
-    
+  
     function refundPremium(bytes32 secretHash)
         public
         isPremiumRefundable(secretHash)
     {
-        ERC20(swaps[secretHash].tokenB).transfer(msg.sender, swaps[secretHash].premiumValue);
-        swaps[secretHash].premiumState = AssetState.Refunded;
+        ERC20(swap[secretHash].tokenB).transfer(msg.sender, premiumAsset[secretHash].value);
+        premiumAsset[secretHash].state = AssetState.Refunded;
 
         emit PremiumRefunded(
             block.timestamp,
-            swaps[secretHash].secretHash,
+            swap[secretHash].secretHash,
             msg.sender,
-            swaps[secretHash].tokenB,
-            swaps[secretHash].premiumValue
+            swap[secretHash].tokenB,
+            premiumAsset[secretHash].value
         );
     }
 }
