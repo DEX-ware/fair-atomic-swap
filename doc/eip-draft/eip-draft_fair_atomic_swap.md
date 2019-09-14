@@ -151,29 +151,76 @@ function refundPremium(bytes32 secretHash) public
 ### Events
 
 #### SetUp
+
 This event logs that one of the parties has set the contract up based on a `secrect_hash`, specifying the amount of the `asset` and the `premium`, and the involved parties.
 
+```
+event SetUp(bytes32 secretHash, address initiator, address participant, address tokenA, address tokenB, uint256 initiatorAssetAmount, uint256 participantAssetAmount, uint256 premiumAmount);
+```
+
 #### Initiated
+
 This event logs that the `initiator` has pay for the token to be exchanged.
 
+```
+event Initiated(uint256 initiateTimestamp, bytes32 secretHash, address initiator, address participant, address initiatorAssetToken, uint256 initiatorAssetAmount, uint256 initiatorAssetRefundTimestamp);
+```
+
 #### Participated
+
 This event logs that the `participant` has pay for the token to be exchanged.
 
+```
+event Participated(uint256 participateTimestamp, bytes32 secretHash, address initiator, address participant, address participantAssetToken, uint256 participantAssetAmount, uint256 participantAssetRefundTimestamp);
+```
+
 #### PremiumFilled
+
 This event logs that the `initiator` has pay for the `premium`.
 
-#### AssetRedeemed
-This event logs that the `asset` has been redeemed by the counter party, and redeemed before the `asset` timelock, providing the preimage of the `secrect_hash`.
+```
+event PremiumFilled(uint256 fillPremiumTimestamp, bytes32 secretHash, address initiator, address participant, address premiumToken, uint256 premiumAmount, uint256 premiumRefundTimestamp);
+```
 
-#### AssetRefunded
-This event logs that the `asset` has been refunded back to the original owner, because of the `asset` timelock expiration.
+#### InitiatorAssetRedeemed/ParticipantAssetRedeemed
+
+These two event log that the `asset` has been redeemed by the counter party, and redeemed before the `asset` timelock, providing the preimage of the `secrect_hash`.
+
+```
+event InitiatorAssetRedeemed(uint256 redeemTimestamp, bytes32 secretHash, bytes32 secret, address redeemer, address assetToken, uint256 amount);
+```
+
+```
+event ParticipantAssetRedeemed(uint256 redeemTimestamp, bytes32 secretHash, bytes32 secret, address redeemer, address assetToken, uint256 amount);
+```
+
+#### InitiatorAssetRefunded/ParticipantAssetRefunded
+
+These two event log that the `asset` has been refunded back to the original owner, because of the `asset` timelock expiration.
+
+```
+event InitiatorAssetRefunded(uint256 refundTimestamp, bytes32 secretHash, address refunder, address assetToken, uint256 amount);
+```
+
+```
+event ParticipantAssetRefunded(uint256 refundTimestamp, bytes32 secretHash, address refunder, address assetToken, uint256 amount);
+```
 
 #### PremiumRedeemed
+
 This event logs that the `premium` has been redeemed by the `participant`, and redeemed before the premium timelock, if the `participant` participates in the swap. This also implies that the `asset` is either redeemed by the `initiator` if it can provide the preimage of the `secrect_hash` before  `asset` timelock expires; or refunded by the `participant` if `asset` timelock expires.
 
+```
+event PremiumRedeemed(uint256 redeemTimestamp,bytes32 secretHash,address redeemer,address token,uint256 amount);
+```
+
 #### PremiumRefunded
+
 This event logs that the `premium` has been refunded back to the `initiator`, because of the `participant` doesn't participate at all, by the time of `premium` timelock expires.
 
+```
+event PremiumRefunded(uint256 refundTimestamp, bytes32 secretHash, address refunder, address token, uint256 amount);
+```
 
 ## Rationale
 <!--The rationale fleshes out the specification by describing what motivated the design and why particular design decisions were made. It should describe alternate designs that were considered and related work, e.g. how the feature is supported in other languages. The rationale may also provide evidence of consensus within the community, and should discuss important objections or concerns raised during discussion.-->
