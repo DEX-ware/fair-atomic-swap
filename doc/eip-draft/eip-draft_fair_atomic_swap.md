@@ -81,35 +81,67 @@ mapping(bytes32 => PremiumAsset) public premiumAsset;
 ```
 
 
-### Interfaces
+### Methods
+
+#### setup
+
+This function sets up the swap contract, including the both parties involved, the tokens to exchanged, and so on.
 
 ```
 function setup(bytes32 secretHash, address payable initiator, address tokenA, address tokenB, uint256 initiatorAssetAmount, address payable participant, uint256 participantAssetAmount, uint256 premiumAmount) public payable
 ```
 
+#### initiate
+
+The initiator invokes this function to lock the token it wants to sell and join the contract.
+
 ```
 function initiate(bytes32 secretHash, uint256 assetRefundTime) public payable
 ```
+
+#### fillPremium
+
+The initiator invokes this function to lock the premium.
 
 ```
 function fillPremium(bytes32 secretHash, uint256 premiumRefundTime) public payable
 ```
 
+#### participate
+
+The participant invokes this function to lock the token it wants to sell and join the contract.
+
 ```
 function participate(bytes32 secretHash, uint256 assetRefundTime) public payable
 ```
+
+#### redeemAsset
+
+One of the parties invokes this function to get the token sold by the counterparty, by providing the preimage of the hash lock.
 
 ```
 function redeemAsset(bytes32 secret, bytes32 secretHash) public
 ```
 
+#### refundAsset
+
+One invokes this function to get its token back if the timelock expires.
+
 ```
 function refundAsset(bytes32 secretHash) public
 ```
 
+#### redeemPremium
+
+The participant invokes this function to get the premium. This should only succeed if the participant does participate and its token is redeemed/refunded.
+
 ```
 function redeemPremium(bytes32 secretHash) public
 ```
+
+#### refundPremium
+
+The initiator invokes this function to get the premium back if the timelock expires.
 
 ```
 function refundPremium(bytes32 secretHash) public
@@ -141,8 +173,6 @@ This event logs that the `premium` has been redeemed by the `participant`, and r
 
 #### PremiumRefunded
 This event logs that the `premium` has been refunded back to the `initior`, because of the `participant` doesn't participate at all, by the time of `premium` timelock expires.
-
-
 
 
 ## Rationale
