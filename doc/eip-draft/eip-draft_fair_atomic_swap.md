@@ -87,6 +87,34 @@ mapping(bytes32 => PremiumAsset) public premiumAsset;
 function setup(bytes32 secretHash, address payable initiator, address tokenA, address tokenB, uint256 initiatorAssetAmount, address payable participant, uint256 participantAssetAmount, uint256 premiumAmount) public payable
 ```
 
+```
+function initiate(bytes32 secretHash, uint256 assetRefundTime) public payable
+```
+
+```
+function fillPremium(bytes32 secretHash, uint256 premiumRefundTime) public payable
+```
+
+```
+function participate(bytes32 secretHash, uint256 assetRefundTime) public payable
+```
+
+```
+function redeemAsset(bytes32 secret, bytes32 secretHash) public
+```
+
+```
+function refundAsset(bytes32 secretHash) public
+```
+
+```
+function redeemPremium(bytes32 secretHash) public
+```
+
+```
+function refundPremium(bytes32 secretHash) public
+```
+
 
 ### Events
 
