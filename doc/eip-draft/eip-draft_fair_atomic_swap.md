@@ -225,35 +225,10 @@ event PremiumRefunded(uint256 refundTimestamp, bytes32 secretHash, address refun
 ## Rationale
 <!--The rationale fleshes out the specification by describing what motivated the design and why particular design decisions were made. It should describe alternate designs that were considered and related work, e.g. how the feature is supported in other languages. The rationale may also provide evidence of consensus within the community, and should discuss important objections or concerns raised during discussion.-->
 
-An American-style Option is a contract which gives the option buyer the right to buy or sell an asset, while the buyer can exercise the contract no later than the strike time. After a successful swap, the two parties exchange their tokens, and the participant gets the premium. Otherwise the tokens are refunded back to their original owners. 
++ To achieve the atomicity, HTLC is used.
++ Premium is redeemable for the participant, if the participant participates and it is redeemed before premium's timelock expires. This also implies that the participantAsset has been filled.
++ Premium is refundable for the initiator only if the initiator initiates but the participant does not participate at all. This also implies that the participant does not lock the tokens even after the premium's timelock expires.
 
-By taking the advantage of HTLC, the swap can achieve atomicity.
-
-
-
-__TODO:__
-
-To resolve the "Free Option Problem", the unfair behaviour should receive punishment.
-
-To apply the punishment, it requires that, besides the asset used to exchange, the initiator must put some asset as collateral, which is in fact premium. The transaction for the premium needs to be locked with the same secret hash but with a flipped payout, i.e. when redeemed with the secret, the premium goes back to the initiator and after timelock, the premium goes to the participant as a compensation for initiator not revealing the secret.
-
-However, this introduces a new problem: this time the participant gains the optionality -- it can get the premium without paying anything, by never participating in.
-
-To resolve the new problem, the premium:
-
-+ should be refunded back to the initiator if the participant does not participate in at all, or if **the participant's funding is redeemed by the initiator**; or
-+ should be redeemed for the participant if the initiator holds the secret used in hash lock maliciously, which also implies that **the participant's funding is refunded back**.
-
-Such a logic is hard to implement in stateless script system like Bitcoin, because, in the aspect of transaction, **where the premium should go, strictly depends on where the participant's funding goes**, but can be empowered in Ethereum-style stateful systems.
-
-In a word, a simple HTLCs-based Atomic Swap on Spot scenario is natively equivalent to an American Call Option without premium, but adding well-designed premium mechanism mitigates the arbitrage risk for both parties.
-
-Meanwhile, it is also worthy to investigate on HTLCs-based Atomic Swaps on American Call Option scenario, with built-in premium.
-
-In American Call Option with premium, the premium:
-
-+ should be refundable for the initiator if the participant doesn't participate; or
-+ should be redeemable for the participant if the participant does participate.
 
 ## Backwards Compatibility
 <!--All EIPs that introduce backwards incompatibilities must include a section describing these incompatibilities and their severity. The EIP must explain how the author proposes to deal with these incompatibilities. EIP submissions without a sufficient backwards compatibility treatise may be rejected outright.-->

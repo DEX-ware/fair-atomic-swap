@@ -232,8 +232,8 @@ contract ERC2266
         require(swap[secretHash].participant == msg.sender);
         // the premium should be deposited
         require(premium[secretHash].state == AssetState.Filled);
-        // if Bob participates, which means participantAsset will be: Filled -> (Redeemed/Refunded)
-        require(participantAsset[secretHash].state == AssetState.Refunded || participantAsset[secretHash].state == AssetState.Redeemed);
+        // if Bob participates, which means participantAsset will be: Filled/Redeemed/Refunded
+        require(participantAsset[secretHash].state != AssetState.Empty);
         // the premium timelock should not be expired
         require(block.timestamp <= premium[secretHash].refundTimestamp);
         _;
