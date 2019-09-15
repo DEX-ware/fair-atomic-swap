@@ -248,7 +248,7 @@ contract ERC2266
         require(premium[secretHash].state == AssetState.Filled);
         // asset2 should be empty
         // which means Bob does not participate
-        require(premium[secretHash].state == AssetState.Empty);
+        require(participantAsset[secretHash].state == AssetState.Empty);
         require(block.timestamp > premium[secretHash].refundTimestamp);
         _;
     }
