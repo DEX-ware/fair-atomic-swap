@@ -226,6 +226,8 @@ event PremiumRefunded(uint256 refundTimestamp, bytes32 secretHash, address refun
 <!--The rationale fleshes out the specification by describing what motivated the design and why particular design decisions were made. It should describe alternate designs that were considered and related work, e.g. how the feature is supported in other languages. The rationale may also provide evidence of consensus within the community, and should discuss important objections or concerns raised during discussion.-->
 
 + To achieve the atomicity, HTLC is used.
++ The participant should decide whether to participate after the initiator locks the tokens and sets up the time locks.
++ The initiator should decide whether to proceed the swap (redeem the tokens from the participant and reveal the preimage of the hash lock), after the participant locks the tokens and sets up the time locks.  
 + Premium is redeemable for the participant, if the participant participates and it is redeemed before premium's timelock expires. This also implies that the participantAsset has been filled.
 + Premium is refundable for the initiator only if the initiator initiates but the participant does not participate at all. This also implies that the participant does not lock the tokens even after the premium's timelock expires.
 
