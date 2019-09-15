@@ -25,7 +25,7 @@ The following standard provides functionality to make Atomic Swap-based American
 ## Motivation
 <!--The motivation is critical for EIPs that want to change the Ethereum protocol. It should clearly explain why the existing protocol specification is inadequate to address the problem that the EIP solves. EIP submissions without sufficient motivation may be rejected outright.-->
 
-The Atomic Swap protocol enables two parties to exchange cryptocurrencies on different blockchains atomically, by the means of Hash Timelocked Contracts (HTLCs). Also, Atomic Swap-based American Call Option Smart Contract, with built-in premium, mitigate the risk of "_Free Option Problem_"[^2]. Existing standards do not regulate the procedure of Atomic Swap-based American Call Option, and the prerequisites of of each step. This standard aims at specifying the procedure, to prevent any arbitrage opportunity if a user regret about the deal, or try to lock the counter party's token maliciously.
+The Atomic Swap protocol enables two parties to exchange cryptocurrencies/tokens atomically, by the means of Hash Timelocked Contracts (HTLCs). Also, Atomic Swap-based American Call Option Smart Contract, with built-in premium, mitigate the risk of "_Free Option Problem_"[^2]. Existing standards do not regulate the procedure of Atomic Swap-based American Call Option, and the prerequisites of of each step. This standard aims at specifying the procedure, to prevent any arbitrage opportunity if a user regret about the deal, or try to lock the counter party's token maliciously.
 
 
 ## Specification
@@ -224,6 +224,12 @@ event PremiumRefunded(uint256 refundTimestamp, bytes32 secretHash, address refun
 
 ## Rationale
 <!--The rationale fleshes out the specification by describing what motivated the design and why particular design decisions were made. It should describe alternate designs that were considered and related work, e.g. how the feature is supported in other languages. The rationale may also provide evidence of consensus within the community, and should discuss important objections or concerns raised during discussion.-->
+
+An American-style Option is a contract which gives the option buyer the right to buy or sell an asset, while the buyer can exercise the contract no later than the strike time. After a successful swap, the two parties exchange their tokens, and the participant gets the premium. Otherwise the tokens are refunded back to their original owners. 
+
+By taking the advantage of HTLC, the swap can achieve atomicity.
+
+
 
 __TODO:__
 
