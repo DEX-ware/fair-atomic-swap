@@ -39,7 +39,7 @@ The Atomic Swap-based American Call Option smart contract should follow the synt
 + `asset`: the amount of token(s) to be exchanged.
 + `premium`: the amount of token(s) that `initiator` pays to `participant` as the premium.
 + `redeem`: the action to claim the token from the other party.
-+ `refund`: the action to claim the token from the party himself, because of timelock expiration.
++ `refund`: the action to claim the token from the party herself/himself, because of timelock expiration.
 + `secrect`: a random string chosen by `initiator` as the preimage of a hash.
 + `secrectHash`: a string equals to the hash of `secrect`, used for constructing HTLCs.
 + `timelock`: a timestamp representing the timelimit, before when the asset can be redeemed, and otherwise can only be refunded.
