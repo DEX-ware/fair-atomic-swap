@@ -56,7 +56,7 @@ mapping(bytes32 => Swap) public swap;
 
 #### initiatorAsset
 
-This mapping stores the deatil of the asset initiators want to sell, including the amount, the timelock and the state. It is asscociated with the swap contract with the same `secretHash`.
+This mapping stores the detail of the asset initiators want to sell, including the amount, the timelock and the state. It is asscociated with the swap contract with the same `secretHash`.
 
 ```
 mapping(bytes32 => InitiatorAsset) public initiatorAsset;
@@ -91,7 +91,7 @@ function setup(bytes32 secretHash, address payable initiator, address tokenA, ad
 
 #### initiate
 
-The initiator invokes this function to fill and lock the token he wants to sell and join the contract.
+The initiator invokes this function to fill and lock the token she/he wants to sell and join the contract.
 
 ```
 function initiate(bytes32 secretHash, uint256 assetRefundTime) public payable
@@ -107,7 +107,7 @@ function fillPremium(bytes32 secretHash, uint256 premiumRefundTime) public payab
 
 #### participate
 
-The participant invokes this function to fill and lock the token he wants to sell and join the contract.
+The participant invokes this function to fill and lock the token she/he wants to sell and join the contract.
 
 ```
 function participate(bytes32 secretHash, uint256 assetRefundTime) public payable
@@ -123,7 +123,7 @@ function redeemAsset(bytes32 secret, bytes32 secretHash) public
 
 #### refundAsset
 
-One of the parties invokes this function to get his token back after the timelock expires.
+One of the parties invokes this function to get the token back after the timelock expires.
 
 ```
 function refundAsset(bytes32 secretHash) public
