@@ -19,38 +19,36 @@ A standard for token contracts, providing Atomic Swap-based American Call Option
 
 ## Abstarct
 
-The following standard provides functionality to make Atomic Swap-based American Call Option payment. This standard allows ERC20 token holders to atomically exchange their tokens without trusted third parties, which is known as `Atomic Swap`, by the use of Hashed Time-Locked Contract; and to exchange their tokens as a type of financial derivatives, named "American-style Option". More specifically, Hashed Time-Locked Contract is a type of smart contract that use hashlocks and timelocks to require that the receiver of a payment either acknowledge receiving the payment prior to a deadline by generating cryptographic proof of payment or forfeit the ability to claim the payment, returning it to the payer [^1]. And an American-style Option is a contract which gives the option buyer the right to buy or sell an asset, while the buyer can exercise the contract no later than the strike time. After a successful swap, the two parties exchange their tokens, and the participant gets the premium. Otherwise the tokens are refunded back to their original owners. 
-
+This standard provides functionality to make Atomic Swap-based American Call Option payment. Atomic Swap allows users to atomically exchange their tokens without trusted third parties. Currently, the Hashed Time-Locked Contract (HTLC) [^1] is usually used for implementing Atomic Swaps. However, the HTLC-based Atomic Swap has optionality. More specifically, the swap initiator can choose to proceed or abort the swap for several hours, which gives him time for speculating according to the exchange rate. [^3] shows that the HTLC-based Atomic Swap is equivalent to an American Call Option in finance. On the other hand,thanks to such optionality, the HTLC-based Atomic Swap can be utilised to construct American Call Options without trusted third party.
 
 ## Motivation
 <!--The motivation is critical for EIPs that want to change the Ethereum protocol. It should clearly explain why the existing protocol specification is inadequate to address the problem that the EIP solves. EIP submissions without sufficient motivation may be rejected outright.-->
 
-The Atomic Swap protocol enables two parties to exchange cryptocurrencies/tokens atomically, by the means of Hash Timelocked Contracts (HTLCs). Also, Atomic Swap-based American Call Option Smart Contract, with built-in premium, mitigate the risk of "_Free Option Problem_"[^2]. Existing standards do not regulate the procedure of Atomic Swap-based American Call Option, and the prerequisites of of each step. This standard aims at specifying the procedure, to prevent any arbitrage opportunity if a user regret about the deal, or try to lock the counter party's token maliciously.
-
+[^4] proposes a secure Atomic-Swap-based American Call Option protocol on smart contracts. This standard defines the common way of implementing this protocol.
+In particular, we define technical terms, provide interfaces, and give reference implementations of this protocol.
 
 ## Specification
 <!--The technical specification should describe the syntax and semantics of any new feature. The specification should be detailed enough to allow competing, interoperable implementations for any of the current Ethereum platforms (go-ethereum, parity, cpp-ethereum, ethereumj, ethereumjs, and [others](https://github.com/ethereum/wiki/wiki/Clients)).-->
 
-The Atomic Swap-based American Call Option Smart Contract should follows the syntax and semantics of the stateful smart contract in Ethereum, with hash locks support and time locks support.
-
+The Atomic Swap-based American Call Option smart contract should follow the syntax and semantics of Ethereum smart contracts.
 
 ### Definitions
 
 + `initiator`: the party who publishes the advertisement of the swap.
-+ `participant`: the party who agrees on the advertisement and want to take the deal.
-+ `asset`: token(s) to be exchanged.
-+ `premium`: the upfront cost that the `initiator` pays for the overall profitability of the trade.
-+ `redeem`: the action to claim the agreed amount of token.
-+ `refund`: the event that the agreed amount of token goes back to the original owner, because of timelock expiration.
-+ `secrect`: random number chosen by the `initiator`, revealed to allow the `participant` to redeem the fund.
-+ `secrectHash`: hash of the `secrect`, used in the contruction of HTLC. 
-+ `timelock`: time limit in the form of block timestamp, ahead of when the fund can only be claimed by a certain party, and otherwise be refunded back to the counter-party after.
++ `participant`: the party who agrees on the advertisement and participates in the swap with `initiator`.
++ `asset`: the amount of token(s) to be exchanged.
++ `premium`: the amount of token(s) that `initiator` pays to `participant` as the premium.
++ `redeem`: the action to claim the token from the other party.
++ `refund`: the action to claim the token from the party himself, because of timelock expiration.
++ `secrect`: a random string chosen by `initiator` as the preimage of a hash.
++ `secrectHash`: a string equals to the hash of `secrect`, used for constructing HTLCs.
++ `timelock`: a timestamp representing the timelimit, before when the asset can be redeemed, and otherwise can only be refunded.
 
 ### Storage Variables
 
 #### swap
 
-This mapping stores the metadata of the swap contracts, including the parties and tokens involved. Each contract uses different `secretHash`, and is distinguished by the `secretHash`.
+This mapping stores the metadata of the swap contracts, including the parties and tokens involved. Each contract uses different `secretHash`, and is distinguished by `secretHash`.
 
 ```
 mapping(bytes32 => Swap) public swap;
@@ -58,7 +56,7 @@ mapping(bytes32 => Swap) public swap;
 
 #### initiatorAsset
 
-This mapping stores the details of the asset the initiator want to sell, including the amount, the timelock and the state. It is asscociated with the swap contract with the same `secretHash`.
+This mapping stores the deatil of the asset initiators want to sell, including the amount, the timelock and the state. It is asscociated with the swap contract with the same `secretHash`.
 
 ```
 mapping(bytes32 => InitiatorAsset) public initiatorAsset;
@@ -66,7 +64,7 @@ mapping(bytes32 => InitiatorAsset) public initiatorAsset;
 
 #### participantAsset
 
-This mapping stores the details of the asset the participant want to sell, including the amount, the timelock and the state. It is asscociated with the swap contract with the same `secretHash`.
+This mapping stores the details of the asset participants want to sell, including the amount, the timelock and the state. It is asscociated with the swap contract with the same `secretHash`.
 
 ```
 mapping(bytes32 => ParticipantAsset) public participantAsset;
@@ -74,7 +72,7 @@ mapping(bytes32 => ParticipantAsset) public participantAsset;
 
 #### premiumAsset
 
-This mapping stores the details of the premium the initiator attach within the swap contract, including the amount, the timelock and the state. It is asscociated with the swap contract with the same `secretHash`.
+This mapping stores the details of the premium initiators attach in the swap contract, including the amount, the timelock and the state. It is asscociated with the swap contract with the same `secretHash`.
 
 ```
 mapping(bytes32 => Premium) public premium;
@@ -93,7 +91,7 @@ function setup(bytes32 secretHash, address payable initiator, address tokenA, ad
 
 #### initiate
 
-The initiator invokes this function to lock the token it wants to sell and join the contract.
+The initiator invokes this function to fill and lock the token he wants to sell and join the contract.
 
 ```
 function initiate(bytes32 secretHash, uint256 assetRefundTime) public payable
@@ -101,7 +99,7 @@ function initiate(bytes32 secretHash, uint256 assetRefundTime) public payable
 
 #### fillPremium
 
-The initiator invokes this function to lock the premium.
+The initiator invokes this function to fill and lock the premium.
 
 ```
 function fillPremium(bytes32 secretHash, uint256 premiumRefundTime) public payable
@@ -109,7 +107,7 @@ function fillPremium(bytes32 secretHash, uint256 premiumRefundTime) public payab
 
 #### participate
 
-The participant invokes this function to lock the token it wants to sell and join the contract.
+The participant invokes this function to fill and lock the token he wants to sell and join the contract.
 
 ```
 function participate(bytes32 secretHash, uint256 assetRefundTime) public payable
@@ -117,7 +115,7 @@ function participate(bytes32 secretHash, uint256 assetRefundTime) public payable
 
 #### redeemAsset
 
-One of the parties invokes this function to get the token sold by the counterparty, by providing the preimage of the hash lock.
+One of the parties invokes this function to get the token from the other party, by providing the preimage of the hash lock `secret`.
 
 ```
 function redeemAsset(bytes32 secret, bytes32 secretHash) public
@@ -125,7 +123,7 @@ function redeemAsset(bytes32 secret, bytes32 secretHash) public
 
 #### refundAsset
 
-One invokes this function to get its token back if the timelock expires.
+One of the parties invokes this function to get his token back after the timelock expires.
 
 ```
 function refundAsset(bytes32 secretHash) public
@@ -133,7 +131,7 @@ function refundAsset(bytes32 secretHash) public
 
 #### redeemPremium
 
-The participant invokes this function to get the premium. This should only succeed if the participant does participate and its token is redeemed/refunded.
+The participant invokes this function to get the premium. This can be invoked only if the participant has already invoked `participate` and the participant's token is redeemed or refunded.
 
 ```
 function redeemPremium(bytes32 secretHash) public
@@ -141,7 +139,7 @@ function redeemPremium(bytes32 secretHash) public
 
 #### refundPremium
 
-The initiator invokes this function to get the premium back if the timelock expires.
+The initiator invokes this function to get the premium back after the timelock expires.
 
 ```
 function refundPremium(bytes32 secretHash) public
@@ -152,7 +150,7 @@ function refundPremium(bytes32 secretHash) public
 
 #### SetUp
 
-This event logs that one of the parties has set the contract up based on a `secrect_hash`, specifying the amount of the `asset` and the `premium`, and the involved parties.
+This event indicates that one party has set up the contract using the function `setup()`.
 
 ```
 event SetUp(bytes32 secretHash, address initiator, address participant, address tokenA, address tokenB, uint256 initiatorAssetAmount, uint256 participantAssetAmount, uint256 premiumAmount);
@@ -160,7 +158,7 @@ event SetUp(bytes32 secretHash, address initiator, address participant, address 
 
 #### Initiated
 
-This event logs that the `initiator` has pay for the token to be exchanged.
+This event indicates that `initiator` has filled and locked the token to be exchanged using the function `initiate()`.
 
 ```
 event Initiated(uint256 initiateTimestamp, bytes32 secretHash, address initiator, address participant, address initiatorAssetToken, uint256 initiatorAssetAmount, uint256 initiatorAssetRefundTimestamp);
@@ -168,7 +166,7 @@ event Initiated(uint256 initiateTimestamp, bytes32 secretHash, address initiator
 
 #### Participated
 
-This event logs that the `participant` has pay for the token to be exchanged.
+This event indicates that `participant` has filled and locked the token to be exchanged using the function `participate()`.
 
 ```
 event Participated(uint256 participateTimestamp, bytes32 secretHash, address initiator, address participant, address participantAssetToken, uint256 participantAssetAmount, uint256 participantAssetRefundTimestamp);
@@ -176,7 +174,7 @@ event Participated(uint256 participateTimestamp, bytes32 secretHash, address ini
 
 #### PremiumFilled
 
-This event logs that the `initiator` has pay for the `premium`.
+This event indicates that `initiator` has filled and locked `premium` using the function `fillPremium()`.
 
 ```
 event PremiumFilled(uint256 fillPremiumTimestamp, bytes32 secretHash, address initiator, address participant, address premiumToken, uint256 premiumAmount, uint256 premiumRefundTimestamp);
@@ -184,7 +182,7 @@ event PremiumFilled(uint256 fillPremiumTimestamp, bytes32 secretHash, address in
 
 #### InitiatorAssetRedeemed/ParticipantAssetRedeemed
 
-These two event log that the `asset` has been redeemed by the counter party, and redeemed before the `asset` timelock, providing the preimage of the `secrect_hash`.
+These two events indicate that `asset` has been redeemed by the other party before the timelock by providing `secret`.
 
 ```
 event InitiatorAssetRedeemed(uint256 redeemTimestamp, bytes32 secretHash, bytes32 secret, address redeemer, address assetToken, uint256 amount);
@@ -196,7 +194,7 @@ event ParticipantAssetRedeemed(uint256 redeemTimestamp, bytes32 secretHash, byte
 
 #### InitiatorAssetRefunded/ParticipantAssetRefunded
 
-These two event log that the `asset` has been refunded back to the original owner, because of the `asset` timelock expiration.
+These two events indicate that `asset` has been refunded by the original owner after the timelock expires.
 
 ```
 event InitiatorAssetRefunded(uint256 refundTimestamp, bytes32 secretHash, address refunder, address assetToken, uint256 amount);
@@ -208,7 +206,7 @@ event ParticipantAssetRefunded(uint256 refundTimestamp, bytes32 secretHash, addr
 
 #### PremiumRedeemed
 
-This event logs that the `premium` has been redeemed by the `participant`, and redeemed before the premium timelock, if the `participant` participates in the swap. This also implies that the `asset` is either redeemed by the `initiator` if it can provide the preimage of the `secrect_hash` before  `asset` timelock expires; or refunded by the `participant` if `asset` timelock expires.
+This event indicates that `premium` has been redeemed by `participant`. This implies that `asset` is either redeemed by `initiator` if it can provide the preimage of `secrectHash` before  `asset` timelock expires; or refunded by `participant` if `asset` timelock expires.
 
 ```
 event PremiumRedeemed(uint256 redeemTimestamp,bytes32 secretHash,address redeemer,address token,uint256 amount);
@@ -216,7 +214,7 @@ event PremiumRedeemed(uint256 redeemTimestamp,bytes32 secretHash,address redeeme
 
 #### PremiumRefunded
 
-This event logs that the `premium` has been refunded back to the `initiator`, because of the `participant` doesn't participate at all, by the time of `premium` timelock expires.
+This event indicates that `premium` has been refunded back to `initiator`, because of `participant` doesn't participate at all, by the time of `premium` timelock expires.
 
 ```
 event PremiumRefunded(uint256 refundTimestamp, bytes32 secretHash, address refunder, address token, uint256 amount);
@@ -226,16 +224,16 @@ event PremiumRefunded(uint256 refundTimestamp, bytes32 secretHash, address refun
 <!--The rationale fleshes out the specification by describing what motivated the design and why particular design decisions were made. It should describe alternate designs that were considered and related work, e.g. how the feature is supported in other languages. The rationale may also provide evidence of consensus within the community, and should discuss important objections or concerns raised during discussion.-->
 
 + To achieve the atomicity, HTLC is used.
-+ The participant should decide whether to participate after the initiator locks the tokens and sets up the time locks.
-+ The initiator should decide whether to proceed the swap (redeem the tokens from the participant and reveal the preimage of the hash lock), after the participant locks the tokens and sets up the time locks.  
-+ Premium is redeemable for the participant, if the participant participates and it is redeemed before premium's timelock expires. This also implies that the participantAsset has been filled.
-+ Premium is refundable for the initiator only if the initiator initiates but the participant does not participate at all. This also implies that the participant does not lock the tokens even after the premium's timelock expires.
++ The participant should decide whether to participate after the initiator locks the token and sets up the timelock.
++ The initiator should decide whether to proceed the swap (redeem the tokens from the participant and reveal the preimage of the hash lock), after the participant locks the tokens and sets up the time locks.
++ Premium is redeemable for the participant only if the participant participates in the swap and redeems the initiator's token before premium's timelock expires.
++ Premium is refundable for the initiator only if the initiator initiates but the participant does not participate in the swap at all.
 
 
 ## Backwards Compatibility
 <!--All EIPs that introduce backwards incompatibilities must include a section describing these incompatibilities and their severity. The EIP must explain how the author proposes to deal with these incompatibilities. EIP submissions without a sufficient backwards compatibility treatise may be rejected outright.-->
 
-This proposal is fully backward compatible. Tokens extended by this proposal should also be following ERC20 standard and HTLC standard. The functionality of ERC20 standard and HTLC standard should not be affected by this proposal but will provide additional functionality to it.
+This proposal is fully backward compatible. Functionalities of existing standards will not be affected by this proposal, as it only provides additional features to them.
 
 
 ## Implementation
@@ -248,4 +246,6 @@ Please visit [here](https://github.com/HAOYUatHZ/fair-atomic-swap/blob/master/sr
 Copyright and related rights waived via [CC0](https://creativecommons.org/publicdomain/zero/1.0/).
 
 [^1]: https://en.bitcoin.it/wiki/Hash_Time_Locked_Contracts
-[^2]: [Atomic Swaps and Distributed Exchanges: The Inadvertent Call Option - BitMEX Blog](https://blog.bitmex.com/atomic-swaps-and-distributed-exchanges-the-inadvertent-call-option/) 
+[^2]: [Atomic Swaps and Distributed Exchanges: The Inadvertent Call Option - BitMEX Blog](https://blog.bitmex.com/atomic-swaps-and-distributed-exchanges-the-inadvertent-call-option/)
+[^3]: [An Argument For Single-Asset Lightning Network](https://lists.linuxfoundation.org/pipermail/lightning-dev/2019-January/001798.html)
+[^4]: [On the optionality and fairness of Atomic Swaps](https://eprint.iacr.org/2019/896)
