@@ -245,7 +245,6 @@ Please visit [here](https://github.com/HAOYUatHZ/fair-atomic-swap/blob/master/sr
 ## Copyright
 Copyright and related rights waived via [CC0](https://creativecommons.org/publicdomain/zero/1.0/).
 
-[^1]: https://en.bitcoin.it/wiki/Hash_Time_Locked_Contracts
-[^2]: [Atomic Swaps and Distributed Exchanges: The Inadvertent Call Option - BitMEX Blog](https://blog.bitmex.com/atomic-swaps-and-distributed-exchanges-the-inadvertent-call-option/)
+[^1]: [Hash Time Locked Contracts](https://en.bitcoin.it/wiki/Hash_Time_Locked_Contracts)
 [^3]: [An Argument For Single-Asset Lightning Network](https://lists.linuxfoundation.org/pipermail/lightning-dev/2019-January/001798.html)
 [^4]: [On the optionality and fairness of Atomic Swaps](https://eprint.iacr.org/2019/896)
