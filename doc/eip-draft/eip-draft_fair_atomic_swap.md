@@ -19,13 +19,12 @@ A standard for token contracts, providing Atomic Swap-based American Call Option
 
 ## Abstarct
 
-This standard provides functionality to make Atomic Swap-based American Call Option payment. Atomic Swap allows users to atomically exchange their tokens without trusted third parties. Currently, the Hashed Time-Locked Contract (HTLC) [^1] is usually used for implementing Atomic Swaps. However, the HTLC-based Atomic Swap has optionality. More specifically, the swap initiator can choose to proceed or abort the swap for several hours, which gives him time for speculating according to the exchange rate. [^3] shows that the HTLC-based Atomic Swap is equivalent to an American Call Option in finance. On the other hand,thanks to such optionality, the HTLC-based Atomic Swap can be utilised to construct American Call Options without trusted third party.
+This standard provides functionality to make Atomic Swap-based American Call Option payment. Atomic Swap allows users to atomically exchange their tokens without trusted third parties. Currently, the Hashed Time-Locked Contract (HTLC) [^1] is usually used for implementing Atomic Swaps. However, the HTLC-based Atomic Swap has optionality. More specifically, the swap initiator can choose to proceed or abort the swap for several hours, which gives him time for speculating according to the exchange rate. A discussion[^2] shows that the HTLC-based Atomic Swap is equivalent to an American Call Option in finance. On the other hand,thanks to such optionality, the HTLC-based Atomic Swap can be utilised to construct American Call Options without trusted third party.
 
 ## Motivation
 <!--The motivation is critical for EIPs that want to change the Ethereum protocol. It should clearly explain why the existing protocol specification is inadequate to address the problem that the EIP solves. EIP submissions without sufficient motivation may be rejected outright.-->
 
-[^4] proposes a secure Atomic-Swap-based American Call Option protocol on smart contracts. This standard defines the common way of implementing this protocol.
-In particular, we define technical terms, provide interfaces, and give reference implementations of this protocol.
+A paper[^3] proposes a secure Atomic-Swap-based American Call Option protocol on smart contracts. This standard defines the common way of implementing this protocol. In particular, this EIP defines technical terms, provides interfaces, and gives reference implementations of this protocol.
 
 ## Specification
 <!--The technical specification should describe the syntax and semantics of any new feature. The specification should be detailed enough to allow competing, interoperable implementations for any of the current Ethereum platforms (go-ethereum, parity, cpp-ethereum, ethereumj, ethereumjs, and [others](https://github.com/ethereum/wiki/wiki/Clients)).-->
@@ -246,5 +245,5 @@ Please visit [here](https://github.com/HAOYUatHZ/fair-atomic-swap/blob/master/sr
 Copyright and related rights waived via [CC0](https://creativecommons.org/publicdomain/zero/1.0/).
 
 [^1]: [Hash Time Locked Contracts](https://en.bitcoin.it/wiki/Hash_Time_Locked_Contracts)
-[^3]: [An Argument For Single-Asset Lightning Network](https://lists.linuxfoundation.org/pipermail/lightning-dev/2019-January/001798.html)
-[^4]: [On the optionality and fairness of Atomic Swaps](https://eprint.iacr.org/2019/896)
+[^2]: [An Argument For Single-Asset Lightning Network](https://lists.linuxfoundation.org/pipermail/lightning-dev/2019-January/001798.html)
+[^3]: [On the optionality and fairness of Atomic Swaps](https://eprint.iacr.org/2019/896)
