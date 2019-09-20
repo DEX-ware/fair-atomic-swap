@@ -121,7 +121,7 @@ contract RiskySpeculativeAtomicSwapOption {
         _;
     }
 
-    // Premium is redeemable on blockchain2 for Bob if Bob participates and refund
+    // Premium is redeemable on blockchain2 for Bob if Bob participates and redeem
     // before premium's timelock expires
     modifier isPremiumRedeemable(bytes32 secretHash) {
         // on asset2 chain
@@ -344,7 +344,7 @@ contract RiskySpeculativeAtomicSwapOption {
         swaps[secretHash].participant.transfer(swaps[secretHash].premiumValue);
         swaps[secretHash].premiumState = PremiumState.Redeemed;
 
-        emit PremiumRefunded(
+        emit PremiumRedeemed(
             block.timestamp,
             swaps[secretHash].secretHash,
             msg.sender,
