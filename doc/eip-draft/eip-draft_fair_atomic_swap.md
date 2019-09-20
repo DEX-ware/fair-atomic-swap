@@ -19,12 +19,14 @@ A standard for token contracts, providing Atomic Swap-based American Call Option
 
 ## Abstarct
 
-This standard provides functionality to make Atomic Swap-based American Call Option payment. Atomic Swap allows users to atomically exchange their tokens without trusted third parties. Currently, the Hashed Time-Locked Contract (HTLC) [^1] is usually used for implementing Atomic Swaps. However, the HTLC-based Atomic Swap has optionality. More specifically, the swap initiator can choose to proceed or abort the swap for several hours, which gives him time for speculating according to the exchange rate. A discussion[^2] shows that the HTLC-based Atomic Swap is equivalent to an American Call Option in finance. On the other hand,thanks to such optionality, the HTLC-based Atomic Swap can be utilised to construct American Call Options without trusted third party.
+This standard provides functionality to make Atomic Swap-based American Call Option payment. The Hashed Time-Locked Contract (HTLC) [^1] is usually used for implementing Atomic Swaps and can be utilised to construct American Call Options without trusted third party. This standard defines the common way of implementing this protocol. In particular, this EIP defines technical terms, provides interfaces, and gives reference implementations of this protocol.
+
 
 ## Motivation
 <!--The motivation is critical for EIPs that want to change the Ethereum protocol. It should clearly explain why the existing protocol specification is inadequate to address the problem that the EIP solves. EIP submissions without sufficient motivation may be rejected outright.-->
 
-A paper[^3] proposes a secure Atomic-Swap-based American Call Option protocol on smart contracts. This standard defines the common way of implementing this protocol. In particular, this EIP defines technical terms, provides interfaces, and gives reference implementations of this protocol.
+Atomic Swap allows users to atomically exchange their tokens without trusted third parties while the HTLC is commonly used for the implementation. However, the HTLC-based Atomic Swap has optionality. More specifically, the swap initiator can choose to proceed or abort the swap for several hours, which gives him time for speculating according to the exchange rate. A discussion[^2] shows that the HTLC-based Atomic Swap is equivalent to an American Call Option in finance. On the other hand,thanks to such optionality, the HTLC-based Atomic Swap can be utilised to construct American Call Options without trusted third party. A paper[^3] proposes a secure Atomic-Swap-based American Call Option protocol on smart contracts. Therefore, to address such issues, this EIP provides an implementation of the protocol.
+
 
 ## Specification
 <!--The technical specification should describe the syntax and semantics of any new feature. The specification should be detailed enough to allow competing, interoperable implementations for any of the current Ethereum platforms (go-ethereum, parity, cpp-ethereum, ethereumj, ethereumjs, and [others](https://github.com/ethereum/wiki/wiki/Clients)).-->
