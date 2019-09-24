@@ -1,3 +1,4 @@
+---
 eip: 2266
 title: Atomic Swap-based American Call Option Contract Standard
 author: Runchao Han <runchao.han@monash.edu>, Haoyu Lin <chris.haoyul@gmail.com>, Jiangshan Yu <jiangshan.yu@monash.edu>
@@ -54,7 +55,7 @@ mapping(bytes32 => Swap) public swap;
 
 #### initiatorAsset
 
-This mapping stores the detail of the asset initiators want to sell, including the amount, the timelock and the state. It is asscociated with the swap contract with the same `secretHash`.
+This mapping stores the detail of the asset initiators want to sell, including the amount, the timelock and the state. It is associated with the swap contract with the same `secretHash`.
 
 ```
 mapping(bytes32 => InitiatorAsset) public initiatorAsset;
@@ -62,7 +63,7 @@ mapping(bytes32 => InitiatorAsset) public initiatorAsset;
 
 #### participantAsset
 
-This mapping stores the details of the asset participants want to sell, including the amount, the timelock and the state. It is asscociated with the swap contract with the same `secretHash`.
+This mapping stores the details of the asset participants want to sell, including the amount, the timelock and the state. It is associated with the swap contract with the same `secretHash`.
 
 ```
 mapping(bytes32 => ParticipantAsset) public participantAsset;
@@ -70,7 +71,7 @@ mapping(bytes32 => ParticipantAsset) public participantAsset;
 
 #### premiumAsset
 
-This mapping stores the details of the premium initiators attach in the swap contract, including the amount, the timelock and the state. It is asscociated with the swap contract with the same `secretHash`.
+This mapping stores the details of the premium initiators attach in the swap contract, including the amount, the timelock and the state. It is associated with the swap contract with the same `secretHash`.
 
 ```
 mapping(bytes32 => Premium) public premium;
