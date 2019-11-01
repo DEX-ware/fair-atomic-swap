@@ -1,8 +1,8 @@
 # On the optionality and fairness of Atomic Swaps
 
-This is the code of the paper [On the optionality and fairness of Atomic Swaps](https://eprint.iacr.org/2019/896) (to appear in [The First ACM Conference on Advances in Financial Technologies (AFT’19)](http://aft.acm.org)) by [Runchao Han](https://github.com/SebastianElvis), [Haoyu Lin](https://github.com/HAOYUatHZ) and [Jiangshan Yu](http://jiangshanyu.com).
+This is the repo for the paper [On the optionality and fairness of Atomic Swaps](https://eprint.iacr.org/2019/896) (published at [The First ACM Conference on Advances in Financial Technologies (AFT’19)](http://aft.acm.org)) by [Runchao Han](https://github.com/SebastianElvis), [Haoyu Lin](https://github.com/HAOYUatHZ) and [Jiangshan Yu](http://jiangshanyu.com).
 
-## Directories
+## Directory
 
 - `/data`: relevant experimental data
 - `/doc`: relevant documentations
@@ -13,9 +13,17 @@ This is the code of the paper [On the optionality and fairness of Atomic Swaps](
   - `/src/evaluation`: code for evaluating the unfairness of Atomic Swaps, including the volatility analysis and the Cox-Ross-Rubinstein model
 - `/test`: testing code for connecting BTC nodes
 
+## Standarisation
+
+We submitted our protocol to Ethereum as an EIP proposal, which is assigned with the ID [EIP-2266](https://eips.ethereum.org/EIPS/eip-2266) and currently under review.
+
 ## Reference
 
 Runchao Han, Haoyu Lin and Jiangshan Yu. On the optionality and fairness of Atomic Swaps. To appear in The First ACM Conference on Advances in Financial Technologies (AFT’19), Oct 2019.
+
+## Contacts
+
+Please feel free to contact any of the authors ([Runchao Han](runchao.han@monash.edu), [Haoyu Lin](chris.haoyul@gmail.com) and [Jiangshan Yu](jiangshan.yu@monash.edu)) for any issues about this project or collaboration.
 
 ## License
 
