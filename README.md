@@ -23,7 +23,7 @@ Runchao Han, Haoyu Lin and Jiangshan Yu. On the optionality and fairness of Atom
 
 ## Contacts
 
-Please feel free to contact any of the authors ([Runchao Han](runchao.han@monash.edu), [Haoyu Lin](chris.haoyul@gmail.com) and [Jiangshan Yu](jiangshan.yu@monash.edu)) for any issues about this project or collaboration.
+Please feel free to contact any of the authors ([Runchao Han](mailto:runchao.han@monash.edu), [Haoyu Lin](mailto:chris.haoyul@gmail.com) and [Jiangshan Yu](mailto:jiangshan.yu@monash.edu)) for any issues about this project or collaboration.
 
 ## License
 
