@@ -13,7 +13,7 @@ This is the repo for the paper [On the optionality and fairness of Atomic Swaps]
   - `/src/evaluation`: code for evaluating the unfairness of Atomic Swaps, including the volatility analysis and the Cox-Ross-Rubinstein model
 - `/test`: testing code for connecting BTC nodes
 
-## Standarisation
+## Standardisation
 
 We submitted our protocol to Ethereum as an EIP proposal, which is assigned with the ID [EIP-2266](https://eips.ethereum.org/EIPS/eip-2266) and currently under review.
 
