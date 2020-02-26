@@ -19,7 +19,7 @@ We submitted our protocol to Ethereum as an EIP proposal, which is assigned with
 
 ## Reference
 
-Runchao Han, Haoyu Lin and Jiangshan Yu. On the optionality and fairness of Atomic Swaps. To appear in The First ACM Conference on Advances in Financial Technologies (AFT’19), Oct 2019.
+Runchao Han, Haoyu Lin and Jiangshan Yu. On the optionality and fairness of Atomic Swaps. The First ACM Conference on Advances in Financial Technologies (AFT’19), Oct 2019.
 
 ## Contacts
 
